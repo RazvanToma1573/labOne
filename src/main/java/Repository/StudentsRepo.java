@@ -13,12 +13,24 @@ public class StudentsRepo implements Repository<Student> {
     }
 
     @Override
-    public void add(Student entity) {
+    public boolean find (Student entity) {
+        return this.students.contains(entity);
+    }
+
+    @Override
+    public void add(Student entity) throws RepositoryException{
+        if (this.find(entity))
+            throw new RepositoryException("Student already contained!");
         students.add(entity);
     }
 
     @Override
-    public void remove(Student entity) {
+    public void remove(Student entity) throws RepositoryException{
+        if (!this.find(entity))
+            throw new RepositoryException("Student not contained!");
         students.remove(entity);
     }
+
+    @Override
+    public List<Student> getAll() { return this.students; }
 }
