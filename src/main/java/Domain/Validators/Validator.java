@@ -1,5 +1,5 @@
 package Domain.Validators;
 
 public interface Validator<T> {
-    void validate(T entiry);
+    void validate(T entity) throws ValidatorException;
 }
