@@ -2,22 +2,26 @@ package UI;
 
 import Domain.Problem;
 import Domain.Student;
+import Domain.Validators.Validator;
 import Domain.Validators.ValidatorException;
 import Repository.RepositoryException;
-import Service.Service;
+import Service.ProblemsService;
+import Service.StudentsService;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Console {
 
-    private Service<Student> studentService;
-    private Service<Problem> problemService;
+    private StudentsService studentService;
+    private ProblemsService problemService;
 
-    public Console(Service<Student> studentService, Service<Problem> problemService) {
+    public Console(StudentsService studentService, ProblemsService problemService) {
         this.studentService = studentService;
         this.problemService = problemService;
     }
@@ -33,6 +37,8 @@ public class Console {
         System.out.println("\t\t 6 - show all problems");
         System.out.println("\t\t 7 - assign a problem to a student");
         System.out.println("\t\t 8 - assign a grade to a student");
+        System.out.println("\t\t 9 - filter");
+        System.out.println("\t\t 11 - print the menu");
     }
 
     public void menu() {
@@ -74,6 +80,14 @@ public class Console {
                 }
                 else if(choice == 8){
                     this.assignGradeToStudent();
+                    System.out.println("Done");
+                }
+                else if(choice == 9) {
+                    this.filterStudents();
+                    System.out.println("Done");
+                }
+                else if(choice == 11) {
+                    this.printTheMenu();
                     System.out.println("Done");
                 }
                 else if (choice == 0)
@@ -141,6 +155,38 @@ public class Console {
         System.out.println("Lab Problems:");
         List<Problem> problems = this.problemService.get();
         problems.stream().forEach(System.out::println);
+    }
+
+    public void filterStudents(){
+        /**
+         * This function will ask the user for a type of filtering (FIRSTNAME/LASTNAME/PROBLEM/GRADE)
+         * and an argument for filtering. After the data is acquired it will pass it to the service for filtering.
+         */
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        List<String> types = new ArrayList<>();
+        types.add("FIRSTNAME");
+        types.add("LASTNAME");
+        types.add("PROBLEM");
+        types.add("GRADE");
+        try {
+            //read the type
+            System.out.println("Available filtering types: FIRSTNAME/LASTNAME/PROBLEM/GRADE");
+            System.out.print("type:");
+            String type = bufferedReader.readLine();
+            if(types.contains(type)){
+                //read the argument
+                System.out.print("filtering argument: ");
+                String argument = bufferedReader.readLine();
+                List<Student> students = this.studentService.filterService(argument, type);
+                students.stream().forEach(System.out::println);
+            } else {
+                System.out.println("ValidatorException: The type you introduced was not valid!");
+            }
+        } catch (IOException exception) {
+            System.out.println(exception.getMessage());
+        } catch (ValidatorException exception) {
+            System.out.println("ValidatorException: " + exception.getMessage());
+        }
     }
 
     public Student readStudentData() {

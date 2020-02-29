@@ -5,7 +5,6 @@ import Domain.Validators.Validator;
 import Domain.Validators.StudentValidator;
 import Repository.Repository;
 import Repository.StudentsRepo;
-import Service.Service;
 import Service.StudentsService;
 import UI.Console;
 import Repository.ProblemsRepo;
@@ -19,8 +18,8 @@ public class Main {
         Validator<Student> studentValidator = new StudentValidator();
         Repository<Problem> problemRepository = new ProblemsRepo();
         Validator<Problem> problemValidator = new ProblemValidator();
-        Service<Student> studentService = new StudentsService<Student>(studentRepository, studentValidator);
-        Service<Problem> problemService = new ProblemsService<Problem>(problemRepository, problemValidator);
+        StudentsService studentService = new StudentsService(studentRepository, studentValidator);
+        ProblemsService problemService = new ProblemsService(problemRepository, problemValidator);
         Console console = new Console(studentService, problemService);
 
         console.menu();

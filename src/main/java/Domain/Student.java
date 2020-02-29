@@ -48,7 +48,7 @@ public class Student {
 
     @Override
     public String toString() {
-        return firstName+" "+lastName+" ("+id+")";
+        return firstName+" "+lastName+" ("+id+")" + "\n" + "Problems and grades:" + problems;
     }
 
     @Override
@@ -62,6 +62,10 @@ public class Student {
     @Override
     public int hashCode() {
         return Objects.hash(getId(), getFirstName(), getLastName());
+    }
+
+    public List<Pair<Problem, Integer>> getProblems() {
+        return problems;
     }
 
     public void assignProblem(Problem problem){
