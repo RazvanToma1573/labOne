@@ -95,31 +95,29 @@ public class Console {
         } catch (ValidatorException exception){
             System.out.println("ValidatorException: " + exception.getMessage());
         } catch (RepositoryException exception){
-            System.out.println("ValidatorException: " + exception.getMessage());
+            System.out.println("RepositoryException: " + exception.getMessage());
         }
     }
 
     public void removeStudent(){
         try {
-            Student studentToBeRemoved = this.readStudentData();
-            this.studentService.remove(studentToBeRemoved);
-        } catch (ValidatorException exception) {
-            System.out.println("ValidatorException: " + exception.getMessage());
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("ID: ");
+            int id = scanner.nextInt();
+            this.studentService.remove(id);
         } catch (RepositoryException exception) {
-            System.out.println("RepositoryException:" + exception.getMessage());
+            System.out.println("RepositoryException: " + exception.getMessage());
         }
     }
 
     public void removeProblem(){
-        try{
+        try {
             Scanner scanner = new Scanner(System.in);
             System.out.print("ID : ");
             int id = scanner.nextInt();
             this.problemService.remove(id);
-        } catch (ValidatorException exception){
-            System.out.println("ValidatorException: " + exception.getMessage());
         } catch (RepositoryException exception){
-            System.out.println("ValidatorException: " + exception.getMessage());
+            System.out.println("RepositoryException: " + exception.getMessage());
         }
     }
 

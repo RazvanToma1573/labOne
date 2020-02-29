@@ -25,10 +25,10 @@ public class StudentsRepo implements Repository<Student> {
     }
 
     @Override
-    public void remove(Student entity) throws RepositoryException{
-        if (!this.find(entity))
+    public void remove(int id) throws RepositoryException{
+        if(!this.find(new Student(id,"","")))
             throw new RepositoryException("Student not contained!");
-        students.remove(entity);
+        students.remove(new Student(id, "", ""));
     }
 
     @Override

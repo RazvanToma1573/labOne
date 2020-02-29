@@ -25,9 +25,8 @@ public class StudentsService<Student> implements Service<Student> {
     }
 
     @Override
-    public void remove (Student studentToBeRemoved) throws ValidatorException, RepositoryException {
-        studentValidator.validate(studentToBeRemoved);
-        this.studentRepository.remove(studentToBeRemoved);
+    public void remove (int id) throws RepositoryException {
+        this.studentRepository.remove(id);
     }
 
     @Override
