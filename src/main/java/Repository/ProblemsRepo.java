@@ -20,9 +20,9 @@ public class ProblemsRepo implements Repository<Problem> {
     }
 
     @Override
-    public void remove(Problem entity) throws RepositoryException {
-        if(!this.find(entity)) throw new RepositoryException("Problem not contained!");
-        this.problems.remove(entity);
+    public void remove(int problemId) throws RepositoryException {
+        if(!this.find(new Problem(problemId,"",""))) throw new RepositoryException("Problem not contained!");
+        this.problems.remove(new Problem(problemId, "", ""));
     }
 
     @Override

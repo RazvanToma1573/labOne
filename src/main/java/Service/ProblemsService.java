@@ -24,9 +24,8 @@ public class ProblemsService<Problem> implements Service<Problem> {
     }
 
     @Override
-    public void remove(Problem problemToBeRemoved) throws ValidatorException, RepositoryException {
-        this.problemValidator.validate(problemToBeRemoved);
-        this.problemRepository.remove(problemToBeRemoved);
+    public void remove(int idProblemToBeRemoved) throws ValidatorException, RepositoryException {
+        this.problemRepository.remove(idProblemToBeRemoved);
     }
 
     @Override

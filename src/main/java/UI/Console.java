@@ -112,8 +112,10 @@ public class Console {
 
     public void removeProblem(){
         try{
-            Problem problemToBeRemoved = this.readProblemData();
-            this.problemService.remove(problemToBeRemoved);
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("ID : ");
+            int id = scanner.nextInt();
+            this.problemService.remove(id);
         } catch (ValidatorException exception){
             System.out.println("ValidatorException: " + exception.getMessage());
         } catch (RepositoryException exception){
