@@ -43,9 +43,7 @@ public class Problem {
         if (this == obj) return true;
         else if (!(obj instanceof Problem)) return false;
         Problem problem = (Problem) obj;
-        return getId() == problem.getId() &&
-                Objects.equals(getDescription(), problem.getDescription()) &&
-                Objects.equals(getDifficulty(), problem.getDifficulty());
+        return getId() == problem.getId();
     }
 
     @Override
