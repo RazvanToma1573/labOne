@@ -31,6 +31,8 @@ public class Console {
         System.out.println("\t\t 4 - add a new lab problem");
         System.out.println("\t\t 5 - remove a lab problem");
         System.out.println("\t\t 6 - show all problems");
+        System.out.println("\t\t 7 - assign a problem to a student");
+        System.out.println("\t\t 8 - assign a grade to a student");
     }
 
     public void menu() {
@@ -64,6 +66,14 @@ public class Console {
                 }
                 else if(choice == 6){
                     this.showAllProblems();
+                    System.out.println("Done");
+                }
+                else if(choice == 7){
+                    this.assignProblemToStudent();
+                    System.out.println("Done");
+                }
+                else if(choice == 8){
+                    this.assignGradeToStudent();
                     System.out.println("Done");
                 }
                 else if (choice == 0)
@@ -169,5 +179,40 @@ public class Console {
             exception.printStackTrace();
         }
         return null;
+    }
+
+    public void assignProblemToStudent(){
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            System.out.print("Student ID : ");
+            int studentId = Integer.valueOf(bufferedReader.readLine());
+            System.out.print("Problem ID : ");
+            int problemId = Integer.valueOf(bufferedReader.readLine());
+            Problem problem = this.problemService.getById(problemId);
+            this.studentService.assignProblem(studentId, problem);
+        } catch (IOException exception){
+            exception.printStackTrace();
+        } catch (RepositoryException exception){
+            System.out.println("RepositoryException : " + exception.getMessage());
+        }
+    }
+
+    public void assignGradeToStudent(){
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        try{
+            System.out.print("Student ID : ");
+            int studentId = Integer.valueOf(bufferedReader.readLine());
+            System.out.print("Problem ID :");
+            int problemId = Integer.valueOf(bufferedReader.readLine());
+            System.out.print("Grade : ");
+            int grade = Integer.valueOf(bufferedReader.readLine());
+            Problem problem = this.problemService.getById(problemId);
+            this.studentService.assignGrade(studentId, problem, grade);
+
+        } catch (IOException exception){
+            exception.printStackTrace();
+        } catch (RepositoryException exception){
+            System.out.println("RepositoryException: "+exception.getMessage());
+        }
     }
 }

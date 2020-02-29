@@ -25,11 +25,27 @@ public class ProblemsService<Problem> implements Service<Problem> {
 
     @Override
     public void remove(int idProblemToBeRemoved) throws RepositoryException {
+
         this.problemRepository.remove(idProblemToBeRemoved);
     }
 
     @Override
     public List<Problem> get() {
         return this.problemRepository.getAll();
+    }
+
+    @Override
+    public Problem getById(int id) throws RepositoryException{
+        return this.problemRepository.getById(id);
+    }
+
+    @Override
+    public void assignProblem(int studentId, Domain.Problem problem) throws RepositoryException {
+        //throw new RepositoryException("");
+    }
+
+    @Override
+    public void assignGrade(int studentId, Domain.Problem problem, int grade) throws RepositoryException {
+
     }
 }

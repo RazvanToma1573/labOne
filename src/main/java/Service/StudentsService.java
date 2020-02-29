@@ -1,5 +1,6 @@
 package Service;
 
+import Domain.Problem;
 import Domain.Student;
 import Domain.Validators.Validator;
 import Domain.Validators.ValidatorException;
@@ -29,8 +30,22 @@ public class StudentsService<Student> implements Service<Student> {
         this.studentRepository.remove(id);
     }
 
+    public void assignProblem(int studentId, Problem problem) throws RepositoryException{
+        this.studentRepository.assignProblem(studentId, problem);
+    }
+
     @Override
     public List<Student> get(){
         return this.studentRepository.getAll();
+    }
+
+    @Override
+    public Student getById(int id) throws RepositoryException {
+        return this.studentRepository.getById(id);
+    }
+
+    @Override
+    public void assignGrade(int studentId, Problem problem, int grade) throws RepositoryException {
+        this.studentRepository.assignGrade(studentId, problem, grade);
     }
 }

@@ -4,6 +4,7 @@ import Domain.Problem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProblemsRepo implements Repository<Problem> {
 
@@ -33,5 +34,22 @@ public class ProblemsRepo implements Repository<Problem> {
     @Override
     public boolean find(Problem entity) {
         return this.problems.contains(entity);
+    }
+
+    public Problem getById(int id) throws RepositoryException{
+        List<Problem> problem = this.problems.stream().filter(prob -> prob.getId() == id)
+                .collect(Collectors.toList());
+        if(problem.isEmpty()) throw new RepositoryException("There is no problem with id "+id);
+        return problem.get(0);
+    }
+
+    @Override
+    public void assignProblem(int studentId, Problem problem) throws RepositoryException {
+
+    }
+
+    @Override
+    public void assignGrade(int studentId, Problem problem, int grade) throws RepositoryException {
+
     }
 }
