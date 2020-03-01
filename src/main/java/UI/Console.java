@@ -21,11 +21,19 @@ public class Console {
     private StudentsService studentService;
     private ProblemsService problemService;
 
+    /**
+     * Creates a new Console
+     * @param studentService is service for students
+     * @param problemService is service for problems
+     */
     public Console(StudentsService studentService, ProblemsService problemService) {
         this.studentService = studentService;
         this.problemService = problemService;
     }
 
+    /**
+     * Prints the menu with the available commands
+     */
     public void printTheMenu() {
         System.out.println("Options:");
         System.out.println("\t\t 0 - quit");
@@ -41,6 +49,9 @@ public class Console {
         System.out.println("\t\t 11 - print the menu");
     }
 
+    /**
+     * Reads a command from the console and implement the specific function
+     */
     public void menu() {
         System.out.println("Hello!");
         Scanner scanner = new Scanner(System.in);
@@ -101,6 +112,9 @@ public class Console {
         }
     }
 
+    /**
+     * Function for adding a new student
+     */
     public void addNewStudent(){
         try {
             Student newStudent = this.readStudentData();
@@ -112,6 +126,9 @@ public class Console {
         }
     }
 
+    /**
+     * Function for adding a new problem
+     */
     public void addNewProblem(){
         try{
             Problem problem = this.readProblemData();
@@ -123,6 +140,9 @@ public class Console {
         }
     }
 
+    /**
+     * Function for removing a student, by reading its ID
+     */
     public void removeStudent(){
         try {
             Scanner scanner = new Scanner(System.in);
@@ -134,6 +154,9 @@ public class Console {
         }
     }
 
+    /**
+     * Function for removing a problem, by reading its ID
+     */
     public void removeProblem(){
         try {
             Scanner scanner = new Scanner(System.in);
@@ -145,18 +168,29 @@ public class Console {
         }
     }
 
+    /**
+     * Function that prints all the students on the screen
+     */
     public void showAllStudents() {
         System.out.println("Students:");
         List<Student> students = this.studentService.get();
         students.stream().forEach(System.out::println);
     }
 
+    /**
+     * Function that prints all the problems on the screen
+     */
     public void showAllProblems(){
         System.out.println("Lab Problems:");
         List<Problem> problems = this.problemService.get();
         problems.stream().forEach(System.out::println);
     }
 
+    /**
+     * Function that filters students, by reading the type of filtering
+     * and the argument for the filter
+     * Students can be filtered by firstname, lastname, problem and grade
+     */
     public void filterStudents(){
         /**
          * This function will ask the user for a type of filtering (FIRSTNAME/LASTNAME/PROBLEM/GRADE)
@@ -189,6 +223,10 @@ public class Console {
         }
     }
 
+    /**
+     * Function the reads data for a student
+     * @return a Student with the read data
+     */
     public Student readStudentData() {
         System.out.println("Insert student data:");
 
@@ -209,6 +247,10 @@ public class Console {
         return null;
     }
 
+    /**
+     * Function that reads data for a probem
+     * @return a Problem with the read data
+     */
     public Problem readProblemData(){
         System.out.println("Insert problem data:");
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
@@ -227,6 +269,10 @@ public class Console {
         return null;
     }
 
+    /**
+     * Function that assigns a problem to a student,
+     * by reading the ID's of the student and the problem
+     */
     public void assignProblemToStudent(){
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         try {
@@ -243,6 +289,10 @@ public class Console {
         }
     }
 
+    /**
+     * Function that assigns a grade to a student for a given problem,
+     * by reading the ID's of the student and the problem, and the grade
+     */
     public void assignGradeToStudent(){
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         try{
