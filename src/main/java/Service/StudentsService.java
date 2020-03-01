@@ -6,9 +6,10 @@ import Domain.Validators.Validator;
 import Domain.Validators.ValidatorException;
 import Repository.Repository;
 import Repository.RepositoryException;
-import javafx.util.Pair;
+
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class StudentsService {
@@ -103,7 +104,7 @@ public class StudentsService {
         } else if (type.equals("PROBLEM")) {
             try {
                 int problemID = Integer.parseInt(argument);
-                return students.stream().filter(student ->  { List<Pair<Problem,Integer>> problemsAndGrades = student.getProblems();
+                return students.stream().filter(student ->  { List<Map.Entry<Problem,Integer>> problemsAndGrades = student.getProblems();
                                                                 return problemsAndGrades.stream().filter(problemIntegerPair -> problemIntegerPair.getKey().getId() == problemID).count() > 0;
                                                                 }).collect(Collectors.toList());
             } catch (NumberFormatException exception) {
@@ -112,7 +113,7 @@ public class StudentsService {
         } else if (type.equals("GRADE")) {
             try{
                 int grade = Integer.parseInt(argument);
-                return students.stream().filter(student -> { List<Pair<Problem,Integer>> problemsAndGrades = student.getProblems();
+                return students.stream().filter(student -> { List<Map.Entry<Problem,Integer>> problemsAndGrades = student.getProblems();
                                                                 return problemsAndGrades.stream().filter(problemIntegerPair -> problemIntegerPair.getValue() == grade).count() > 0;
                                                                 }).collect(Collectors.toList());
             } catch (NumberFormatException exception) {

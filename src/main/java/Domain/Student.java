@@ -2,18 +2,16 @@ package Domain;
 
 import Repository.Repository;
 import Repository.RepositoryException;
-import javafx.util.Pair;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Student {
     private int id;
     private String firstName;
     private String lastName;
-    private List<Pair<Problem, Integer>> problems;
+    private List<Map.Entry<Problem, Integer>> problems;
 
     /**
      * Creates a new Student with the given parameters
@@ -25,7 +23,7 @@ public class Student {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.problems = new ArrayList<Pair<Problem, Integer>>();
+        this.problems = new ArrayList<Map.Entry<Problem, Integer>>();
     }
 
     /**
@@ -105,9 +103,9 @@ public class Student {
 
     /**
      * Returns all the problems of the given student, together with the grades
-     * @return a list with pairs Problem -> Grade
+     * @return a list with pairs Problem - Grade
      */
-    public List<Pair<Problem, Integer>> getProblems() {
+    public List<Map.Entry<Problem, Integer>> getProblems() {
         return problems;
     }
 
@@ -116,7 +114,7 @@ public class Student {
      * @param problem is the new problem for the student
      */
     public void assignProblem(Problem problem){
-        this.problems.add(new Pair<Problem, Integer>(problem, -1));
+        this.problems.add(new AbstractMap.SimpleEntry<>(problem, -1));
     }
 
     /**
@@ -129,7 +127,7 @@ public class Student {
         if(this.problems.stream().map(pair -> pair.getKey()).filter(prob -> prob.getId() == problem.getId())
         .collect(Collectors.toList()).isEmpty()) throw new RepositoryException("The problem was not assigned to this student");
         this.problems = this.problems.stream().map(pair -> {
-            if(pair.getKey().equals(problem)) return new Pair<Problem, Integer>(problem, grade);
+            if(pair.getKey().equals(problem)) return new AbstractMap.SimpleEntry<>(problem, grade);
             else return pair;
         }).collect(Collectors.toList());
     }
