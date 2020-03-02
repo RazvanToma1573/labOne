@@ -1,4 +1,4 @@
-package Repository;
+package Domain.Validators;
 
 public class RepositoryException extends Exception {
     public RepositoryException() {

@@ -1,14 +1,13 @@
 package UI;
 
+import Domain.Grade;
 import Domain.Problem;
 import Domain.Student;
-import Domain.Validators.Validator;
 import Domain.Validators.ValidatorException;
-import Repository.RepositoryException;
+import Domain.Validators.RepositoryException;
 import Service.ProblemsService;
 import Service.StudentsService;
 
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -44,8 +43,9 @@ public class Console {
         System.out.println("\t\t 5 - remove a lab problem");
         System.out.println("\t\t 6 - show all problems");
         System.out.println("\t\t 7 - assign a problem to a student");
-        System.out.println("\t\t 8 - assign a grade to a student");
-        System.out.println("\t\t 9 - filter");
+        System.out.println("\t\t 8 - show all students,problems and grades");
+        System.out.println("\t\t 9 - assign a grade to a student");
+        System.out.println("\t\t 10 - filter");
         System.out.println("\t\t 11 - print the menu");
     }
 
@@ -90,10 +90,14 @@ public class Console {
                     System.out.println("Done");
                 }
                 else if(choice == 8){
+                    this.showAllGrades();
+                    System.out.println("Done");
+                }
+                else if(choice == 9){
                     this.assignGradeToStudent();
                     System.out.println("Done");
                 }
-                else if(choice == 9) {
+                else if(choice == 10) {
                     this.filterStudents();
                     System.out.println("Done");
                 }
@@ -121,8 +125,6 @@ public class Console {
             this.studentService.add(newStudent);
         } catch (ValidatorException exception){
             System.out.println("ValidatorException:" + exception.getMessage());
-        } catch (RepositoryException exception) {
-            System.out.println("RepositoryException:" + exception.getMessage());
         }
     }
 
@@ -135,8 +137,6 @@ public class Console {
             this.problemService.add(problem);
         } catch (ValidatorException exception){
             System.out.println("ValidatorException: " + exception.getMessage());
-        } catch (RepositoryException exception){
-            System.out.println("RepositoryException: " + exception.getMessage());
         }
     }
 
@@ -144,28 +144,20 @@ public class Console {
      * Function for removing a student, by reading its ID
      */
     public void removeStudent(){
-        try {
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("ID: ");
-            int id = scanner.nextInt();
-            this.studentService.remove(id);
-        } catch (RepositoryException exception) {
-            System.out.println("RepositoryException: " + exception.getMessage());
-        }
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("ID: ");
+        int id = scanner.nextInt();
+        this.studentService.remove(id);
     }
 
     /**
      * Function for removing a problem, by reading its ID
      */
     public void removeProblem(){
-        try {
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("ID : ");
-            int id = scanner.nextInt();
-            this.problemService.remove(id);
-        } catch (RepositoryException exception){
-            System.out.println("RepositoryException: " + exception.getMessage());
-        }
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("ID : ");
+        int id = scanner.nextInt();
+        this.problemService.remove(id);
     }
 
     /**
@@ -173,8 +165,8 @@ public class Console {
      */
     public void showAllStudents() {
         System.out.println("Students:");
-        List<Student> students = this.studentService.get();
-        students.stream().forEach(System.out::println);
+        Iterable<Student> students = this.studentService.get();
+        students.forEach(System.out::println);
     }
 
     /**
@@ -182,8 +174,17 @@ public class Console {
      */
     public void showAllProblems(){
         System.out.println("Lab Problems:");
-        List<Problem> problems = this.problemService.get();
-        problems.stream().forEach(System.out::println);
+        Iterable<Problem> problems = this.problemService.get();
+        problems.forEach(System.out::println);
+    }
+
+    /**
+     * Function that prints all the grades on the screen
+     */
+    public void showAllGrades(){
+        System.out.println("Students, problems and grades:");
+        Iterable<Grade> grades = this.studentService.getGrades();
+        grades.forEach(System.out::println);
     }
 
     /**
@@ -211,8 +212,8 @@ public class Console {
                 //read the argument
                 System.out.print("filtering argument: ");
                 String argument = bufferedReader.readLine();
-                List<Student> students = this.studentService.filterService(argument, type);
-                students.stream().forEach(System.out::println);
+                Iterable<Student> students = this.studentService.filterService(argument, type);
+                students.forEach(System.out::println);
             } else {
                 System.out.println("ValidatorException: The type you introduced was not valid!");
             }
@@ -239,7 +240,8 @@ public class Console {
             System.out.print("Last Name : ");
             String lastName = bufferRead.readLine();
 
-            Student student = new Student(id, firstName, lastName);
+            Student student = new Student(firstName, lastName);
+            student.setId(id);
             return student;
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -261,7 +263,8 @@ public class Console {
             String description = bufferedReader.readLine();
             System.out.print("Difficulty(easy/medium/hard): ");
             String difficulty = bufferedReader.readLine();
-            Problem problem = new Problem(id, description, difficulty);
+            Problem problem = new Problem(description, difficulty);
+            problem.setId(id);
             return problem;
         } catch(IOException exception){
             exception.printStackTrace();
@@ -284,8 +287,8 @@ public class Console {
             this.studentService.assignProblem(studentId, problem);
         } catch (IOException exception){
             exception.printStackTrace();
-        } catch (RepositoryException exception){
-            System.out.println("RepositoryException : " + exception.getMessage());
+        } catch (ValidatorException exception){
+            System.out.println("ValidatorException : " + exception.getMessage());
         }
     }
 
@@ -307,8 +310,8 @@ public class Console {
 
         } catch (IOException exception){
             exception.printStackTrace();
-        } catch (RepositoryException exception){
-            System.out.println("RepositoryException: "+exception.getMessage());
+        } catch (ValidatorException exception){
+            System.out.println("ValidatorException: "+exception.getMessage());
         }
     }
 }

@@ -1,45 +1,19 @@
 package Domain;
 
-import Repository.Repository;
-import Repository.RepositoryException;
-
-
 import java.util.*;
-import java.util.stream.Collectors;
 
-public class Student {
-    private int id;
+public class Student extends BaseEntity<Integer>{
     private String firstName;
     private String lastName;
-    private List<Map.Entry<Problem, Integer>> problems;
 
     /**
      * Creates a new Student with the given parameters
-     * @param id is the student's ID
      * @param firstName is the student's first name
      * @param lastName is the students's second name
      */
-    public Student(int id, String firstName, String lastName) {
-        this.id = id;
+    public Student(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.problems = new ArrayList<Map.Entry<Problem, Integer>>();
-    }
-
-    /**
-     * Returns the ID of the student
-     * @return the ID of the student (int)
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Set the ID for the given student
-     * @param id is the new ID to be set
-     */
-    public void setId(int id) {
-        this.id = id;
     }
 
     /**
@@ -80,7 +54,7 @@ public class Student {
      */
     @Override
     public String toString() {
-        return firstName+" "+lastName+" ("+id+")" + "\n" + "Problems and grades:" + problems;
+        return firstName + " "+ lastName + " (" + getId() + ") ";
     }
 
     /**
@@ -93,7 +67,7 @@ public class Student {
         if (this == o) return true;
         if (!(o instanceof Student)) return false;
         Student student = (Student) o;
-        return getId() == student.getId();
+        return getId().equals(student.getId());
     }
 
     @Override
@@ -101,34 +75,4 @@ public class Student {
         return Objects.hash(getId(), getFirstName(), getLastName());
     }
 
-    /**
-     * Returns all the problems of the given student, together with the grades
-     * @return a list with pairs Problem - Grade
-     */
-    public List<Map.Entry<Problem, Integer>> getProblems() {
-        return problems;
-    }
-
-    /**
-     * Adds a problem for the given student with no grade (-1)
-     * @param problem is the new problem for the student
-     */
-    public void assignProblem(Problem problem){
-        this.problems.add(new AbstractMap.SimpleEntry<>(problem, -1));
-    }
-
-    /**
-     * Assign a grade to the student for the given problem in parameters
-     * @param problem is the problem to be graded
-     * @param grade is the grade (0..10)
-     * @throws RepositoryException if the student doesn't have this problem already assigned
-     */
-    public void assignGrade(Problem problem, int grade) throws RepositoryException {
-        if(this.problems.stream().map(pair -> pair.getKey()).filter(prob -> prob.getId() == problem.getId())
-        .collect(Collectors.toList()).isEmpty()) throw new RepositoryException("The problem was not assigned to this student");
-        this.problems = this.problems.stream().map(pair -> {
-            if(pair.getKey().equals(problem)) return new AbstractMap.SimpleEntry<>(problem, grade);
-            else return pair;
-        }).collect(Collectors.toList());
-    }
 }

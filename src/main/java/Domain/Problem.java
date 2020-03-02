@@ -2,39 +2,21 @@ package Domain;
 
 import java.util.Objects;
 
-public class Problem {
+public class Problem extends BaseEntity<Integer> {
 
-    private int id;
     private String description;
     private String difficulty; //easy/medium/hard
 
     /**
      * Creates a new problem with the given parameters.
-     * @param id is the problem's id.
      * @param description is the problem's description.
      * @param difficulty is the problem's difficulty.
      */
-    public Problem(int id, String description, String difficulty) {
-        this.id = id;
+    public Problem(String description, String difficulty) {
         this.description = description;
         this.difficulty = difficulty;
     }
 
-    /**
-     * Returns the problem's ID.
-     * @return the id of the problem (int)
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Set the id of the given problem.
-     * @param id is the new id of the problem (int)
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
 
     /**
      * Returns the problem's description.
@@ -87,7 +69,7 @@ public class Problem {
      */
     @Override
     public String toString() {
-        return description + " " + difficulty + " " + "(" + id + ")";
+        return description + " " + difficulty + " " + "(" + getId() + ")";
     }
 
     @Override

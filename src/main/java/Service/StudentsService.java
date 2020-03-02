@@ -1,78 +1,82 @@
 package Service;
 
+import Domain.Grade;
 import Domain.Problem;
 import Domain.Student;
-import Domain.Validators.Validator;
 import Domain.Validators.ValidatorException;
 import Repository.Repository;
-import Repository.RepositoryException;
+import Domain.Validators.RepositoryException;
 
 
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
+
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class StudentsService {
 
-    private Repository<Student> studentRepository;
-    private Validator<Student> studentValidator;
+    private Repository<Integer, Student> studentRepository;
+    private Repository<Integer, Grade> gradeRepository;
 
     /**
      * Creates a new Service for the students
      * @param studentRepository is the repository for the students
-     * @param studentValidator is the validator for students
+     * @param gradeRepository is the repository for the grades
      */
-    public StudentsService(Repository<Student> studentRepository, Validator<Student> studentValidator) {
+    public StudentsService(Repository<Integer, Student> studentRepository, Repository<Integer, Grade> gradeRepository) {
         this.studentRepository = studentRepository;
-        this.studentValidator = studentValidator;
+        this.gradeRepository = gradeRepository;
     }
 
     /**
      * Adds a new student to the repository
      * @param newStudent is the new student to be added
      * @throws ValidatorException if the data of the new student is invalid
-     * @throws RepositoryException if the student is already in the repository
      */
-    public void add (Student newStudent) throws ValidatorException, RepositoryException {
-        studentValidator.validate(newStudent);
-        this.studentRepository.add(newStudent);
+    public void add (Student newStudent) throws ValidatorException {
+        studentRepository.save(newStudent);
     }
 
     /**
      * Removes a student from the repository
      * @param id is the ID of the student to be removed
-     * @throws RepositoryException if the student is not in the repository
      */
-    public void remove (int id) throws RepositoryException {
-        this.studentRepository.remove(id);
+    public void remove (int id) {
+        studentRepository.delete(id);
     }
 
     /**
      * Assigns a problem to a student from repository
      * @param studentId is the ID of the student
      * @param problem is the new problem to be assigned
-     * @throws RepositoryException if the student is not in the repository
+     * @throws ValidatorException Custom exception
      */
-    public void assignProblem(int studentId, Problem problem) throws RepositoryException{
-        this.studentRepository.assignProblem(studentId, problem);
+    public void assignProblem(int studentId, Problem problem) throws ValidatorException{
+        Student student = this.studentRepository.findOne(studentId).get();
+        this.gradeRepository.save(new Grade(student, problem, 0));
     }
 
     /**
      * Returns all the students from the repository
-     * @return a list with all the students
+     * @return an iterable with all the students
      */
-    public List<Student> get(){
-        return this.studentRepository.getAll();
+    public Iterable<Student> get(){
+        return this.studentRepository.findAll();
     }
+
+    /**
+     * Returns all the grades from the repository
+     * @return an iterable with all the grades
+     */
+    public Iterable<Grade> getGrades() {return this.gradeRepository.findAll();}
 
     /**
      * Returns a student with the given ID from the repository
      * @param id is the ID of the student
      * @return student with the given ID
-     * @throws RepositoryException if there is no student with such ID in the repository
      */
-    public Student getById(int id) throws RepositoryException {
-        return this.studentRepository.getById(id);
+    public Student getById(int id) {
+        return this.studentRepository.findOne(id).get();
     }
 
     /**
@@ -80,11 +84,11 @@ public class StudentsService {
      * @param studentId is the ID of the stundet
      * @param problem is the problem to be graded
      * @param grade is the grade (0..10)
-     * @throws RepositoryException if grade is invalid or if the student
-     * is not in the repository
+     * @throws ValidatorException custom exception
      */
-    public void assignGrade(int studentId, Problem problem, int grade) throws RepositoryException {
-        this.studentRepository.assignGrade(studentId, problem, grade);
+    public void assignGrade(int studentId, Problem problem, int grade) throws ValidatorException {
+        Student student = this.studentRepository.findOne(studentId).get();
+        this.gradeRepository.update(new Grade(student, problem, grade));
     }
 
     /**
@@ -95,27 +99,49 @@ public class StudentsService {
      * @return a list of filtere students
      * @throws ValidatorException if the argument is invalid
      */
-    public List<Student> filterService(String argument, String type) throws ValidatorException {
-        List<Student> students = this.studentRepository.getAll();
+    public Set<Student> filterService(String argument, String type) throws ValidatorException {
+        Iterable<Student> students = studentRepository.findAll();
+        Iterable<Grade> grades = gradeRepository.findAll();
         if (type.equals("FIRSTNAME")) {
-            return students.stream().filter(student -> argument.equals(student.getFirstName())).collect(Collectors.toList());
+
+            Set<Student> filteredStudents = new HashSet<>();
+            students.forEach(filteredStudents::add);
+            filteredStudents.removeIf(student -> !student.getFirstName().contains(argument));
+            return filteredStudents;
+
         } else if (type.equals("LASTNAME")) {
-            return students.stream().filter(student -> argument.equals(student.getLastName())).collect(Collectors.toList());
+
+            Set<Student> filteredStudents = new HashSet<>();
+            students.forEach(filteredStudents::add);
+            filteredStudents.removeIf(student -> !student.getLastName().contains(argument));
+            return filteredStudents;
+
         } else if (type.equals("PROBLEM")) {
             try {
                 int problemID = Integer.parseInt(argument);
-                return students.stream().filter(student ->  { List<Map.Entry<Problem,Integer>> problemsAndGrades = student.getProblems();
-                                                                return problemsAndGrades.stream().filter(problemIntegerPair -> problemIntegerPair.getKey().getId() == problemID).count() > 0;
-                                                                }).collect(Collectors.toList());
+
+                Set<Grade> filteredGrades = new HashSet<>();
+                grades.forEach(filteredGrades::add);
+                filteredGrades.removeIf(grade -> !grade.getProblem().getId().equals(problemID));
+                Set<Student> filteredStudents = filteredGrades.stream().map(grade -> grade.getStudent()).collect(Collectors.toSet());
+
+                return filteredStudents;
+
             } catch (NumberFormatException exception) {
                 throw new ValidatorException("ID not valid");
             }
         } else if (type.equals("GRADE")) {
             try{
-                int grade = Integer.parseInt(argument);
-                return students.stream().filter(student -> { List<Map.Entry<Problem,Integer>> problemsAndGrades = student.getProblems();
-                                                                return problemsAndGrades.stream().filter(problemIntegerPair -> problemIntegerPair.getValue() == grade).count() > 0;
-                                                                }).collect(Collectors.toList());
+                int wantedGrade = Integer.parseInt(argument);
+
+                Set<Grade> filteredGrades = new HashSet<>();
+                grades.forEach(filteredGrades::add);
+                filteredGrades.removeIf(grade -> grade.getActualGrade() != (wantedGrade));
+                Set<Student> filteredStudents = filteredGrades.stream().map(grade -> grade.getStudent()).collect(Collectors.toSet());
+
+
+                return filteredStudents;
+
             } catch (NumberFormatException exception) {
                 throw new ValidatorException("Grade not valid");
             }
