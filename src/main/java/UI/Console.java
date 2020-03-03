@@ -125,6 +125,8 @@ public class Console {
             this.studentService.add(newStudent);
         } catch (ValidatorException exception){
             System.out.println("ValidatorException:" + exception.getMessage());
+        } catch (IllegalArgumentException exception) {
+            System.out.println("IllegalArgumentException:" + exception.getMessage());
         }
     }
 
@@ -137,6 +139,8 @@ public class Console {
             this.problemService.add(problem);
         } catch (ValidatorException exception){
             System.out.println("ValidatorException: " + exception.getMessage());
+        } catch (IllegalArgumentException exception) {
+            System.out.println("IllegalArgumentException:" + exception.getMessage());
         }
     }
 
@@ -144,20 +148,28 @@ public class Console {
      * Function for removing a student, by reading its ID
      */
     public void removeStudent(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("ID: ");
-        int id = scanner.nextInt();
-        this.studentService.remove(id);
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("ID: ");
+            int id = scanner.nextInt();
+            this.studentService.remove(id);
+        } catch (IllegalArgumentException exception) {
+            System.out.println("IllegalArgumentException:" + exception.getMessage());
+        }
     }
 
     /**
      * Function for removing a problem, by reading its ID
      */
     public void removeProblem(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("ID : ");
-        int id = scanner.nextInt();
-        this.problemService.remove(id);
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("ID : ");
+            int id = scanner.nextInt();
+            this.problemService.remove(id);
+        } catch (IllegalArgumentException exception) {
+            System.out.println("IllegalArgumentException:" + exception.getMessage());
+        }
     }
 
     /**
@@ -289,6 +301,8 @@ public class Console {
             exception.printStackTrace();
         } catch (ValidatorException exception){
             System.out.println("ValidatorException : " + exception.getMessage());
+        } catch (IllegalArgumentException exception) {
+            System.out.println("IllegalArgumentException:" + exception.getMessage());
         }
     }
 
@@ -312,6 +326,8 @@ public class Console {
             exception.printStackTrace();
         } catch (ValidatorException exception){
             System.out.println("ValidatorException: "+exception.getMessage());
+        } catch (IllegalArgumentException exception) {
+            System.out.println("IllegalArgumentException:" + exception.getMessage());
         }
     }
 }
