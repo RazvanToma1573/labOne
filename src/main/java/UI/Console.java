@@ -46,6 +46,7 @@ public class Console {
         System.out.println("\t\t 8 - show all students,problems and grades");
         System.out.println("\t\t 9 - assign a grade to a student");
         System.out.println("\t\t 10 - filter");
+        System.out.println("\t\t 11 - reports");
         System.out.println("\t\t 11 - print the menu");
     }
 
@@ -55,9 +56,11 @@ public class Console {
     public void menu() {
         System.out.println("Hello!");
         Scanner scanner = new Scanner(System.in);
-        this.printTheMenu();
         int choice = -1;
         while (choice != 0) {
+            this.printTheMenu();
+            System.out.println("---------------");
+            System.out.println("");
             System.out.print("Your choice : ");
             if (scanner.hasNextInt()){
                 choice = scanner.nextInt();
@@ -102,7 +105,24 @@ public class Console {
                     System.out.println("Done");
                 }
                 else if(choice == 11) {
-                    this.printTheMenu();
+                    System.out.println("Select one report from the list below:");
+                    System.out.println("\t 1. Problem that was assigned most times");
+                    System.out.println("\t 2. Student with the highest average grade");
+                    System.out.println("\t 3. Student with the most assigned problems");
+                    choice = scanner.nextInt();
+                    switch(choice){
+                        case 1:
+                            //todo
+                            break;
+                        case 2:
+                            System.out.println(this.studentService.getStudentWithMaxGrade());
+                            break;
+                        case 3:
+                            //todo
+                            break;
+                        default:
+                            System.out.println("Invalid command");
+                    }
                     System.out.println("Done");
                 }
                 else if (choice == 0)
