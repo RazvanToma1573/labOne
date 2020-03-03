@@ -16,16 +16,16 @@ public class Main {
     public static void main(String[] args){
 
         Validator<Student> studentValidator = new StudentValidator();
-        Repository<Integer, Student> studentRepository = new InMemoryRepository<Integer, Student>(studentValidator);
+        Repository<Integer, Student> studentRepository = new InMemoryRepository<Integer, Student>();
 
         Validator<Problem> problemValidator = new ProblemValidator();
-        Repository<Integer, Problem> problemRepository = new InMemoryRepository<Integer, Problem>(problemValidator);
+        Repository<Integer, Problem> problemRepository = new InMemoryRepository<Integer, Problem>();
 
-        Validator<Grade> gradeValidator = new GradeValidator(studentValidator, problemValidator);
-        Repository<Integer, Grade> gradeRepository = new InMemoryRepository<Integer, Grade>(gradeValidator);
+        Validator<Grade> gradeValidator = new GradeValidator();
+        Repository<Integer, Grade> gradeRepository = new InMemoryRepository<Integer, Grade>();
 
-        StudentsService studentService = new StudentsService(studentRepository, gradeRepository);
-        ProblemsService problemService = new ProblemsService(problemRepository);
+        StudentsService studentService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemValidator);
+        ProblemsService problemService = new ProblemsService(problemRepository, problemValidator);
         Console console = new Console(studentService, problemService);
 
         console.menu();

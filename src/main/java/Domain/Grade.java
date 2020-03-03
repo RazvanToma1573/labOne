@@ -4,12 +4,14 @@ import java.util.Objects;
 
 public class Grade extends BaseEntity<Integer>{
 
+    private static int id = 0;
     private Student student;
     private Problem problem;
     private int actualGrade;
 
     public Grade(Student student, Problem problem, int actualGrade) {
-        this.setId(student.getId());
+        this.setId(student.getId()+problem.getId() + id);
+        id++;
         this.student = student;
         this.problem = problem;
         this.actualGrade = actualGrade;

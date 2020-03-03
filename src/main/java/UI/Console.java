@@ -4,7 +4,6 @@ import Domain.Grade;
 import Domain.Problem;
 import Domain.Student;
 import Domain.Validators.ValidatorException;
-import Domain.Validators.RepositoryException;
 import Service.ProblemsService;
 import Service.StudentsService;
 
@@ -12,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -46,7 +46,6 @@ public class Console {
         System.out.println("\t\t 8 - show all students,problems and grades");
         System.out.println("\t\t 9 - assign a grade to a student");
         System.out.println("\t\t 10 - filter");
-        System.out.println("\t\t 11 - print the menu");
     }
 
     /**
@@ -59,59 +58,98 @@ public class Console {
         int choice = -1;
         while (choice != 0) {
             System.out.print("Your choice : ");
-            if (scanner.hasNextInt()){
+            try {
                 choice = scanner.nextInt();
                 if (choice == 1) {
+                    System.out.println();
                     this.addNewStudent();
-                    System.out.println("Done");
-                }
-                else if (choice == 2) {
-                    this.removeStudent();
-                    System.out.println("Done");
-                }
-                else if (choice == 3) {
-                    this.showAllStudents();
-                    System.out.println("Done");
-                }
-                else if(choice == 4){
-                    this.addNewProblem();
-                    System.out.println("Done");
-                }
-                else if(choice == 5){
-                    this.removeProblem();
-                    System.out.println("Done");
-                }
-                else if(choice == 6){
-                    this.showAllProblems();
-                    System.out.println("Done");
-                }
-                else if(choice == 7){
-                    this.assignProblemToStudent();
-                    System.out.println("Done");
-                }
-                else if(choice == 8){
-                    this.showAllGrades();
-                    System.out.println("Done");
-                }
-                else if(choice == 9){
-                    this.assignGradeToStudent();
-                    System.out.println("Done");
-                }
-                else if(choice == 10) {
-                    this.filterStudents();
-                    System.out.println("Done");
-                }
-                else if(choice == 11) {
+                    System.out.println();
+                    System.out.println("Done...");
+                    System.out.println();
                     this.printTheMenu();
-                    System.out.println("Done");
-                }
-                else if (choice == 0)
+                    System.out.println();
+                } else if (choice == 2) {
+                    System.out.println();
+                    this.removeStudent();
+                    System.out.println();
+                    System.out.println("Done...");
+                    System.out.println();
+                    this.printTheMenu();
+                    System.out.println();
+                } else if (choice == 3) {
+                    System.out.println();
+                    this.showAllStudents();
+                    System.out.println();
+                    System.out.println("Done...");
+                    System.out.println();
+                    this.printTheMenu();
+                    System.out.println();
+                } else if (choice == 4) {
+                    System.out.println();
+                    this.addNewProblem();
+                    System.out.println();
+                    System.out.println("Done...");
+                    System.out.println();
+                    this.printTheMenu();
+                    System.out.println();
+                } else if (choice == 5) {
+                    System.out.println();
+                    this.removeProblem();
+                    System.out.println();
+                    System.out.println("Done...");
+                    System.out.println();
+                    this.printTheMenu();
+                    System.out.println();
+                } else if (choice == 6) {
+                    System.out.println();
+                    this.showAllProblems();
+                    System.out.println();
+                    System.out.println("Done...");
+                    System.out.println();
+                    this.printTheMenu();
+                    System.out.println();
+                } else if (choice == 7) {
+                    System.out.println();
+                    this.assignProblemToStudent();
+                    System.out.println();
+                    System.out.println("Done...");
+                    System.out.println();
+                    this.printTheMenu();
+                    System.out.println();
+                } else if (choice == 8) {
+                    System.out.println();
+                    this.showAllGrades();
+                    System.out.println();
+                    System.out.println("Done...");
+                    System.out.println();
+                    this.printTheMenu();
+                    System.out.println();
+                } else if (choice == 9) {
+                    System.out.println();
+                    this.assignGradeToStudent();
+                    System.out.println();
+                    System.out.println("Done...");
+                    System.out.println();
+                    this.printTheMenu();
+                    System.out.println();
+                } else if (choice == 10) {
+                    System.out.println();
+                    this.filterStudents();
+                    System.out.println();
+                    System.out.println("Done...");
+                    System.out.println();
+                    this.printTheMenu();
+                    System.out.println();
+                } else if (choice == 0) {
+                    System.out.println();
                     System.out.println("Execution over...");
-                else{
+                    System.out.println();
+                } else {
                     System.out.println("Please insert a valid number for your option!");
                 }
-            } else {
-                System.out.println("Please insert a number for your option!");
+            } catch(InputMismatchException exception) {
+                System.out.println("Input exception:" + exception.getMessage());
+                scanner.nextLine();
             }
         }
     }

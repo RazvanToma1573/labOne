@@ -3,6 +3,7 @@ package Service;
 import Domain.Grade;
 import Domain.Problem;
 import Domain.Student;
+import Domain.Validators.Validator;
 import Domain.Validators.ValidatorException;
 import Repository.Repository;
 import Domain.Validators.RepositoryException;
@@ -10,6 +11,7 @@ import Domain.Validators.RepositoryException;
 
 import java.util.HashSet;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,15 +19,24 @@ public class StudentsService {
 
     private Repository<Integer, Student> studentRepository;
     private Repository<Integer, Grade> gradeRepository;
+    private Validator<Student> studentValidator;
+    private Validator<Grade> gradeValidator;
+    private Validator<Problem> problemValidator;
 
     /**
-     * Creates a new Service for the students
-     * @param studentRepository is the repository for the students
-     * @param gradeRepository is the repository for the grades
+     * Creates a new Student service
+     * @param studentRepository student repository
+     * @param gradeRepository grade repository
+     * @param studentValidator student validator
+     * @param gradeValidator grade validator
+     * @param problemValidator problem validator
      */
-    public StudentsService(Repository<Integer, Student> studentRepository, Repository<Integer, Grade> gradeRepository) {
+    public StudentsService(Repository<Integer, Student> studentRepository, Repository<Integer, Grade> gradeRepository, Validator<Student> studentValidator, Validator<Grade> gradeValidator, Validator<Problem> problemValidator) {
         this.studentRepository = studentRepository;
         this.gradeRepository = gradeRepository;
+        this.studentValidator = studentValidator;
+        this.gradeValidator = gradeValidator;
+        this.problemValidator = problemValidator;
     }
 
     /**
@@ -35,6 +46,7 @@ public class StudentsService {
      * @throws IllegalArgumentException if newStudent is null
      */
     public void add (Student newStudent) throws ValidatorException, IllegalArgumentException {
+        this.studentValidator.validate(newStudent);
         studentRepository.save(newStudent);
     }
 
@@ -56,6 +68,8 @@ public class StudentsService {
      */
     public void assignProblem(int studentId, Problem problem) throws ValidatorException, IllegalArgumentException{
         Student student = this.studentRepository.findOne(studentId).get();
+        this.studentValidator.validate(student);
+        this.problemValidator.validate(problem);
         this.gradeRepository.save(new Grade(student, problem, 0));
     }
 
@@ -93,7 +107,11 @@ public class StudentsService {
      */
     public void assignGrade(int studentId, Problem problem, int grade) throws ValidatorException, IllegalArgumentException {
         Student student = this.studentRepository.findOne(studentId).get();
-        this.gradeRepository.update(new Grade(student, problem, grade));
+        this.studentValidator.validate(student);
+        this.problemValidator.validate(problem);
+        Grade newGrade = new Grade(student, problem, grade);
+        this.gradeValidator.validate(newGrade);
+        this.gradeRepository.update(newGrade);
     }
 
     /**
@@ -152,5 +170,17 @@ public class StudentsService {
             }
         }
         return null;
+    }
+
+    /**
+     * Updates a student on the fields present in the type list of strings
+     * - The list may contain (FIRSTNAME, LASTNAME)
+     * @param updatedStudent student
+     * @param type  types (Strings)
+     * @throws ValidatorException validator exception
+     * @throws IllegalArgumentException illegal argument exception
+     */
+    public void update (Student updatedStudent, List<String> type) throws ValidatorException, IllegalArgumentException {
+        this.studentRepository.update(updatedStudent);
     }
 }

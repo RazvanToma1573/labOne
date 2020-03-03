@@ -1,12 +1,14 @@
 package Repository;
 
+import Domain.Grade;
+import Domain.Problem;
 import Domain.Student;
-import Domain.Validators.StudentValidator;
-import Domain.Validators.Validator;
-import Domain.Validators.ValidatorException;
+import Domain.Validators.*;
+import Service.StudentsService;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -16,14 +18,18 @@ public class InMemoryRepositoryTest {
 
     @Test
     public void findOne() {
+        Repository<Integer, Student> studentRepository = new InMemoryRepository<Integer, Student>();
+        Repository<Integer, Grade> gradeRepository = new InMemoryRepository<Integer, Grade>();
         Validator<Student> studentValidator = new StudentValidator();
-        Repository<Integer, Student> studentRepository = new InMemoryRepository<Integer, Student>(studentValidator);
+        Validator<Grade> gradeValidator = new GradeValidator();
+        Validator<Problem> problemValidator = new ProblemValidator();
+        StudentsService studentsService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemValidator);
 
         Student student = new Student("Razvan","Toma");
         student.setId(1);
 
         try{
-            studentRepository.save(student);
+            studentsService.add(student);
         } catch(ValidatorException exception) {
             System.out.println("ValidatorException:" + exception.getMessage());
         } catch(IllegalArgumentException exception) {
@@ -35,8 +41,12 @@ public class InMemoryRepositoryTest {
 
     @Test
     public void findAll() {
+        Repository<Integer, Student> studentRepository = new InMemoryRepository<Integer, Student>();
+        Repository<Integer, Grade> gradeRepository = new InMemoryRepository<Integer, Grade>();
         Validator<Student> studentValidator = new StudentValidator();
-        Repository<Integer, Student> studentRepository = new InMemoryRepository<Integer, Student>(studentValidator);
+        Validator<Grade> gradeValidator = new GradeValidator();
+        Validator<Problem> problemValidator = new ProblemValidator();
+        StudentsService studentsService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemValidator);
 
         Student student1 = new Student("aaaa","bbbb");
         student1.setId(1);
@@ -45,8 +55,8 @@ public class InMemoryRepositoryTest {
         student2.setId(2);
 
         try{
-            studentRepository.save(student1);
-            studentRepository.save(student2);
+            studentsService.add(student1);
+            studentsService.add(student2);
         } catch(ValidatorException exception) {
             System.out.println("ValidatorException:" + exception.getMessage());
         } catch(IllegalArgumentException exception) {
@@ -60,15 +70,19 @@ public class InMemoryRepositoryTest {
 
     @Test
     public void save() {
+        Repository<Integer, Student> studentRepository = new InMemoryRepository<Integer, Student>();
+        Repository<Integer, Grade> gradeRepository = new InMemoryRepository<Integer, Grade>();
         Validator<Student> studentValidator = new StudentValidator();
-        Repository<Integer, Student> studentRepository = new InMemoryRepository<Integer, Student>(studentValidator);
+        Validator<Grade> gradeValidator = new GradeValidator();
+        Validator<Problem> problemValidator = new ProblemValidator();
+        StudentsService studentsService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemValidator);
 
         Student student1 = new Student("aaaa","bbbb");
         student1.setId(1);
 
 
         try{
-            studentRepository.save(student1);
+            studentsService.add(student1);
         } catch(ValidatorException exception) {
             System.out.println("ValidatorException:" + exception.getMessage());
         } catch(IllegalArgumentException exception) {
@@ -83,7 +97,7 @@ public class InMemoryRepositoryTest {
 
 
         try{
-            studentRepository.save(student2);
+            studentsService.add(student2);
         } catch(ValidatorException exception) {
             System.out.println("ValidatorException:" + exception.getMessage());
         } catch(IllegalArgumentException exception) {
@@ -96,15 +110,19 @@ public class InMemoryRepositoryTest {
 
     @Test
     public void delete() {
+        Repository<Integer, Student> studentRepository = new InMemoryRepository<Integer, Student>();
+        Repository<Integer, Grade> gradeRepository = new InMemoryRepository<Integer, Grade>();
         Validator<Student> studentValidator = new StudentValidator();
-        Repository<Integer, Student> studentRepository = new InMemoryRepository<Integer, Student>(studentValidator);
+        Validator<Grade> gradeValidator = new GradeValidator();
+        Validator<Problem> problemValidator = new ProblemValidator();
+        StudentsService studentsService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemValidator);
 
         Student student1 = new Student("aaaa","bbbb");
         student1.setId(1);
 
 
         try{
-            studentRepository.save(student1);
+            studentsService.add(student1);
         } catch(ValidatorException exception) {
             System.out.println("ValidatorException:" + exception.getMessage());
         } catch(IllegalArgumentException exception) {
@@ -113,7 +131,7 @@ public class InMemoryRepositoryTest {
 
 
         try{
-            studentRepository.delete(1);
+            studentsService.remove(1);
         } catch(IllegalArgumentException exception) {
             System.out.println("IllegalArgumentException:" + exception.getMessage());
         }
@@ -124,15 +142,19 @@ public class InMemoryRepositoryTest {
 
     @Test
     public void update() {
+        Repository<Integer, Student> studentRepository = new InMemoryRepository<Integer, Student>();
+        Repository<Integer, Grade> gradeRepository = new InMemoryRepository<Integer, Grade>();
         Validator<Student> studentValidator = new StudentValidator();
-        Repository<Integer, Student> studentRepository = new InMemoryRepository<Integer, Student>(studentValidator);
+        Validator<Grade> gradeValidator = new GradeValidator();
+        Validator<Problem> problemValidator = new ProblemValidator();
+        StudentsService studentsService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemValidator);
 
         Student student1 = new Student("aaaa","bbbb");
         student1.setId(1);
 
 
         try{
-            studentRepository.save(student1);
+            studentsService.add(student1);
         } catch(ValidatorException exception) {
             System.out.println("ValidatorException:" + exception.getMessage());
         } catch(IllegalArgumentException exception) {
@@ -142,8 +164,12 @@ public class InMemoryRepositoryTest {
         Student student2 = new Student("xxxx","zzzz");
         student2.setId(1);
 
+        List<String> types = new ArrayList<>();
+        types.add("FIRSTNAME");
+        types.add("LASTNAME");
+
         try{
-            studentRepository.update(student2);
+            studentsService.update(student2, types);
         } catch(ValidatorException exception) {
             System.out.println("ValidatorException:" + exception.getMessage());
         } catch(IllegalArgumentException exception) {

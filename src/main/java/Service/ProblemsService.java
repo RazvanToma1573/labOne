@@ -1,23 +1,25 @@
 package Service;
 
 import Domain.Problem;
+import Domain.Student;
 import Domain.Validators.Validator;
 import Domain.Validators.ValidatorException;
 import Repository.Repository;
-import Domain.Validators.RepositoryException;
 
 import java.util.List;
 
 public class ProblemsService{
     private Repository<Integer, Problem> problemRepository;
-
+    private Validator<Problem> problemValidator;
 
     /**
-     * Creates a new problmes service.
-     * @param problemRepository problem repository (Repository)
+     * Creates a new problem service
+     * @param problemRepository problem repository
+     * @param problemValidator problem validator
      */
-    public ProblemsService(Repository<Integer, Problem> problemRepository) {
+    public ProblemsService(Repository<Integer, Problem> problemRepository, Validator<Problem> problemValidator) {
         this.problemRepository = problemRepository;
+        this.problemValidator = problemValidator;
     }
 
     /**
@@ -27,6 +29,7 @@ public class ProblemsService{
      * @throws ValidatorException custom exception (ValidatorException)
      */
     public void add(Problem newProblem) throws ValidatorException {
+        this.problemValidator.validate(newProblem);
         this.problemRepository.save(newProblem);
     }
 
@@ -55,4 +58,15 @@ public class ProblemsService{
         return this.problemRepository.findOne(id).get();
     }
 
+    /**
+     * Updates a problem on the fields present in the type list of strings
+     * - The list may contain (DESCRIPTION, DIFFICULTY)
+     * @param updatedProblem student
+     * @param type  types (Strings)
+     * @throws ValidatorException validator exception
+     * @throws IllegalArgumentException illegal argument exception
+     */
+    public void update (Problem updatedProblem, List<String> type) throws ValidatorException, IllegalArgumentException {
+        this.problemRepository.update(updatedProblem);
+    }
 }
