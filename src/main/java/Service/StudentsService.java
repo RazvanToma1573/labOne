@@ -32,16 +32,18 @@ public class StudentsService {
      * Adds a new student to the repository
      * @param newStudent is the new student to be added
      * @throws ValidatorException if the data of the new student is invalid
+     * @throws IllegalArgumentException if newStudent is null
      */
-    public void add (Student newStudent) throws ValidatorException {
+    public void add (Student newStudent) throws ValidatorException, IllegalArgumentException {
         studentRepository.save(newStudent);
     }
 
     /**
      * Removes a student from the repository
      * @param id is the ID of the student to be removed
+     * @throws IllegalArgumentException if id is null
      */
-    public void remove (int id) {
+    public void remove (int id) throws IllegalArgumentException{
         studentRepository.delete(id);
     }
 
@@ -50,8 +52,9 @@ public class StudentsService {
      * @param studentId is the ID of the student
      * @param problem is the new problem to be assigned
      * @throws ValidatorException Custom exception
+     * @throws IllegalArgumentException if the new grade is null
      */
-    public void assignProblem(int studentId, Problem problem) throws ValidatorException{
+    public void assignProblem(int studentId, Problem problem) throws ValidatorException, IllegalArgumentException{
         Student student = this.studentRepository.findOne(studentId).get();
         this.gradeRepository.save(new Grade(student, problem, 0));
     }
@@ -74,8 +77,9 @@ public class StudentsService {
      * Returns a student with the given ID from the repository
      * @param id is the ID of the student
      * @return student with the given ID
+     * @throws IllegalArgumentException if id is null
      */
-    public Student getById(int id) {
+    public Student getById(int id) throws IllegalArgumentException {
         return this.studentRepository.findOne(id).get();
     }
 
@@ -85,8 +89,9 @@ public class StudentsService {
      * @param problem is the problem to be graded
      * @param grade is the grade (0..10)
      * @throws ValidatorException custom exception
+     * @throws IllegalArgumentException if new grade is null
      */
-    public void assignGrade(int studentId, Problem problem, int grade) throws ValidatorException {
+    public void assignGrade(int studentId, Problem problem, int grade) throws ValidatorException, IllegalArgumentException {
         Student student = this.studentRepository.findOne(studentId).get();
         this.gradeRepository.update(new Grade(student, problem, grade));
     }

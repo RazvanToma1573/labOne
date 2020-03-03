@@ -3,6 +3,7 @@ package Domain;
 public class BaseEntity<ID> {
     private ID id;
 
+
     public ID getId() {
         return id;
     }
