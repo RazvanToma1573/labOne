@@ -48,6 +48,7 @@ public class Console {
         System.out.println("\t\t 10 - filter");
         System.out.println("\t\t 12 - update student");
         System.out.println("\t\t 13 - update problem");
+        System.out.println("\t\t 11 - reports");
     }
 
     /**
@@ -56,9 +57,11 @@ public class Console {
     public void menu() {
         System.out.println("Hello!");
         Scanner scanner = new Scanner(System.in);
-        this.printTheMenu();
         int choice = -1;
         while (choice != 0) {
+            this.printTheMenu();
+            System.out.println("---------------");
+            System.out.println("");
             System.out.print("Your choice : ");
             try {
                 choice = scanner.nextInt();
@@ -160,6 +163,28 @@ public class Console {
                     System.out.println();
                 } else if (choice == 0) {
                     System.out.println();
+                    System.out.println("Done");
+                }
+                else if(choice == 11) {
+                    System.out.println("Select one report from the list below:");
+                    System.out.println("\t 1. Problem that was assigned most times");
+                    System.out.println("\t 2. Student with the highest average grade");
+                    System.out.println("\t 3. Student with the most assigned problems");
+                    choice = scanner.nextInt();
+                    switch(choice){
+                        case 1:
+                            System.out.println(this.studentService.getMaxAssignedProblem());
+                            break;
+                        case 2:
+                            System.out.println(this.studentService.getStudentWithMaxGrade());
+                            break;
+                        case 3:
+                            System.out.println(this.studentService.getMostAssignedStudent());
+                            break;
+                        default:
+                            System.out.println("Invalid command");
+                    }
+                    System.out.println("Done");
                     System.out.println("Execution over...");
                     System.out.println();
                 } else {
