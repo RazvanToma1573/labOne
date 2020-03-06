@@ -5,9 +5,6 @@ import Domain.Problem;
 import Domain.Student;
 import Domain.Validators.ValidatorException;
 import Repository.Repository;
-import Domain.Validators.RepositoryException;
-import javafx.util.Pair;
-
 
 import java.util.*;
 
@@ -169,12 +166,12 @@ public class StudentsService {
         Iterable<Grade> grades = this.gradeRepository.findAll();
         Set<Grade> gradesSet = new HashSet<>();
         grades.forEach(gradesSet::add);
-        Map<Student, Pair<Float, Integer>> averages = new HashMap<>();
+        Map<Student, Map.Entry<Float, Integer>> averages = new HashMap<>();
         gradesSet.stream().forEach(grade -> {
             if (averages.containsKey(grade.getStudent()))
-                averages.put(grade.getStudent(), new Pair<>(averages.get(grade.getStudent()).getKey() + grade.getActualGrade(), averages.get(grade.getStudent()).getValue() + 1));
+                averages.put(grade.getStudent(), new HashMap.SimpleEntry<>(averages.get(grade.getStudent()).getKey() + grade.getActualGrade(), averages.get(grade.getStudent()).getValue() + 1));
             else
-                averages.put(grade.getStudent(), new Pair<>((float) grade.getActualGrade(), 1));
+                averages.put(grade.getStudent(), new HashMap.SimpleEntry<>((float) grade.getActualGrade(), 1));
         });
         return averages.entrySet().stream().map(entry -> new HashMap.SimpleEntry<Student, Float>(entry.getKey(), entry.getValue().getKey() / entry.getValue().getValue()))
                 .max(Comparator.comparing(entry -> entry.getValue())).get().getKey();
