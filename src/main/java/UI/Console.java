@@ -112,13 +112,13 @@ public class Console {
                     choice = scanner.nextInt();
                     switch(choice){
                         case 1:
-                            //todo
+                            System.out.println(this.studentService.getMaxAssignedProblem());
                             break;
                         case 2:
                             System.out.println(this.studentService.getStudentWithMaxGrade());
                             break;
                         case 3:
-                            //todo
+                            System.out.println(this.studentService.getMostAssignedStudent());
                             break;
                         default:
                             System.out.println("Invalid command");

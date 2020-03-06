@@ -180,4 +180,32 @@ public class StudentsService {
                 .max(Comparator.comparing(entry -> entry.getValue())).get().getKey();
 
     }
+
+    public Problem getMaxAssignedProblem(){
+        Iterable<Grade> allGrades = this.gradeRepository.findAll();
+        Set<Grade> grades = new HashSet<>();
+        allGrades.forEach(grades::add);
+        Map<Problem, Integer> gradesFrequency = new HashMap<>();
+        grades.stream().forEach(grade -> {
+            if(gradesFrequency.containsKey(grade.getProblem()))
+                gradesFrequency.put(grade.getProblem(), gradesFrequency.get(grade.getProblem())+1);
+            else
+                gradesFrequency.put(grade.getProblem(), 1);
+        });
+        return gradesFrequency.entrySet().stream().max(Comparator.comparing(entry -> entry.getValue())).get().getKey();
+    }
+
+    public Student getMostAssignedStudent(){
+        Iterable<Grade> allGrades = this.gradeRepository.findAll();
+        Set<Grade> grades = new HashSet<>();
+        allGrades.forEach(grades::add);
+        Map<Student, Integer> problemsFrequency = new HashMap<>();
+        grades.stream().forEach(grade -> {
+            if(problemsFrequency.containsKey(grade.getStudent()))
+                problemsFrequency.put(grade.getStudent(), problemsFrequency.get(grade.getStudent())+1);
+            else
+                problemsFrequency.put(grade.getStudent(), 1);
+        });
+        return problemsFrequency.entrySet().stream().max(Comparator.comparing(entry -> entry.getValue())).get().getKey();
+    }
 }
