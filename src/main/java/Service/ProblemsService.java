@@ -67,6 +67,7 @@ public class ProblemsService{
      * Updates a problem on the field present in the type string
      * @param idProblem int
      * @param type  String
+     * @param update String
      * @throws ValidatorException validator exception
      * @throws IllegalArgumentException illegal argument exception
      */

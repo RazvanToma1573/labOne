@@ -104,6 +104,7 @@ public class StudentsService {
      *
      * @param id is the ID of the student
      * @return student with the given ID
+     * @throws ValidatorException custom exception
      * @throws IllegalArgumentException if id is null
      */
     public Student getById(int id) throws ValidatorException, IllegalArgumentException {
@@ -130,9 +131,13 @@ public class StudentsService {
             Student student = checkStudent.get();
             this.studentValidator.validate(student);
             this.problemValidator.validate(problem);
-            Grade newGrade = new Grade(student, problem, grade);
-            this.gradeValidator.validate(newGrade);
-            this.gradeRepository.update(newGrade);
+
+            Iterable<Grade> grades = this.gradeRepository.findAll();
+            Set<Grade> gradeSet = new HashSet<>();
+            grades.forEach(gradeSet::add);
+            Grade gradeToBeUpdated = gradeSet.stream().filter(grade1 -> grade1.getStudent().equals(student) && grade1.getProblem().equals(problem)).collect(Collectors.toList()).get(0);
+            gradeToBeUpdated.setActualGrade(grade);
+            this.gradeRepository.update(gradeToBeUpdated);
         } else {
             throw new ValidatorException("No student found with the given id!");
         }
@@ -200,6 +205,7 @@ public class StudentsService {
     /**
      * Updates a student on the field present in the type
      * @param idStudent int
+     * @param type String
      * @param update  string
      * @throws ValidatorException validator exception
      * @throws IllegalArgumentException illegal argument exception

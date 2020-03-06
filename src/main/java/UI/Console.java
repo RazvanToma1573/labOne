@@ -46,9 +46,9 @@ public class Console {
         System.out.println("\t\t 8 - show all students,problems and grades");
         System.out.println("\t\t 9 - assign a grade to a student");
         System.out.println("\t\t 10 - filter");
+        System.out.println("\t\t 11 - reports");
         System.out.println("\t\t 12 - update student");
         System.out.println("\t\t 13 - update problem");
-        System.out.println("\t\t 11 - reports");
     }
 
     /**
@@ -58,10 +58,12 @@ public class Console {
         System.out.println("Hello!");
         Scanner scanner = new Scanner(System.in);
         int choice = -1;
+        this.printTheMenu();
         while (choice != 0) {
             this.printTheMenu();
-            System.out.println("---------------");
-            System.out.println("");
+            System.out.println();
+            System.out.println("-------------------------------------------");
+            System.out.println();
             System.out.print("Your choice : ");
             try {
                 choice = scanner.nextInt();
@@ -71,15 +73,11 @@ public class Console {
                     System.out.println();
                     System.out.println("Done...");
                     System.out.println();
-                    this.printTheMenu();
-                    System.out.println();
                 } else if (choice == 2) {
                     System.out.println();
                     this.removeStudent();
                     System.out.println();
                     System.out.println("Done...");
-                    System.out.println();
-                    this.printTheMenu();
                     System.out.println();
                 } else if (choice == 3) {
                     System.out.println();
@@ -87,15 +85,11 @@ public class Console {
                     System.out.println();
                     System.out.println("Done...");
                     System.out.println();
-                    this.printTheMenu();
-                    System.out.println();
                 } else if (choice == 4) {
                     System.out.println();
                     this.addNewProblem();
                     System.out.println();
                     System.out.println("Done...");
-                    System.out.println();
-                    this.printTheMenu();
                     System.out.println();
                 } else if (choice == 5) {
                     System.out.println();
@@ -103,15 +97,11 @@ public class Console {
                     System.out.println();
                     System.out.println("Done...");
                     System.out.println();
-                    this.printTheMenu();
-                    System.out.println();
                 } else if (choice == 6) {
                     System.out.println();
                     this.showAllProblems();
                     System.out.println();
                     System.out.println("Done...");
-                    System.out.println();
-                    this.printTheMenu();
                     System.out.println();
                 } else if (choice == 7) {
                     System.out.println();
@@ -119,15 +109,11 @@ public class Console {
                     System.out.println();
                     System.out.println("Done...");
                     System.out.println();
-                    this.printTheMenu();
-                    System.out.println();
                 } else if (choice == 8) {
                     System.out.println();
                     this.showAllGrades();
                     System.out.println();
                     System.out.println("Done...");
-                    System.out.println();
-                    this.printTheMenu();
                     System.out.println();
                 } else if (choice == 9) {
                     System.out.println();
@@ -135,37 +121,13 @@ public class Console {
                     System.out.println();
                     System.out.println("Done...");
                     System.out.println();
-                    this.printTheMenu();
-                    System.out.println();
                 } else if (choice == 10) {
                     System.out.println();
                     this.filterStudents();
                     System.out.println();
                     System.out.println("Done...");
                     System.out.println();
-                    this.printTheMenu();
-                    System.out.println();
-                } else if (choice == 12) {
-                    System.out.println();
-                    this.updateStudent();
-                    System.out.println();
-                    System.out.println("Done...");
-                    System.out.println();
-                    this.printTheMenu();
-                    System.out.println();
-                } else if (choice == 13) {
-                    System.out.println();
-                    this.updateProblem();
-                    System.out.println();
-                    System.out.println("Done...");
-                    System.out.println();
-                    this.printTheMenu();
-                    System.out.println();
-                } else if (choice == 0) {
-                    System.out.println();
-                    System.out.println("Done");
-                }
-                else if(choice == 11) {
+                } else if(choice == 11) {
                     System.out.println("Select one report from the list below:");
                     System.out.println("\t 1. Problem that was assigned most times");
                     System.out.println("\t 2. Student with the highest average grade");
@@ -187,6 +149,21 @@ public class Console {
                     System.out.println("Done");
                     System.out.println("Execution over...");
                     System.out.println();
+                } else if (choice == 12) {
+                    System.out.println();
+                    this.updateStudent();
+                    System.out.println();
+                    System.out.println("Done...");
+                    System.out.println();
+                } else if (choice == 13) {
+                    System.out.println();
+                    this.updateProblem();
+                    System.out.println();
+                    System.out.println("Done...");
+                    System.out.println();
+                } else if (choice == 0) {
+                    System.out.println();
+                    System.out.println("Done");
                 } else {
                     System.out.println("Please insert a valid number for your option!");
                 }
@@ -206,7 +183,7 @@ public class Console {
         while(cont) {
             try {
                 System.out.print("ID:");
-                int idStudentToBeUpdated =  Integer.valueOf(bufferedReader.readLine());
+                int idStudentToBeUpdated =  Integer.parseInt(bufferedReader.readLine());
                 System.out.println("You can update the Students' first name (FIRSTNAME) or the Students' last name (LASTNAME)");
                 System.out.print("TYPE:");
                 String type = bufferedReader.readLine();
@@ -224,7 +201,7 @@ public class Console {
                     System.out.println("Input exception: Input a valid type! (FIRSTNAME|LASTNAME)");
                 }
             } catch (ValidatorException exception) {
-                System.out.printf("Validator exception:" + exception.getMessage());
+                System.out.println("Validator exception:" + exception.getMessage());
                 cont = false;
             } catch (IOException exception) {
                 System.out.println("Input Exception: " + exception.getMessage());
@@ -241,7 +218,7 @@ public class Console {
         while (cont) {
             try{
                 System.out.print("ID:");
-                int id = Integer.valueOf(bufferedReader.readLine());
+                int id = Integer.parseInt(bufferedReader.readLine());
                 System.out.println("You can update the Problems' description (DESCRIPTION) or the Problems' difficulty (DIFFICULTY)");
                 System.out.print("TYPE:");
                 String type = bufferedReader.readLine();
@@ -356,10 +333,6 @@ public class Console {
      * Students can be filtered by firstname, lastname, problem and grade
      */
     public void filterStudents(){
-        /**
-         * This function will ask the user for a type of filtering (FIRSTNAME/LASTNAME/PROBLEM/GRADE)
-         * and an argument for filtering. After the data is acquired it will pass it to the service for filtering.
-         */
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         List<String> types = new ArrayList<>();
         types.add("FIRSTNAME");
@@ -397,7 +370,7 @@ public class Console {
         BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
         try {
             System.out.print("ID : ");
-            int id = Integer.valueOf(bufferRead.readLine());// ...
+            int id = Integer.parseInt(bufferRead.readLine());// ...
             System.out.print("First Name : ");
             String firstName = bufferRead.readLine();
             System.out.print("Last Name : ");
@@ -421,7 +394,7 @@ public class Console {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         try{
             System.out.print("ID : ");
-            int id = Integer.valueOf(bufferedReader.readLine());
+            int id = Integer.parseInt(bufferedReader.readLine());
             System.out.print("Description : ");
             String description = bufferedReader.readLine();
             System.out.print("Difficulty(easy/medium/hard): ");
@@ -443,9 +416,9 @@ public class Console {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         try {
             System.out.print("Student ID : ");
-            int studentId = Integer.valueOf(bufferedReader.readLine());
+            int studentId = Integer.parseInt(bufferedReader.readLine());
             System.out.print("Problem ID : ");
-            int problemId = Integer.valueOf(bufferedReader.readLine());
+            int problemId = Integer.parseInt(bufferedReader.readLine());
             Problem problem = this.problemService.getById(problemId);
             this.studentService.assignProblem(studentId, problem);
         } catch (IOException exception){
@@ -465,11 +438,11 @@ public class Console {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         try{
             System.out.print("Student ID : ");
-            int studentId = Integer.valueOf(bufferedReader.readLine());
+            int studentId = Integer.parseInt(bufferedReader.readLine());
             System.out.print("Problem ID :");
-            int problemId = Integer.valueOf(bufferedReader.readLine());
+            int problemId = Integer.parseInt(bufferedReader.readLine());
             System.out.print("Grade : ");
-            int grade = Integer.valueOf(bufferedReader.readLine());
+            int grade = Integer.parseInt(bufferedReader.readLine());
             Problem problem = this.problemService.getById(problemId);
             this.studentService.assignGrade(studentId, problem, grade);
 
