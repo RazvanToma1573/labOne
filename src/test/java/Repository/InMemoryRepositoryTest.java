@@ -161,15 +161,17 @@ public class InMemoryRepositoryTest {
             System.out.println("IllegalArgumentException:" + exception.getMessage());
         }
 
-        Student student2 = new Student("xxxx","zzzz");
-        student2.setId(1);
-
-        List<String> types = new ArrayList<>();
-        types.add("FIRSTNAME");
-        types.add("LASTNAME");
 
         try{
-            studentsService.update(student2, types);
+            studentsService.update(1, "FIRST", "xxxx");
+        } catch(ValidatorException exception) {
+            System.out.println("ValidatorException:" + exception.getMessage());
+        } catch(IllegalArgumentException exception) {
+            System.out.println("IllegalArgumentException:" + exception.getMessage());
+        }
+
+        try{
+            studentsService.update(1, "LAST", "yyyy");
         } catch(ValidatorException exception) {
             System.out.println("ValidatorException:" + exception.getMessage());
         } catch(IllegalArgumentException exception) {
@@ -177,5 +179,6 @@ public class InMemoryRepositoryTest {
         }
 
         assertTrue("xxxx".equals(studentRepository.findOne(1).get().getFirstName()));
+        assertTrue("yyyy".equals(studentRepository.findOne(1).get().getLastName()));
     }
 }

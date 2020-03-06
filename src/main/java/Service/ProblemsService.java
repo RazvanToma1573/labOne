@@ -1,12 +1,11 @@
 package Service;
 
 import Domain.Problem;
-import Domain.Student;
 import Domain.Validators.Validator;
 import Domain.Validators.ValidatorException;
 import Repository.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 public class ProblemsService{
     private Repository<Integer, Problem> problemRepository;
@@ -51,22 +50,39 @@ public class ProblemsService{
 
     /**
      * Returns the problem that has the given id.
-     * @param id id of the problem we want to return (int)
-     * @return problem with the given id if it was found (Problem)
+     * @param id int
+     * @return problem if found
+     * @throws ValidatorException custom exception
      */
-    public Problem getById(int id) {
-        return this.problemRepository.findOne(id).get();
+    public Problem getById(int id) throws ValidatorException {
+        Optional<Problem> checkProblem = this.problemRepository.findOne(id);
+        if (checkProblem.isPresent()) {
+            return checkProblem.get();
+        } else {
+            throw new ValidatorException("No problem found with the given id!");
+        }
     }
 
     /**
-     * Updates a problem on the fields present in the type list of strings
-     * - The list may contain (DESCRIPTION, DIFFICULTY)
-     * @param updatedProblem student
-     * @param type  types (Strings)
+     * Updates a problem on the field present in the type string
+     * @param idProblem int
+     * @param type  String
      * @throws ValidatorException validator exception
      * @throws IllegalArgumentException illegal argument exception
      */
-    public void update (Problem updatedProblem, List<String> type) throws ValidatorException, IllegalArgumentException {
-        this.problemRepository.update(updatedProblem);
+    public void update (int idProblem, String type, String update) throws ValidatorException, IllegalArgumentException {
+        Optional<Problem> checkProblem = this.problemRepository.findOne(idProblem);
+        if(checkProblem.isPresent()) {
+            Problem problem = checkProblem.get();
+            if (type.equals("DESCRIPTION")) {
+                problem.setDescription(update);
+                this.problemRepository.update(problem);
+            } else if (type.equals("DIFFICULTY")) {
+                problem.setDifficulty(update);
+                this.problemRepository.update(problem);
+            }
+        } else {
+            throw new ValidatorException("No problem found with the given id!");
+        }
     }
 }

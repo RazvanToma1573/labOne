@@ -6,12 +6,11 @@ import Domain.Student;
 import Domain.Validators.Validator;
 import Domain.Validators.ValidatorException;
 import Repository.Repository;
-import Domain.Validators.RepositoryException;
 
 
 import java.util.HashSet;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -67,10 +66,15 @@ public class StudentsService {
      * @throws IllegalArgumentException if the new grade is null
      */
     public void assignProblem(int studentId, Problem problem) throws ValidatorException, IllegalArgumentException{
-        Student student = this.studentRepository.findOne(studentId).get();
-        this.studentValidator.validate(student);
-        this.problemValidator.validate(problem);
-        this.gradeRepository.save(new Grade(student, problem, 0));
+        Optional<Student> checkStudent = this.studentRepository.findOne(studentId);
+        if (checkStudent.isPresent()) {
+            Student student = checkStudent.get();
+            this.studentValidator.validate(student);
+            this.problemValidator.validate(problem);
+            this.gradeRepository.save(new Grade(student, problem, 0));
+        } else {
+            throw new ValidatorException("No student found with the given id!");
+        }
     }
 
     /**
@@ -93,8 +97,13 @@ public class StudentsService {
      * @return student with the given ID
      * @throws IllegalArgumentException if id is null
      */
-    public Student getById(int id) throws IllegalArgumentException {
-        return this.studentRepository.findOne(id).get();
+    public Student getById(int id) throws ValidatorException, IllegalArgumentException {
+        Optional<Student> checkStudent = this.studentRepository.findOne(id);
+        if (checkStudent.isPresent()) {
+            return checkStudent.get();
+        } else {
+            throw new ValidatorException("No student found with the given id!");
+        }
     }
 
     /**
@@ -106,12 +115,17 @@ public class StudentsService {
      * @throws IllegalArgumentException if new grade is null
      */
     public void assignGrade(int studentId, Problem problem, int grade) throws ValidatorException, IllegalArgumentException {
-        Student student = this.studentRepository.findOne(studentId).get();
-        this.studentValidator.validate(student);
-        this.problemValidator.validate(problem);
-        Grade newGrade = new Grade(student, problem, grade);
-        this.gradeValidator.validate(newGrade);
-        this.gradeRepository.update(newGrade);
+        Optional<Student> checkStudent = this.studentRepository.findOne(studentId);
+        if (checkStudent.isPresent()) {
+            Student student = checkStudent.get();
+            this.studentValidator.validate(student);
+            this.problemValidator.validate(problem);
+            Grade newGrade = new Grade(student, problem, grade);
+            this.gradeValidator.validate(newGrade);
+            this.gradeRepository.update(newGrade);
+        } else {
+            throw new ValidatorException("No student found with the given id!");
+        }
     }
 
     /**
@@ -125,62 +139,72 @@ public class StudentsService {
     public Set<Student> filterService(String argument, String type) throws ValidatorException {
         Iterable<Student> students = studentRepository.findAll();
         Iterable<Grade> grades = gradeRepository.findAll();
-        if (type.equals("FIRSTNAME")) {
+        switch (type) {
+            case "FIRSTNAME": {
 
-            Set<Student> filteredStudents = new HashSet<>();
-            students.forEach(filteredStudents::add);
-            filteredStudents.removeIf(student -> !student.getFirstName().contains(argument));
-            return filteredStudents;
-
-        } else if (type.equals("LASTNAME")) {
-
-            Set<Student> filteredStudents = new HashSet<>();
-            students.forEach(filteredStudents::add);
-            filteredStudents.removeIf(student -> !student.getLastName().contains(argument));
-            return filteredStudents;
-
-        } else if (type.equals("PROBLEM")) {
-            try {
-                int problemID = Integer.parseInt(argument);
-
-                Set<Grade> filteredGrades = new HashSet<>();
-                grades.forEach(filteredGrades::add);
-                filteredGrades.removeIf(grade -> !grade.getProblem().getId().equals(problemID));
-                Set<Student> filteredStudents = filteredGrades.stream().map(grade -> grade.getStudent()).collect(Collectors.toSet());
-
+                Set<Student> filteredStudents = new HashSet<>();
+                students.forEach(filteredStudents::add);
+                filteredStudents.removeIf(student -> !student.getFirstName().contains(argument));
                 return filteredStudents;
 
-            } catch (NumberFormatException exception) {
-                throw new ValidatorException("ID not valid");
             }
-        } else if (type.equals("GRADE")) {
-            try{
-                int wantedGrade = Integer.parseInt(argument);
+            case "LASTNAME": {
 
-                Set<Grade> filteredGrades = new HashSet<>();
-                grades.forEach(filteredGrades::add);
-                filteredGrades.removeIf(grade -> grade.getActualGrade() != (wantedGrade));
-                Set<Student> filteredStudents = filteredGrades.stream().map(grade -> grade.getStudent()).collect(Collectors.toSet());
-
-
+                Set<Student> filteredStudents = new HashSet<>();
+                students.forEach(filteredStudents::add);
+                filteredStudents.removeIf(student -> !student.getLastName().contains(argument));
                 return filteredStudents;
 
-            } catch (NumberFormatException exception) {
-                throw new ValidatorException("Grade not valid");
             }
+            case "PROBLEM":
+                try {
+                    int problemID = Integer.parseInt(argument);
+
+                    Set<Grade> filteredGrades = new HashSet<>();
+                    grades.forEach(filteredGrades::add);
+                    filteredGrades.removeIf(grade -> !grade.getProblem().getId().equals(problemID));
+
+                    return filteredGrades.stream().map(Grade::getStudent).collect(Collectors.toSet());
+
+                } catch (NumberFormatException exception) {
+                    throw new ValidatorException("ID not valid");
+                }
+            case "GRADE":
+                try {
+                    int wantedGrade = Integer.parseInt(argument);
+
+                    Set<Grade> filteredGrades = new HashSet<>();
+                    grades.forEach(filteredGrades::add);
+                    filteredGrades.removeIf(grade -> grade.getActualGrade() != (wantedGrade));
+
+                    return filteredGrades.stream().map(Grade::getStudent).collect(Collectors.toSet());
+
+                } catch (NumberFormatException exception) {
+                    throw new ValidatorException("Grade not valid");
+                }
         }
         return null;
     }
 
     /**
-     * Updates a student on the fields present in the type list of strings
-     * - The list may contain (FIRSTNAME, LASTNAME)
-     * @param updatedStudent student
-     * @param type  types (Strings)
+     * Updates a student on the field present in the type
+     * @param idStudent int
+     * @param update  string
      * @throws ValidatorException validator exception
      * @throws IllegalArgumentException illegal argument exception
      */
-    public void update (Student updatedStudent, List<String> type) throws ValidatorException, IllegalArgumentException {
-        this.studentRepository.update(updatedStudent);
+    public void update (int idStudent, String type, String update) throws ValidatorException, IllegalArgumentException {
+        Optional<Student> checkStudent = this.studentRepository.findOne(idStudent);
+        if (checkStudent.isPresent()){
+            Student student = checkStudent.get();
+            if (type.equals("FIRST")) {
+                student.setFirstName(update);
+            } else if (type.equals("LAST")) {
+                student.setLastName(update);
+            }
+            this.studentRepository.update(student);
+        } else {
+            throw new ValidatorException("No student found with the given id!");
+        }
     }
 }

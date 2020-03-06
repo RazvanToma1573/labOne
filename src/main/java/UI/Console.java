@@ -6,6 +6,7 @@ import Domain.Student;
 import Domain.Validators.ValidatorException;
 import Service.ProblemsService;
 import Service.StudentsService;
+import com.sun.tools.jdeprscan.scan.Scan;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -46,6 +47,8 @@ public class Console {
         System.out.println("\t\t 8 - show all students,problems and grades");
         System.out.println("\t\t 9 - assign a grade to a student");
         System.out.println("\t\t 10 - filter");
+        System.out.println("\t\t 12 - update student");
+        System.out.println("\t\t 13 - update problem");
     }
 
     /**
@@ -140,6 +143,22 @@ public class Console {
                     System.out.println();
                     this.printTheMenu();
                     System.out.println();
+                } else if (choice == 12) {
+                    System.out.println();
+                    this.updateStudent();
+                    System.out.println();
+                    System.out.println("Done...");
+                    System.out.println();
+                    this.printTheMenu();
+                    System.out.println();
+                } else if (choice == 13) {
+                    System.out.println();
+                    this.updateProblem();
+                    System.out.println();
+                    System.out.println("Done...");
+                    System.out.println();
+                    this.printTheMenu();
+                    System.out.println();
                 } else if (choice == 0) {
                     System.out.println();
                     System.out.println("Execution over...");
@@ -150,6 +169,76 @@ public class Console {
             } catch(InputMismatchException exception) {
                 System.out.println("Input exception:" + exception.getMessage());
                 scanner.nextLine();
+            }
+        }
+    }
+
+    /**
+     * Function for updating a student
+     */
+    public void updateStudent(){
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        boolean cont = true;
+        while(cont) {
+            try {
+                System.out.print("ID:");
+                int idStudentToBeUpdated =  Integer.valueOf(bufferedReader.readLine());
+                System.out.println("You can update the Students' first name (FIRSTNAME) or the Students' last name (LASTNAME)");
+                System.out.print("TYPE:");
+                String type = bufferedReader.readLine();
+                if(type.equals("FIRSTNAME")) {
+                    System.out.print("new first name:");
+                    String firstname = bufferedReader.readLine();
+                    this.studentService.update(idStudentToBeUpdated, "FIRST", firstname);
+                    cont = false;
+                } else if(type.equals("LASTNAME")) {
+                    System.out.print("new last name:");
+                    String lastname = bufferedReader.readLine();
+                    this.studentService.update(idStudentToBeUpdated, "LAST", lastname);
+                    cont = false;
+                } else {
+                    System.out.println("Input exception: Input a valid type! (FIRSTNAME|LASTNAME)");
+                }
+            } catch (ValidatorException exception) {
+                System.out.printf("Validator exception:" + exception.getMessage());
+                cont = false;
+            } catch (IOException exception) {
+                System.out.println("Input Exception: " + exception.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Function for updatign a problem
+     */
+    public void updateProblem(){
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        boolean cont = true;
+        while (cont) {
+            try{
+                System.out.print("ID:");
+                int id = Integer.valueOf(bufferedReader.readLine());
+                System.out.println("You can update the Problems' description (DESCRIPTION) or the Problems' difficulty (DIFFICULTY)");
+                System.out.print("TYPE:");
+                String type = bufferedReader.readLine();
+                if (type.equals("DESCRIPTION")) {
+                    System.out.print("new description:");
+                    String description = bufferedReader.readLine();
+                    this.problemService.update(id, "DESCRIPTION", description);
+                    cont = false;
+                } else if (type.equals("DIFFICULTY")) {
+                    System.out.print("new difficulty:");
+                    String difficulty = bufferedReader.readLine();
+                    this.problemService.update(id, "DIFFICULTY", difficulty);
+                    cont = false;
+                } else {
+                    System.out.println("Input exception: Input a valid type! (DESCRIPTION|DIFFICULTY)");
+                }
+            } catch (ValidatorException exception) {
+                System.out.println("Validator Exception: " + exception.getMessage());
+                cont = false;
+            } catch (IOException exception) {
+                System.out.println("Input Exception: " + exception.getMessage());
             }
         }
     }
