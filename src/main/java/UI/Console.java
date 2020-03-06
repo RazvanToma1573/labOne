@@ -6,7 +6,6 @@ import Domain.Student;
 import Domain.Validators.ValidatorException;
 import Service.ProblemsService;
 import Service.StudentsService;
-import com.sun.tools.jdeprscan.scan.Scan;
 
 import java.io.BufferedReader;
 import java.io.IOException;
