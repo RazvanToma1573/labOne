@@ -58,7 +58,6 @@ public class Console {
         System.out.println("Hello!");
         Scanner scanner = new Scanner(System.in);
         int choice = -1;
-        this.printTheMenu();
         while (choice != 0) {
             this.printTheMenu();
             System.out.println();

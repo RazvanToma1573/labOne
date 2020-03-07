@@ -60,7 +60,7 @@ public class Problem extends BaseEntity<Integer> {
         if (this == obj) return true;
         else if (!(obj instanceof Problem)) return false;
         Problem problem = (Problem) obj;
-        return getId() == problem.getId();
+        return getId().equals(problem.getId());
     }
 
     /**
@@ -69,7 +69,7 @@ public class Problem extends BaseEntity<Integer> {
      */
     @Override
     public String toString() {
-        return description + " " + difficulty + " " + "(" + getId() + ")";
+        return getId() + "," + description + "," + difficulty;
     }
 
     @Override

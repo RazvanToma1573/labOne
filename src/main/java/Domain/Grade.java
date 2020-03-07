@@ -91,6 +91,6 @@ public class Grade extends BaseEntity<Integer>{
 
     @Override
     public String toString() {
-        return "student: " + student + "\n" + "problem: " + problem + "\n" + "grade: " + actualGrade;
+        return student + "," + problem + "," + actualGrade;
     }
 }
