@@ -10,13 +10,14 @@ import Repository.InMemoryRepository;
 import Service.StudentsService;
 import UI.Console;
 import Service.ProblemsService;
+import Repository.StudentFileRepository;
 
 public class Main {
 
     public static void main(String[] args){
 
         Validator<Student> studentValidator = new StudentValidator();
-        Repository<Integer, Student> studentRepository = new InMemoryRepository<Integer, Student>();
+        Repository<Integer, Student> studentRepository = new StudentFileRepository("src/main/java/Repository/Students.txt");
 
         Validator<Problem> problemValidator = new ProblemValidator();
         Repository<Integer, Problem> problemRepository = new InMemoryRepository<Integer, Problem>();
