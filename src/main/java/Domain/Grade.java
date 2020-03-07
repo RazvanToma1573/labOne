@@ -10,7 +10,7 @@ public class Grade extends BaseEntity<Integer>{
     private int actualGrade;
 
     public Grade(Student student, Problem problem, int actualGrade) {
-        this.setId(student.getId()+problem.getId() + id);
+        this.setId(id);
         id++;
         this.student = student;
         this.problem = problem;
