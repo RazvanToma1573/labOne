@@ -1,0 +1,5 @@
+1,a,b,2,ai,hard,8
+2,c,d,2,ai,hard,9
+1,a,b,1,mpp,medium,9
+3,r,b,1,mpp,medium,10
+3,r,b,3,iss,medium,9

@@ -54,7 +54,7 @@ public class Student extends BaseEntity<Integer>{
      */
     @Override
     public String toString() {
-        return firstName + " "+ lastName + " (" + getId() + ") ";
+        return getId()+","+firstName+","+lastName;
     }
 
     /**

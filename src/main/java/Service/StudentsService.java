@@ -225,6 +225,10 @@ public class StudentsService {
         }
     }
 
+    /**
+     * Finds the student with the maximum average grade for report
+     * @return the student with the maximum average grade
+     */
     public Student getStudentWithMaxGrade() {
         Iterable<Grade> grades = this.gradeRepository.findAll();
         Set<Grade> gradesSet = new HashSet<>();
@@ -241,6 +245,10 @@ public class StudentsService {
 
     }
 
+    /**
+     * Finds the problem which was assigned most times for report
+     * @return the problem which was assigned most times
+     */
     public Problem getMaxAssignedProblem(){
         Iterable<Grade> allGrades = this.gradeRepository.findAll();
         Set<Grade> grades = new HashSet<>();
@@ -255,6 +263,10 @@ public class StudentsService {
         return gradesFrequency.entrySet().stream().max(Comparator.comparing(entry -> entry.getValue())).get().getKey();
     }
 
+    /**
+     * Finds the student who has most assigned problem for report
+     * @return the student with the most number of assigned problems
+     */
     public Student getMostAssignedStudent(){
         Iterable<Grade> allGrades = this.gradeRepository.findAll();
         Set<Grade> grades = new HashSet<>();
