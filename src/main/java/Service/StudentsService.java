@@ -21,7 +21,7 @@ public class StudentsService {
     private Repository<Integer, Grade> gradeRepository;
     private Validator<Student> studentValidator;
     private Validator<Grade> gradeValidator;
-    private Validator<Problem> problemValidator;
+    private ProblemsService problemsService;
 
     /**
      * Creates a new Student service
@@ -29,14 +29,14 @@ public class StudentsService {
      * @param gradeRepository grade repository
      * @param studentValidator student validator
      * @param gradeValidator grade validator
-     * @param problemValidator problem validator
+     * @param problemService problem service
      */
-    public StudentsService(Repository<Integer, Student> studentRepository, Repository<Integer, Grade> gradeRepository, Validator<Student> studentValidator, Validator<Grade> gradeValidator, Validator<Problem> problemValidator) {
+    public StudentsService(Repository<Integer, Student> studentRepository, Repository<Integer, Grade> gradeRepository, Validator<Student> studentValidator, Validator<Grade> gradeValidator, ProblemsService problemService) {
         this.studentRepository = studentRepository;
         this.gradeRepository = gradeRepository;
         this.studentValidator = studentValidator;
         this.gradeValidator = gradeValidator;
-        this.problemValidator = problemValidator;
+        this.problemsService = problemService;
     }
 
     /**
@@ -65,16 +65,18 @@ public class StudentsService {
      * Assigns a problem to a student from repository
      *
      * @param studentId is the ID of the student
-     * @param problem   is the new problem to be assigned
+     * @param problemId   is the id of the new problem to be assigned
      * @throws ValidatorException       Custom exception
      * @throws IllegalArgumentException if the new grade is null
      */
-    public void assignProblem(int studentId, Problem problem) throws ValidatorException, IllegalArgumentException{
+    public void assignProblem(int studentId, int problemId) throws ValidatorException, IllegalArgumentException{
         Optional<Student> checkStudent = this.studentRepository.findOne(studentId);
         if (checkStudent.isPresent()) {
             Student student = checkStudent.get();
             this.studentValidator.validate(student);
-            this.problemValidator.validate(problem);
+
+           Problem problem = this.problemsService.getById(problemId);
+
             this.gradeRepository.save(new Grade(student, problem, 0));
         } else {
             throw new ValidatorException("No student found with the given id!");
@@ -120,24 +122,33 @@ public class StudentsService {
      * Assigns a grade to a student from repository for a given problem
      *
      * @param studentId is the ID of the stundet
-     * @param problem   is the problem to be graded
+     * @param problemId   is the problem to be graded
      * @param grade     is the grade (0..10)
      * @throws ValidatorException       custom exception
      * @throws IllegalArgumentException if new grade is null
      */
-    public void assignGrade(int studentId, Problem problem, int grade) throws ValidatorException, IllegalArgumentException {
+    public void assignGrade(int studentId, int problemId, int grade) throws ValidatorException, IllegalArgumentException {
         Optional<Student> checkStudent = this.studentRepository.findOne(studentId);
         if (checkStudent.isPresent()) {
             Student student = checkStudent.get();
             this.studentValidator.validate(student);
-            this.problemValidator.validate(problem);
+
+            Problem problem = this.problemsService.getById(problemId);
 
             Iterable<Grade> grades = this.gradeRepository.findAll();
             Set<Grade> gradeSet = new HashSet<>();
             grades.forEach(gradeSet::add);
-            Grade gradeToBeUpdated = gradeSet.stream().filter(grade1 -> grade1.getStudent().equals(student) && grade1.getProblem().equals(problem)).collect(Collectors.toList()).get(0);
-            gradeToBeUpdated.setActualGrade(grade);
-            this.gradeRepository.update(gradeToBeUpdated);
+            try {
+                Grade gradeToBeUpdated = gradeSet.stream().filter(grade1 -> grade1.getStudent().equals(student) && grade1.getProblem().equals(problem)).collect(Collectors.toList()).get(0);
+                Grade gradeToValidate = new Grade(student, problem, grade);
+                this.gradeValidator.validate(gradeToValidate);
+
+                gradeToBeUpdated.setActualGrade(grade);
+                this.gradeRepository.update(gradeToBeUpdated);
+            } catch (IndexOutOfBoundsException exception) {
+                throw new ValidatorException("Student does not have to do the given problem!");
+            }
+
         } else {
             throw new ValidatorException("No student found with the given id!");
         }

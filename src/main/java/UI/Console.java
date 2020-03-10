@@ -418,8 +418,7 @@ public class Console {
             int studentId = Integer.parseInt(bufferedReader.readLine());
             System.out.print("Problem ID : ");
             int problemId = Integer.parseInt(bufferedReader.readLine());
-            Problem problem = this.problemService.getById(problemId);
-            this.studentService.assignProblem(studentId, problem);
+            this.studentService.assignProblem(studentId, problemId);
         } catch (IOException exception){
             exception.printStackTrace();
         } catch (ValidatorException exception){
@@ -438,12 +437,11 @@ public class Console {
         try{
             System.out.print("Student ID : ");
             int studentId = Integer.parseInt(bufferedReader.readLine());
-            System.out.print("Problem ID :");
+            System.out.print("Problem ID : ");
             int problemId = Integer.parseInt(bufferedReader.readLine());
             System.out.print("Grade : ");
             int grade = Integer.parseInt(bufferedReader.readLine());
-            Problem problem = this.problemService.getById(problemId);
-            this.studentService.assignGrade(studentId, problem, grade);
+            this.studentService.assignGrade(studentId, problemId, grade);
 
         } catch (IOException exception){
             exception.printStackTrace();

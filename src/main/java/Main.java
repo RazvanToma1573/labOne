@@ -26,8 +26,8 @@ public class Main {
         Validator<Grade> gradeValidator = new GradeValidator();
         Repository<Integer, Grade> gradeRepository = new GradeFileRepository("src/main/java/Repository/Grades.txt");
 
-        StudentsService studentService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemValidator);
         ProblemsService problemService = new ProblemsService(problemRepository, problemValidator);
+        StudentsService studentService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemService);
         Console console = new Console(studentService, problemService);
 
         console.menu();
