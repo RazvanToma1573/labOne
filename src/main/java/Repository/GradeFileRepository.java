@@ -50,14 +50,9 @@ public class GradeFileRepository extends FileRepository<Integer, Grade> {
         try{
             BufferedReader bufferedReader = new BufferedReader(new FileReader(this.filePath));
             bufferedReader.lines().forEach(entry -> {
-                Student student = new Student(entry.split(",")[1], entry.split(",")[2]);
-                student.setId(Integer.valueOf(entry.split(",")[0]));
-
-                Problem problem = new Problem(entry.split(",")[4], entry.split(",")[5]);
-                problem.setId(Integer.valueOf(entry.split(",")[3]));
-
-                Grade grade = new Grade(student, problem, Integer.parseInt(entry.split(",")[6]));
-
+                int studentId = Integer.valueOf(entry.split(",")[0]);
+                int problemId = Integer.valueOf(entry.split(",")[1]);
+                Grade grade = new Grade(studentId, problemId, Integer.parseInt(entry.split(",")[6]));
                 super.save(grade);
             });
             bufferedReader.close();

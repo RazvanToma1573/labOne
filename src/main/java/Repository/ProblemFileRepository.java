@@ -13,36 +13,6 @@ public class ProblemFileRepository extends FileRepository<Integer, Problem> {
         this.readFromFile();
     }
 
-    @Override
-    public Optional<Problem> findOne(Integer integer) {
-        return super.findOne(integer);
-    }
-
-    @Override
-    public Iterable<Problem> findAll() {
-        return super.findAll();
-    }
-
-    @Override
-    public Optional<Problem> save(Problem entity) {
-        return super.save(entity);
-    }
-
-    @Override
-    public Optional<Problem> delete(Integer integer) {
-        return super.delete(integer);
-    }
-
-    @Override
-    public Optional<Problem> update(Problem entity) {
-        return super.update(entity);
-    }
-
-    @Override
-    protected void writeToFile() {
-        super.writeToFile();
-    }
-
     private void readFromFile() {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(super.filePath));

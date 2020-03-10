@@ -4,6 +4,7 @@ import Domain.Grade;
 import Domain.Problem;
 import Domain.Student;
 import Domain.Validators.*;
+import Service.ProblemsService;
 import Service.StudentsService;
 import org.junit.Test;
 
@@ -20,10 +21,12 @@ public class InMemoryRepositoryTest {
     public void findOne() {
         Repository<Integer, Student> studentRepository = new InMemoryRepository<Integer, Student>();
         Repository<Integer, Grade> gradeRepository = new InMemoryRepository<Integer, Grade>();
+        Repository<Integer, Problem> problemRepository = new InMemoryRepository<Integer, Problem>();
         Validator<Student> studentValidator = new StudentValidator();
         Validator<Grade> gradeValidator = new GradeValidator();
         Validator<Problem> problemValidator = new ProblemValidator();
-        StudentsService studentsService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemValidator);
+        ProblemsService problemsService = new ProblemsService(problemRepository, problemValidator);
+        StudentsService studentsService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemsService);
 
         Student student = new Student("Razvan","Toma");
         student.setId(1);
@@ -43,10 +46,12 @@ public class InMemoryRepositoryTest {
     public void findAll() {
         Repository<Integer, Student> studentRepository = new InMemoryRepository<Integer, Student>();
         Repository<Integer, Grade> gradeRepository = new InMemoryRepository<Integer, Grade>();
+        Repository<Integer, Problem> problemRepository = new InMemoryRepository<Integer, Problem>();
         Validator<Student> studentValidator = new StudentValidator();
         Validator<Grade> gradeValidator = new GradeValidator();
         Validator<Problem> problemValidator = new ProblemValidator();
-        StudentsService studentsService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemValidator);
+        ProblemsService problemsService = new ProblemsService(problemRepository, problemValidator);
+        StudentsService studentsService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemsService);
 
         Student student1 = new Student("aaaa","bbbb");
         student1.setId(1);
@@ -72,10 +77,12 @@ public class InMemoryRepositoryTest {
     public void save() {
         Repository<Integer, Student> studentRepository = new InMemoryRepository<Integer, Student>();
         Repository<Integer, Grade> gradeRepository = new InMemoryRepository<Integer, Grade>();
+        Repository<Integer, Problem> problemRepository = new InMemoryRepository<Integer, Problem>();
         Validator<Student> studentValidator = new StudentValidator();
         Validator<Grade> gradeValidator = new GradeValidator();
         Validator<Problem> problemValidator = new ProblemValidator();
-        StudentsService studentsService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemValidator);
+        ProblemsService problemsService = new ProblemsService(problemRepository, problemValidator);
+        StudentsService studentsService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemsService);
 
         Student student1 = new Student("aaaa","bbbb");
         student1.setId(1);
@@ -112,10 +119,13 @@ public class InMemoryRepositoryTest {
     public void delete() {
         Repository<Integer, Student> studentRepository = new InMemoryRepository<Integer, Student>();
         Repository<Integer, Grade> gradeRepository = new InMemoryRepository<Integer, Grade>();
+        Repository<Integer, Problem> problemRepository = new InMemoryRepository<Integer, Problem>();
         Validator<Student> studentValidator = new StudentValidator();
         Validator<Grade> gradeValidator = new GradeValidator();
         Validator<Problem> problemValidator = new ProblemValidator();
-        StudentsService studentsService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemValidator);
+        ProblemsService problemsService = new ProblemsService(problemRepository, problemValidator);
+        StudentsService studentsService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemsService);
+
 
         Student student1 = new Student("aaaa","bbbb");
         student1.setId(1);
@@ -144,10 +154,12 @@ public class InMemoryRepositoryTest {
     public void update() {
         Repository<Integer, Student> studentRepository = new InMemoryRepository<Integer, Student>();
         Repository<Integer, Grade> gradeRepository = new InMemoryRepository<Integer, Grade>();
+        Repository<Integer, Problem> problemRepository = new InMemoryRepository<Integer, Problem>();
         Validator<Student> studentValidator = new StudentValidator();
         Validator<Grade> gradeValidator = new GradeValidator();
         Validator<Problem> problemValidator = new ProblemValidator();
-        StudentsService studentsService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemValidator);
+        ProblemsService problemsService = new ProblemsService(problemRepository, problemValidator);
+        StudentsService studentsService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemsService);
 
         Student student1 = new Student("aaaa","bbbb");
         student1.setId(1);

@@ -21,7 +21,7 @@ public class StudentsService {
     private Repository<Integer, Grade> gradeRepository;
     private Validator<Student> studentValidator;
     private Validator<Grade> gradeValidator;
-    private Validator<Problem> problemValidator;
+    private ProblemsService problemsService;
 
     /**
      * Creates a new Student service
@@ -29,14 +29,14 @@ public class StudentsService {
      * @param gradeRepository grade repository
      * @param studentValidator student validator
      * @param gradeValidator grade validator
-     * @param problemValidator problem validator
+     * @param problemService problem service
      */
-    public StudentsService(Repository<Integer, Student> studentRepository, Repository<Integer, Grade> gradeRepository, Validator<Student> studentValidator, Validator<Grade> gradeValidator, Validator<Problem> problemValidator) {
+    public StudentsService(Repository<Integer, Student> studentRepository, Repository<Integer, Grade> gradeRepository, Validator<Student> studentValidator, Validator<Grade> gradeValidator, ProblemsService problemService) {
         this.studentRepository = studentRepository;
         this.gradeRepository = gradeRepository;
         this.studentValidator = studentValidator;
         this.gradeValidator = gradeValidator;
-        this.problemValidator = problemValidator;
+        this.problemsService = problemService;
     }
 
     /**
@@ -65,17 +65,19 @@ public class StudentsService {
      * Assigns a problem to a student from repository
      *
      * @param studentId is the ID of the student
-     * @param problem   is the new problem to be assigned
+     * @param problemId   is the id of the new problem to be assigned
      * @throws ValidatorException       Custom exception
      * @throws IllegalArgumentException if the new grade is null
      */
-    public void assignProblem(int studentId, Problem problem) throws ValidatorException, IllegalArgumentException{
+    public void assignProblem(int studentId, int problemId) throws ValidatorException, IllegalArgumentException{
         Optional<Student> checkStudent = this.studentRepository.findOne(studentId);
         if (checkStudent.isPresent()) {
             Student student = checkStudent.get();
             this.studentValidator.validate(student);
-            this.problemValidator.validate(problem);
-            this.gradeRepository.save(new Grade(student, problem, 0));
+
+           Problem problem = this.problemsService.getById(problemId);
+
+            this.gradeRepository.save(new Grade(student.getId(), problem.getId(), 0));
         } else {
             throw new ValidatorException("No student found with the given id!");
         }
@@ -120,24 +122,33 @@ public class StudentsService {
      * Assigns a grade to a student from repository for a given problem
      *
      * @param studentId is the ID of the stundet
-     * @param problem   is the problem to be graded
+     * @param problemId   is the problem to be graded
      * @param grade     is the grade (0..10)
      * @throws ValidatorException       custom exception
      * @throws IllegalArgumentException if new grade is null
      */
-    public void assignGrade(int studentId, Problem problem, int grade) throws ValidatorException, IllegalArgumentException {
+    public void assignGrade(int studentId, int problemId, int grade) throws ValidatorException, IllegalArgumentException {
         Optional<Student> checkStudent = this.studentRepository.findOne(studentId);
         if (checkStudent.isPresent()) {
             Student student = checkStudent.get();
             this.studentValidator.validate(student);
-            this.problemValidator.validate(problem);
+
+            Problem problem = this.problemsService.getById(problemId);
 
             Iterable<Grade> grades = this.gradeRepository.findAll();
             Set<Grade> gradeSet = new HashSet<>();
             grades.forEach(gradeSet::add);
-            Grade gradeToBeUpdated = gradeSet.stream().filter(grade1 -> grade1.getStudent().equals(student) && grade1.getProblem().equals(problem)).collect(Collectors.toList()).get(0);
-            gradeToBeUpdated.setActualGrade(grade);
-            this.gradeRepository.update(gradeToBeUpdated);
+            try {
+                Grade gradeToBeUpdated = gradeSet.stream().filter(grade1 -> grade1.getStudent()==student.getId() && grade1.getProblem()==problem.getId()).collect(Collectors.toList()).get(0);
+                Grade gradeToValidate = new Grade(student.getId(), problem.getId(), grade);
+                this.gradeValidator.validate(gradeToValidate);
+
+                gradeToBeUpdated.setActualGrade(grade);
+                this.gradeRepository.update(gradeToBeUpdated);
+            } catch (IndexOutOfBoundsException exception) {
+                throw new ValidatorException("Student does not have to do the given problem!");
+            }
+
         } else {
             throw new ValidatorException("No student found with the given id!");
         }
@@ -178,9 +189,10 @@ public class StudentsService {
 
                     Set<Grade> filteredGrades = new HashSet<>();
                     grades.forEach(filteredGrades::add);
-                    filteredGrades.removeIf(grade -> !grade.getProblem().getId().equals(problemID));
+                    filteredGrades.removeIf(grade -> !(grade.getProblem()==problemID));
 
-                    return filteredGrades.stream().map(Grade::getStudent).collect(Collectors.toSet());
+                    return filteredGrades.stream().map(Grade::getStudent)
+                            .map(studentId -> this.studentRepository.findOne(studentId).get()).collect(Collectors.toSet());
 
                 } catch (NumberFormatException exception) {
                     throw new ValidatorException("ID not valid");
@@ -193,7 +205,9 @@ public class StudentsService {
                     grades.forEach(filteredGrades::add);
                     filteredGrades.removeIf(grade -> grade.getActualGrade() != (wantedGrade));
 
-                    return filteredGrades.stream().map(Grade::getStudent).collect(Collectors.toSet());
+                    return filteredGrades.stream().map(Grade::getStudent)
+                            .map(studentId -> this.studentRepository.findOne(studentId).get())
+                            .collect(Collectors.toSet());
 
                 } catch (NumberFormatException exception) {
                     throw new ValidatorException("Grade not valid");
@@ -236,9 +250,9 @@ public class StudentsService {
         Map<Student, Map.Entry<Float, Integer>> averages = new HashMap<>();
         gradesSet.stream().forEach(grade -> {
             if (averages.containsKey(grade.getStudent()))
-                averages.put(grade.getStudent(), new HashMap.SimpleEntry<>(averages.get(grade.getStudent()).getKey() + grade.getActualGrade(), averages.get(grade.getStudent()).getValue() + 1));
+                averages.put(this.studentRepository.findOne(grade.getStudent()).get(), new HashMap.SimpleEntry<>(averages.get(grade.getStudent()).getKey() + grade.getActualGrade(), averages.get(grade.getStudent()).getValue() + 1));
             else
-                averages.put(grade.getStudent(), new HashMap.SimpleEntry<>((float) grade.getActualGrade(), 1));
+                averages.put(this.studentRepository.findOne(grade.getStudent()).get(), new HashMap.SimpleEntry<>((float) grade.getActualGrade(), 1));
         });
         return averages.entrySet().stream().map(entry -> new HashMap.SimpleEntry<Student, Float>(entry.getKey(), entry.getValue().getKey() / entry.getValue().getValue()))
                 .max(Comparator.comparing(entry -> entry.getValue())).get().getKey();
@@ -249,16 +263,16 @@ public class StudentsService {
      * Finds the problem which was assigned most times for report
      * @return the problem which was assigned most times
      */
-    public Problem getMaxAssignedProblem(){
+    public Problem getMaxAssignedProblem() throws ValidatorException {
         Iterable<Grade> allGrades = this.gradeRepository.findAll();
         Set<Grade> grades = new HashSet<>();
         allGrades.forEach(grades::add);
         Map<Problem, Integer> gradesFrequency = new HashMap<>();
         grades.stream().forEach(grade -> {
             if(gradesFrequency.containsKey(grade.getProblem()))
-                gradesFrequency.put(grade.getProblem(), gradesFrequency.get(grade.getProblem())+1);
+                gradesFrequency.put(this.problemsService.getById(grade.getProblem()), gradesFrequency.get(grade.getProblem())+1);
             else
-                gradesFrequency.put(grade.getProblem(), 1);
+                gradesFrequency.put(this.problemsService.getById(grade.getProblem()), 1);
         });
         return gradesFrequency.entrySet().stream().max(Comparator.comparing(entry -> entry.getValue())).get().getKey();
     }
@@ -274,9 +288,9 @@ public class StudentsService {
         Map<Student, Integer> problemsFrequency = new HashMap<>();
         grades.stream().forEach(grade -> {
             if(problemsFrequency.containsKey(grade.getStudent()))
-                problemsFrequency.put(grade.getStudent(), problemsFrequency.get(grade.getStudent())+1);
+                problemsFrequency.put(this.studentRepository.findOne(grade.getStudent()).get(), problemsFrequency.get(grade.getStudent())+1);
             else
-                problemsFrequency.put(grade.getStudent(), 1);
+                problemsFrequency.put(this.studentRepository.findOne(grade.getStudent()).get(), 1);
         });
         return problemsFrequency.entrySet().stream().max(Comparator.comparing(entry -> entry.getValue())).get().getKey();
     }

@@ -14,36 +14,6 @@ public class StudentFileRepository extends FileRepository<Integer, Student> {
         this.readFromFile();
     }
 
-    @Override
-    public Optional<Student> findOne(Integer integer) {
-        return super.findOne(integer);
-    }
-
-    @Override
-    public Iterable<Student> findAll() {
-        return super.findAll();
-    }
-
-    @Override
-    public Optional<Student> save(Student entity) {
-        return super.save(entity);
-    }
-
-    @Override
-    public Optional<Student> delete(Integer integer) {
-        return super.delete(integer);
-    }
-
-    @Override
-    public Optional<Student> update(Student entity) {
-        return super.update(entity);
-    }
-
-    @Override
-    protected void writeToFile() {
-        super.writeToFile();
-    }
-
     private void readFromFile(){
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(super.filePath));

@@ -5,21 +5,21 @@ import java.util.Objects;
 public class Grade extends BaseEntity<Integer>{
 
     private static int id = 0;
-    private Student student;
-    private Problem problem;
+    private int studentId;
+    private int problemId;
     private int actualGrade;
 
     /**
      * Creates a new Grade
-     * @param student is the student who is graded
-     * @param problem the problem which is evaluated
+     * @param studentId is the student's ID who is graded
+     * @param problemId the ID of the problem which is evaluated
      * @param actualGrade is the grade value
      */
-    public Grade(Student student, Problem problem, int actualGrade) {
+    public Grade(int studentId, int problemId, int actualGrade) {
         this.setId(id);
         id++;
-        this.student = student;
-        this.problem = problem;
+        this.studentId = studentId;
+        this.problemId = problemId;
         this.actualGrade = actualGrade;
     }
 
@@ -27,32 +27,32 @@ public class Grade extends BaseEntity<Integer>{
      * Returns the student who is graded
      * @return the student
      */
-    public Student getStudent() {
-        return student;
+    public int getStudent() {
+        return studentId;
     }
 
     /**
      * Sets the student who is graded
-     * @param student is the Student
+     * @param studentId is the Student's ID
      */
-    public void setStudent(Student student) {
-        this.student = student;
+    public void setStudent(int studentId) {
+        this.studentId = studentId;
     }
 
     /**
      * Returns the problem which is evaluated
      * @return the Problem
      */
-    public Problem getProblem() {
-        return problem;
+    public int getProblem() {
+        return problemId;
     }
 
     /**
      * Sets the problem which is evaluated
-     * @param problem is the Problem
+     * @param problemId is the ID of the Problem
      */
-    public void setProblem(Problem problem) {
-        this.problem = problem;
+    public void setProblem(int problemId) {
+        this.problemId = problemId;
     }
 
     /**
@@ -86,11 +86,11 @@ public class Grade extends BaseEntity<Integer>{
         if (obj == null) return false;
         if (!(obj instanceof Grade)) return false;
         Grade grade = (Grade) obj;
-        return student.equals(grade.getStudent()) && problem.equals(grade.getProblem());
+        return studentId==grade.getStudent() && problemId==grade.getProblem();
     }
 
     @Override
     public String toString() {
-        return student + "," + problem + "," + actualGrade;
+        return studentId + "," + problemId + "," + actualGrade;
     }
 }
