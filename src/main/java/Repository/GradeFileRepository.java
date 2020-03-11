@@ -1,8 +1,6 @@
 package Repository;
 
 import Domain.Grade;
-import Domain.Problem;
-import Domain.Student;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -50,9 +48,9 @@ public class GradeFileRepository extends FileRepository<Integer, Grade> {
         try{
             BufferedReader bufferedReader = new BufferedReader(new FileReader(this.filePath));
             bufferedReader.lines().forEach(entry -> {
-                int studentId = Integer.valueOf(entry.split(",")[0]);
-                int problemId = Integer.valueOf(entry.split(",")[1]);
-                Grade grade = new Grade(studentId, problemId, Integer.parseInt(entry.split(",")[6]));
+                int studentId = Integer.parseInt(entry.split(",")[0]);
+                int problemId = Integer.parseInt(entry.split(",")[1]);
+                Grade grade = new Grade(studentId, problemId, Integer.parseInt(entry.split(",")[2]));
                 super.save(grade);
             });
             bufferedReader.close();

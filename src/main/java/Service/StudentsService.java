@@ -248,7 +248,7 @@ public class StudentsService {
         Set<Grade> gradesSet = new HashSet<>();
         grades.forEach(gradesSet::add);
         Map<Student, Map.Entry<Float, Integer>> averages = new HashMap<>();
-        gradesSet.stream().forEach(grade -> {
+        gradesSet.forEach(grade -> {
             if (averages.containsKey(grade.getStudent()))
                 averages.put(this.studentRepository.findOne(grade.getStudent()).get(), new HashMap.SimpleEntry<>(averages.get(grade.getStudent()).getKey() + grade.getActualGrade(), averages.get(grade.getStudent()).getValue() + 1));
             else
@@ -269,10 +269,20 @@ public class StudentsService {
         allGrades.forEach(grades::add);
         Map<Problem, Integer> gradesFrequency = new HashMap<>();
         grades.stream().forEach(grade -> {
-            if(gradesFrequency.containsKey(grade.getProblem()))
-                gradesFrequency.put(this.problemsService.getById(grade.getProblem()), gradesFrequency.get(grade.getProblem())+1);
-            else
-                gradesFrequency.put(this.problemsService.getById(grade.getProblem()), 1);
+            if(gradesFrequency.containsKey(grade.getProblem())) {
+                try {
+                    gradesFrequency.put(this.problemsService.getById(grade.getProblem()), gradesFrequency.get(grade.getProblem())+1);
+                } catch (ValidatorException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                try {
+                    gradesFrequency.put(this.problemsService.getById(grade.getProblem()), 1);
+                } catch (ValidatorException e) {
+                    e.printStackTrace();
+                }
+            }
         });
         return gradesFrequency.entrySet().stream().max(Comparator.comparing(entry -> entry.getValue())).get().getKey();
     }
@@ -285,13 +295,13 @@ public class StudentsService {
         Iterable<Grade> allGrades = this.gradeRepository.findAll();
         Set<Grade> grades = new HashSet<>();
         allGrades.forEach(grades::add);
-        Map<Student, Integer> problemsFrequency = new HashMap<>();
+        Map<Integer, Integer> problemsFrequency = new HashMap<>();
         grades.stream().forEach(grade -> {
             if(problemsFrequency.containsKey(grade.getStudent()))
-                problemsFrequency.put(this.studentRepository.findOne(grade.getStudent()).get(), problemsFrequency.get(grade.getStudent())+1);
+                problemsFrequency.put(this.studentRepository.findOne(grade.getStudent()).get().getId(), problemsFrequency.get(grade.getStudent())+1);
             else
-                problemsFrequency.put(this.studentRepository.findOne(grade.getStudent()).get(), 1);
+                problemsFrequency.put(this.studentRepository.findOne(grade.getStudent()).get().getId(), 1);
         });
-        return problemsFrequency.entrySet().stream().max(Comparator.comparing(entry -> entry.getValue())).get().getKey();
+        return this.studentRepository.findOne(problemsFrequency.entrySet().stream().max(Comparator.comparing(entry -> entry.getValue())).get().getKey()).get();
     }
 }

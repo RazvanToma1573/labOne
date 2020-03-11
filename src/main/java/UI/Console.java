@@ -127,26 +127,10 @@ public class Console {
                     System.out.println("Done...");
                     System.out.println();
                 } else if(choice == 11) {
-                    System.out.println("Select one report from the list below:");
-                    System.out.println("\t 1. Problem that was assigned most times");
-                    System.out.println("\t 2. Student with the highest average grade");
-                    System.out.println("\t 3. Student with the most assigned problems");
-                    choice = scanner.nextInt();
-                    switch(choice){
-                        case 1:
-                            System.out.println(this.studentService.getMaxAssignedProblem());
-                            break;
-                        case 2:
-                            System.out.println(this.studentService.getStudentWithMaxGrade());
-                            break;
-                        case 3:
-                            System.out.println(this.studentService.getMostAssignedStudent());
-                            break;
-                        default:
-                            System.out.println("Invalid command");
-                    }
+                    System.out.println();
+                    this.reports();
+                    System.out.println();
                     System.out.println("Done");
-                    System.out.println("Execution over...");
                     System.out.println();
                 } else if (choice == 12) {
                     System.out.println();
@@ -173,6 +157,31 @@ public class Console {
         }
     }
 
+    public void reports() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Select one report from the list below:");
+        System.out.println("\t 1. Problem that was assigned most times");
+        System.out.println("\t 2. Student with the highest average grade");
+        System.out.println("\t 3. Student with the most assigned problems");
+        try {
+            int choice = scanner.nextInt();
+            switch (choice) {
+                case 1:
+                    System.out.println(this.studentService.getMaxAssignedProblem());
+                    break;
+                case 2:
+                    System.out.println(this.studentService.getStudentWithMaxGrade());
+                    break;
+                case 3:
+                    System.out.println(this.studentService.getMostAssignedStudent());
+                    break;
+                default:
+                    System.out.println("Invalid command");
+            }
+        } catch (ValidatorException exception) {
+            System.out.println("Validator Exception: " + exception.getMessage());
+        }
+    }
     /**
      * Function for updating a student
      */
@@ -322,8 +331,29 @@ public class Console {
      */
     public void showAllGrades(){
         System.out.println("Students, problems and grades:");
+        System.out.println();
         Iterable<Grade> grades = this.studentService.getGrades();
-        grades.forEach(System.out::println);
+        grades.forEach(
+                grade -> {
+                    int studentId = Integer.parseInt(grade.toString().split(",")[0]);
+                    int problemId = Integer.parseInt(grade.toString().split(",")[1]);
+                    int gradeToBeShown = Integer.parseInt(grade.toString().split(",")[2]);
+                    try {
+                        Student student = this.studentService.getById(studentId);
+                        Problem problem = this.problemService.getById(problemId);
+                        System.out.print("Student:");
+                        System.out.println(student);
+                        System.out.print("Problem:");
+                        System.out.println(problem);
+                        System.out.print("Grade:");
+                        System.out.println(gradeToBeShown);
+                        System.out.println();
+                        System.out.println();
+                    } catch (ValidatorException e) {
+                        e.printStackTrace();
+                    }
+                }
+        );
     }
 
     /**
