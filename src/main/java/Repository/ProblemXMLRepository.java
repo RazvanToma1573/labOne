@@ -128,7 +128,7 @@ public class ProblemXMLRepository extends InMemoryRepository<Integer, Problem> {
             for (int i = 0; i < nodeList.getLength(); i++) {
                 Node node = nodeList.item(i);
                 Element element = (Element) node;
-                int id = Integer.valueOf(element.getAttribute("id"));
+                int id = Integer.parseInt(element.getAttribute("id"));
                 String description = element.getElementsByTagName("description").item(0).getTextContent();
                 String difficulty = element.getElementsByTagName("difficulty").item(0).getTextContent();
                 Problem problem = new Problem(description, difficulty);
