@@ -12,6 +12,7 @@ import Service.ProblemsService;
 import Repository.StudentFileRepository;
 import Repository.ProblemFileRepository;
 import Repository.GradeFileRepository;
+import Repository.ProblemXMLRepository;
 
 public class Main {
 
@@ -21,7 +22,7 @@ public class Main {
         Repository<Integer, Student> studentRepository = new StudentFileRepository("src/main/java/Repository/Students.txt");
 
         Validator<Problem> problemValidator = new ProblemValidator();
-        Repository<Integer, Problem> problemRepository = new ProblemFileRepository("src/main/java/Repository/Problems.txt");
+        Repository<Integer, Problem> problemRepository = new ProblemXMLRepository("src/main/java/Repository/Problems.xml");
 
         Validator<Grade> gradeValidator = new GradeValidator();
         Repository<Integer, Grade> gradeRepository = new GradeFileRepository("src/main/java/Repository/Grades.txt");
