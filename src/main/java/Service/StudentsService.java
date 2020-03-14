@@ -304,4 +304,25 @@ public class StudentsService {
         });
         return this.studentRepository.findOne(problemsFrequency.entrySet().stream().max(Comparator.comparing(entry -> entry.getValue())).get().getKey()).get();
     }
+
+    /**
+     * Returns the problem with the highest average grade for all students
+     * @return Problem with highest average grade
+     */
+    public Problem getProblemHighestAverage() throws ValidatorException {
+        Iterable<Grade> allGrades = this.gradeRepository.findAll();
+        Set<Grade> grades = new HashSet<>();
+        allGrades.forEach(grades::add);
+        Map<Integer, Map.Entry<Float, Integer>> averages = new HashMap<>();
+        grades.stream().forEach(grade ->{
+            if(averages.containsKey(grade.getProblem()))
+                averages.put(grade.getProblem(), new HashMap.SimpleEntry<>(averages.get(grade.getProblem()).getKey()+grade.getActualGrade(), averages.get(grade.getProblem()).getValue()+1));
+            else
+                averages.put(grade.getProblem(), new HashMap.SimpleEntry<Float, Integer>((float)grade.getActualGrade(), 1));
+        });
+        int problemId = averages.entrySet().stream()
+                .map(entry -> new HashMap.SimpleEntry<>(entry.getKey(), entry.getValue().getKey()/entry.getValue().getValue()))
+                .max(Comparator.comparing(entry -> entry.getValue())).get().getKey();
+        return this.problemsService.getById(problemId);
+    }
 }

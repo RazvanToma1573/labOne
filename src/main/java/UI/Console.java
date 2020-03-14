@@ -163,6 +163,7 @@ public class Console {
         System.out.println("\t 1. Problem that was assigned most times");
         System.out.println("\t 2. Student with the highest average grade");
         System.out.println("\t 3. Student with the most assigned problems");
+        System.out.println("\t 4. Problem with the highest average grade");
         try {
             int choice = scanner.nextInt();
             switch (choice) {
@@ -174,6 +175,8 @@ public class Console {
                     break;
                 case 3:
                     System.out.println(this.studentService.getMostAssignedStudent());
+                case 4:
+                    System.out.println(this.studentService.getProblemHighestAverage());
                     break;
                 default:
                     System.out.println("Invalid command");
