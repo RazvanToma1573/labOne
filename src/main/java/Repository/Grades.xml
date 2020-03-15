@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><gradeRepository>
+    <grade>
+        <studentid>1</studentid>
+        <problemid>2</problemid>
+        <agrade>8</agrade>
+    </grade>
+    <grade>
+        <studentid>2</studentid>
+        <problemid>3</problemid>
+        <agrade>8</agrade>
+    </grade>
+    <grade>
+        <studentid>2</studentid>`
+        <problemid>2</problemid>
+        <agrade>9</agrade>
+    </grade>
+    <grade>
+        <studentid>4</studentid>
+        <problemid>1</problemid>
+        <agrade>9</agrade>
+    </grade>
+<grade><studentid>1</studentid><problemid>1</problemid><agrade>10</agrade></grade></gradeRepository>

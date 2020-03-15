@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><problemsRepository>
     <problem id="1">
         <description>MPP</description>
-        <difficulty>hard</difficulty>
+        <difficulty>easy</difficulty>
     </problem>
     <problem id="2">
         <description>AI</description>
@@ -15,4 +15,4 @@
         <description>Database</description>
         <difficulty>medium</difficulty>
     </problem>
-</problemsRepository>
+<problem id="5"><description>ai</description><difficulty>hard</difficulty></problem></problemsRepository>
