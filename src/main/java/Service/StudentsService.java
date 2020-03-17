@@ -256,18 +256,13 @@ public class StudentsService {
      * @return the student with the maximum average grade
      */
     public Student getStudentWithMaxGrade() {
-        Iterable<Grade> grades = this.gradeRepository.findAll();
-        Set<Grade> gradesSet = new HashSet<>();
-        grades.forEach(gradesSet::add);
-        Map<Student, Map.Entry<Float, Integer>> averages = new HashMap<>();
-        gradesSet.forEach(grade -> {
-            if (averages.containsKey(grade.getStudent()))
-                averages.put(this.studentRepository.findOne(grade.getStudent()).get(), new HashMap.SimpleEntry<>(averages.get(grade.getStudent()).getKey() + grade.getActualGrade(), averages.get(grade.getStudent()).getValue() + 1));
-            else
-                averages.put(this.studentRepository.findOne(grade.getStudent()).get(), new HashMap.SimpleEntry<>((float) grade.getActualGrade(), 1));
-        });
-        return averages.entrySet().stream().map(entry -> new HashMap.SimpleEntry<Student, Float>(entry.getKey(), entry.getValue().getKey() / entry.getValue().getValue()))
-                .max(Comparator.comparing(entry -> entry.getValue())).get().getKey();
+        Set<Grade> grades = new HashSet<>();
+        this.gradeRepository.findAll().forEach(grades::add);
+        return this.studentRepository.findOne(grades.stream()
+                .collect(Collectors.groupingBy(Grade::getStudent))
+                .entrySet().stream()
+                .map(entry -> new HashMap.SimpleEntry<Integer, Double>(entry.getKey(), entry.getValue().stream().map(Grade::getActualGrade).collect(Collectors.averagingDouble(grade -> (double)grade)))).
+                        max(Comparator.comparing(entry -> entry.getValue())).get().getKey()).get();
 
     }
 
@@ -343,11 +338,9 @@ public class StudentsService {
      * @return the student with max Grade
      */
     public Student getStudentHighestAverageHard(){
-        Iterable<Grade> grades = this.gradeRepository.findAll();
-        Set<Grade> gradesSet = new HashSet<>();
-        grades.forEach(gradesSet::add);
-        Map<Student, Map.Entry<Float, Integer>> averages = new HashMap<>();
-        gradesSet.stream().filter(grade -> {
+        Set<Grade> grades = new HashSet<>();
+        this.gradeRepository.findAll().forEach(grades::add);
+        return this.studentRepository.findOne(grades.stream().filter(grade -> {
             try{
                 return this.problemsService.getById(grade.getProblem()).getDifficulty().equals("hard");
             } catch (Exception e){
@@ -355,13 +348,10 @@ public class StudentsService {
             }
             return false;
         })
-                .forEach(grade -> {
-            if (averages.containsKey(grade.getStudent()))
-                averages.put(this.studentRepository.findOne(grade.getStudent()).get(), new HashMap.SimpleEntry<>(averages.get(grade.getStudent()).getKey() + grade.getActualGrade(), averages.get(grade.getStudent()).getValue() + 1));
-            else
-                averages.put(this.studentRepository.findOne(grade.getStudent()).get(), new HashMap.SimpleEntry<>((float) grade.getActualGrade(), 1));
-        });
-        return averages.entrySet().stream().map(entry -> new HashMap.SimpleEntry<Student, Float>(entry.getKey(), entry.getValue().getKey() / entry.getValue().getValue()))
-                .max(Comparator.comparing(entry -> entry.getValue())).get().getKey();
+                .collect(Collectors.groupingBy(Grade::getStudent))
+                .entrySet().stream()
+                .map(entry -> new HashMap.SimpleEntry<Integer, Double>(entry.getKey(), entry.getValue().stream().map(Grade::getActualGrade).collect(Collectors.averagingDouble(grade -> (double)grade)))).
+                max(Comparator.comparing(entry -> entry.getValue())).get().getKey()).get();
+
     }
 }
