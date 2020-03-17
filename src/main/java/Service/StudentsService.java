@@ -52,12 +52,16 @@ public class StudentsService {
     }
 
     /**
-     * Removes a student from the repository
+     * Removes a student from the repository and remove all the grades of this stuedent
      *
      * @param id is the ID of the student to be removed
      * @throws IllegalArgumentException if id is null
      */
     public void remove(int id) throws IllegalArgumentException {
+        Set<Grade> grades = new HashSet<>();
+        this.gradeRepository.findAll().forEach(grades::add);
+        grades.stream().filter(grade -> grade.getStudent() == id)
+                .forEach(grade -> this.gradeRepository.delete(grade.getId()));
         studentRepository.delete(id);
     }
 

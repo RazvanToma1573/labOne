@@ -1,24 +1,29 @@
 package Service;
 
+import Domain.Grade;
 import Domain.Problem;
 import Domain.Validators.Validator;
 import Domain.Validators.ValidatorException;
 import Repository.Repository;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 public class ProblemsService{
     private Repository<Integer, Problem> problemRepository;
     private Validator<Problem> problemValidator;
+    private Repository<Integer, Grade> gradeRepository;
 
     /**
      * Creates a new problem service
      * @param problemRepository problem repository
      * @param problemValidator problem validator
      */
-    public ProblemsService(Repository<Integer, Problem> problemRepository, Validator<Problem> problemValidator) {
+    public ProblemsService(Repository<Integer, Problem> problemRepository, Validator<Problem> problemValidator, Repository<Integer, Grade> gradeRepository) {
         this.problemRepository = problemRepository;
         this.problemValidator = problemValidator;
+        this.gradeRepository = gradeRepository;
     }
 
     /**
@@ -33,10 +38,14 @@ public class ProblemsService{
     }
 
     /**
-     * Remove problem with the given id.
+     * Remove problem with the given id and remove all the grades for this problem
      * @param idProblemToBeRemoved id of the problem to be removed (int)
      */
     public void remove(int idProblemToBeRemoved) {
+        Set<Grade> grades = new HashSet<>();
+        this.gradeRepository.findAll().forEach(grades::add);
+        grades.stream().filter(grade -> grade.getProblem() == idProblemToBeRemoved)
+                .forEach(grade -> this.gradeRepository.delete(grade.getId()));
         this.problemRepository.delete(idProblemToBeRemoved);
     }
 
