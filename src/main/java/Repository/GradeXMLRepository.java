@@ -16,7 +16,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class GradeXMLRepository extends InMemoryRepository<Integer, Grade> {
 
@@ -59,6 +60,45 @@ public class GradeXMLRepository extends InMemoryRepository<Integer, Grade> {
             exception.printStackTrace();
         }
         return super.save(entity);
+    }
+
+    @Override
+    public Optional<Grade> delete(Integer integer) {
+        try {
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            Document document = documentBuilder.parse(new File(this.filePath));
+            document.getDocumentElement().normalize();
+            NodeList gradeNodes = document.getElementsByTagName("grade");
+
+            Iterable<Grade> allGrades = this.findAll();
+            Set<Grade> grades = new HashSet<>();
+            allGrades.forEach(grades::add);
+
+            List<Grade> filteredGrades = grades.stream().filter(grade -> grade.getId().equals(integer)).collect(Collectors.toList());
+
+            for (int i = 0; i < gradeNodes.getLength(); i++) {
+                 if (gradeNodes.item(i).getNodeType() == gradeNodes.item(i).ELEMENT_NODE){
+                     Element grade = (Element) gradeNodes.item(i);
+                     for (int j = 0; j < filteredGrades.size(); j++) {
+                         if (Integer.parseInt(grade.getElementsByTagName("studentid").item(0).getTextContent()) == filteredGrades.get(j).getStudent() &&
+                         Integer.parseInt(grade.getElementsByTagName("problemid").item(0).getTextContent()) == filteredGrades.get(j).getProblem()) {
+                             gradeNodes.item(i).getParentNode().removeChild(gradeNodes.item(i));
+                             break;
+                         }
+                     }
+                 }
+            }
+
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(document);
+            StreamResult result = new StreamResult(new File(this.filePath));
+            transformer.transform(source, result);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return super.delete(integer);
     }
 
     @Override

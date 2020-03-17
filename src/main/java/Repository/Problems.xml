@@ -3,10 +3,7 @@
         <description>MPP</description>
         <difficulty>easy</difficulty>
     </problem>
-    <problem id="2">
-        <description>AI</description>
-        <difficulty>hard</difficulty>
-    </problem>
+    
     <problem id="3">
         <description>MPP</description>
         <difficulty>medium</difficulty>
