@@ -309,7 +309,7 @@ public class Console {
             Scanner scanner = new Scanner(System.in);
             System.out.print("ID : ");
             int id = scanner.nextInt();
-            this.problemService.remove(id);
+            this.studentService.removeProblem(id);
         } catch (IllegalArgumentException exception) {
             System.out.println("IllegalArgumentException:" + exception.getMessage());
         }

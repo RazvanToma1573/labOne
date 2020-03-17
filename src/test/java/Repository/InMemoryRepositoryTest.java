@@ -25,7 +25,7 @@ public class InMemoryRepositoryTest {
         Validator<Student> studentValidator = new StudentValidator();
         Validator<Grade> gradeValidator = new GradeValidator();
         Validator<Problem> problemValidator = new ProblemValidator();
-        ProblemsService problemsService = new ProblemsService(problemRepository, problemValidator, gradeRepository);
+        ProblemsService problemsService = new ProblemsService(problemRepository, problemValidator);
         StudentsService studentsService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemsService);
 
         Student student = new Student("Razvan","Toma");
@@ -50,7 +50,7 @@ public class InMemoryRepositoryTest {
         Validator<Student> studentValidator = new StudentValidator();
         Validator<Grade> gradeValidator = new GradeValidator();
         Validator<Problem> problemValidator = new ProblemValidator();
-        ProblemsService problemsService = new ProblemsService(problemRepository, problemValidator, gradeRepository);
+        ProblemsService problemsService = new ProblemsService(problemRepository, problemValidator);
         StudentsService studentsService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemsService);
 
         Student student1 = new Student("aaaa","bbbb");
@@ -81,7 +81,7 @@ public class InMemoryRepositoryTest {
         Validator<Student> studentValidator = new StudentValidator();
         Validator<Grade> gradeValidator = new GradeValidator();
         Validator<Problem> problemValidator = new ProblemValidator();
-        ProblemsService problemsService = new ProblemsService(problemRepository, problemValidator, gradeRepository);
+        ProblemsService problemsService = new ProblemsService(problemRepository, problemValidator);
         StudentsService studentsService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemsService);
 
         Student student1 = new Student("aaaa","bbbb");
@@ -123,7 +123,7 @@ public class InMemoryRepositoryTest {
         Validator<Student> studentValidator = new StudentValidator();
         Validator<Grade> gradeValidator = new GradeValidator();
         Validator<Problem> problemValidator = new ProblemValidator();
-        ProblemsService problemsService = new ProblemsService(problemRepository, problemValidator, gradeRepository);
+        ProblemsService problemsService = new ProblemsService(problemRepository, problemValidator);
         StudentsService studentsService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemsService);
 
 
@@ -158,7 +158,7 @@ public class InMemoryRepositoryTest {
         Validator<Student> studentValidator = new StudentValidator();
         Validator<Grade> gradeValidator = new GradeValidator();
         Validator<Problem> problemValidator = new ProblemValidator();
-        ProblemsService problemsService = new ProblemsService(problemRepository, problemValidator, gradeRepository);
+        ProblemsService problemsService = new ProblemsService(problemRepository, problemValidator);
         StudentsService studentsService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemsService);
 
         Student student1 = new Student("aaaa","bbbb");

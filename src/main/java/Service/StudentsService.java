@@ -65,6 +65,14 @@ public class StudentsService {
         studentRepository.delete(id);
     }
 
+    public void removeProblem(int id) throws  IllegalArgumentException{
+        Set<Grade> grades = new HashSet<>();
+        this.gradeRepository.findAll().forEach(grades::add);
+        grades.stream().filter(grade -> grade.getProblem() == id)
+                .forEach(grade -> this.gradeRepository.delete(grade.getId()));
+        this.problemsService.remove(id);
+    }
+
     /**
      * Assigns a problem to a student from repository
      *

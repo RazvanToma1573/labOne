@@ -13,17 +13,15 @@ import java.util.Set;
 public class ProblemsService{
     private Repository<Integer, Problem> problemRepository;
     private Validator<Problem> problemValidator;
-    private Repository<Integer, Grade> gradeRepository;
 
     /**
      * Creates a new problem service
      * @param problemRepository problem repository
      * @param problemValidator problem validator
      */
-    public ProblemsService(Repository<Integer, Problem> problemRepository, Validator<Problem> problemValidator, Repository<Integer, Grade> gradeRepository) {
+    public ProblemsService(Repository<Integer, Problem> problemRepository, Validator<Problem> problemValidator) {
         this.problemRepository = problemRepository;
         this.problemValidator = problemValidator;
-        this.gradeRepository = gradeRepository;
     }
 
     /**
@@ -42,10 +40,6 @@ public class ProblemsService{
      * @param idProblemToBeRemoved id of the problem to be removed (int)
      */
     public void remove(int idProblemToBeRemoved) {
-        Set<Grade> grades = new HashSet<>();
-        this.gradeRepository.findAll().forEach(grades::add);
-        grades.stream().filter(grade -> grade.getProblem() == idProblemToBeRemoved)
-                .forEach(grade -> this.gradeRepository.delete(grade.getId()));
         this.problemRepository.delete(idProblemToBeRemoved);
     }
 

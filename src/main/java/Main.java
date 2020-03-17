@@ -26,7 +26,7 @@ public class Main {
         Validator<Grade> gradeValidator = new GradeValidator();
         Repository<Integer, Grade> gradeRepository = new GradeXMLRepository("src/main/java/Repository/Grades.xml");
 
-        ProblemsService problemService = new ProblemsService(problemRepository, problemValidator, gradeRepository);
+        ProblemsService problemService = new ProblemsService(problemRepository, problemValidator);
         StudentsService studentService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemService);
         Console console = new Console(studentService, problemService);
 
