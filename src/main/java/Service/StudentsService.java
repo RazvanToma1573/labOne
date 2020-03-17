@@ -329,4 +329,31 @@ public class StudentsService {
                 .max(Comparator.comparing(entry -> entry.getValue())).get().getKey();
         return this.problemsService.getById(problemId);
     }
+
+    /**
+     * Return the student with highest average grade at hard problems
+     * @return the student with max Grade
+     */
+    public Student getStudentHighestAverageHard(){
+        Iterable<Grade> grades = this.gradeRepository.findAll();
+        Set<Grade> gradesSet = new HashSet<>();
+        grades.forEach(gradesSet::add);
+        Map<Student, Map.Entry<Float, Integer>> averages = new HashMap<>();
+        gradesSet.stream().filter(grade -> {
+            try{
+                return this.problemsService.getById(grade.getProblem()).getDifficulty().equals("hard");
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            return false;
+        })
+                .forEach(grade -> {
+            if (averages.containsKey(grade.getStudent()))
+                averages.put(this.studentRepository.findOne(grade.getStudent()).get(), new HashMap.SimpleEntry<>(averages.get(grade.getStudent()).getKey() + grade.getActualGrade(), averages.get(grade.getStudent()).getValue() + 1));
+            else
+                averages.put(this.studentRepository.findOne(grade.getStudent()).get(), new HashMap.SimpleEntry<>((float) grade.getActualGrade(), 1));
+        });
+        return averages.entrySet().stream().map(entry -> new HashMap.SimpleEntry<Student, Float>(entry.getKey(), entry.getValue().getKey() / entry.getValue().getValue()))
+                .max(Comparator.comparing(entry -> entry.getValue())).get().getKey();
+    }
 }

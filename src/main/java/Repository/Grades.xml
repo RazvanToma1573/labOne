@@ -11,4 +11,4 @@
         <problemid>1</problemid>
         <agrade>9</agrade>
     </grade>
-</gradeRepository>
+<grade><studentid>2</studentid><problemid>5</problemid><agrade>9</agrade></grade></gradeRepository>
