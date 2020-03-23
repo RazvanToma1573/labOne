@@ -2,16 +2,21 @@ package Service;
 
 import Domain.Grade;
 import Domain.Problem;
+import Domain.Student;
 import Domain.Validators.Validator;
 import Domain.Validators.ValidatorException;
 import Repository.Repository;
+import Repository.SortedRepository;
+import Repository.Sort;
+import com.sun.tools.javac.util.Pair;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 public class ProblemsService{
-    private Repository<Integer, Problem> problemRepository;
+    private SortedRepository<Integer, Problem> problemRepository;
     private Validator<Problem> problemValidator;
 
     /**
@@ -19,7 +24,7 @@ public class ProblemsService{
      * @param problemRepository problem repository
      * @param problemValidator problem validator
      */
-    public ProblemsService(Repository<Integer, Problem> problemRepository, Validator<Problem> problemValidator) {
+    public ProblemsService(SortedRepository<Integer, Problem> problemRepository, Validator<Problem> problemValidator) {
         this.problemRepository = problemRepository;
         this.problemValidator = problemValidator;
     }
@@ -88,5 +93,12 @@ public class ProblemsService{
         } else {
             throw new ValidatorException("No problem found with the given id!");
         }
+    }
+
+    public Iterable<Problem> getSorted(List<Pair<Boolean, String>> criteria) {
+        Sort sort = new Sort(criteria.get(0).fst, criteria.get(0).snd);
+        criteria.remove(0);
+        criteria.stream().forEach(cr -> sort.and(new Sort(cr.fst, cr.snd)));
+        return this.problemRepository.findAll(sort);
     }
 }

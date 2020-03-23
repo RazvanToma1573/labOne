@@ -6,19 +6,21 @@ import Domain.Student;
 import Domain.Validators.Validator;
 import Domain.Validators.ValidatorException;
 import Repository.Repository;
+import Repository.Sort;
+import com.sun.tools.javac.util.Pair;
 
 import java.util.*;
 
 import java.util.HashSet;
-
+import Repository.SortedRepository;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class StudentsService {
 
-    private Repository<Integer, Student> studentRepository;
-    private Repository<Integer, Grade> gradeRepository;
+    private SortedRepository<Integer, Student> studentRepository;
+    private SortedRepository<Integer, Grade> gradeRepository;
     private Validator<Student> studentValidator;
     private Validator<Grade> gradeValidator;
     private ProblemsService problemsService;
@@ -31,7 +33,7 @@ public class StudentsService {
      * @param gradeValidator grade validator
      * @param problemService problem service
      */
-    public StudentsService(Repository<Integer, Student> studentRepository, Repository<Integer, Grade> gradeRepository, Validator<Student> studentValidator, Validator<Grade> gradeValidator, ProblemsService problemService) {
+    public StudentsService(SortedRepository<Integer, Student> studentRepository, SortedRepository<Integer, Grade> gradeRepository, Validator<Student> studentValidator, Validator<Grade> gradeValidator, ProblemsService problemService) {
         this.studentRepository = studentRepository;
         this.gradeRepository = gradeRepository;
         this.studentValidator = studentValidator;
@@ -353,5 +355,19 @@ public class StudentsService {
                 .map(entry -> new HashMap.SimpleEntry<Integer, Double>(entry.getKey(), entry.getValue().stream().map(Grade::getActualGrade).collect(Collectors.averagingDouble(grade -> (double)grade)))).
                 max(Comparator.comparing(entry -> entry.getValue())).get().getKey()).get();
 
+    }
+
+    public Iterable<Student> getSorted(List<Pair<Boolean, String>> criteria) {
+        Sort sort = new Sort(criteria.get(0).fst, criteria.get(0).snd);
+        criteria.remove(0);
+        criteria.stream().forEach(cr -> sort.and(new Sort(cr.fst, cr.snd)));
+        return this.studentRepository.findAll(sort);
+    }
+
+    public Iterable<Grade> getGradesSorted(List<Pair<Boolean, String>> criteria) {
+        Sort sort = new Sort(criteria.get(0).fst, criteria.get(0).snd);
+        criteria.remove(0);
+        criteria.stream().forEach(cr -> sort.and(new Sort(cr.fst, cr.snd)));
+        return this.gradeRepository.findAll(sort);
     }
 }

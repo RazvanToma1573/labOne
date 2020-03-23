@@ -6,6 +6,7 @@ import Domain.Student;
 import Domain.Validators.ValidatorException;
 import Service.ProblemsService;
 import Service.StudentsService;
+import com.sun.tools.javac.util.Pair;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -49,6 +50,9 @@ public class Console {
         System.out.println("\t\t 11 - reports");
         System.out.println("\t\t 12 - update student");
         System.out.println("\t\t 13 - update problem");
+        System.out.println("\t\t 14 - show all students, sorted ");
+        System.out.println("\t\t 15 - show all problems, sorted ");
+        System.out.println("\t\t 16 - show all grades, sorted ");
     }
 
     /**
@@ -486,6 +490,84 @@ public class Console {
             System.out.println("ValidatorException: "+exception.getMessage());
         } catch (IllegalArgumentException exception) {
             System.out.println("IllegalArgumentException:" + exception.getMessage());
+        }
+    }
+
+    public void showStudentsSorted(){
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        List<Pair<Boolean, String>> criteria = new ArrayList<>();
+        System.out.println("Give a criteria in the form: asc/desc <fieldname>");
+        try {
+            String line = bufferedReader.readLine();
+            criteria.add(new Pair<>(line.split(" ")[0].equals("desc"), line.split(" ")[1]));
+            while(true){
+                System.out.println("Any other criteria? (enter no if none)");
+                line = bufferedReader.readLine();
+                if(line.equals("no"))
+                        break;
+                criteria.add(new Pair<>(line.split(" ")[0].equals("desc"), line.split(" ")[1]));
+            }
+            this.studentService.getSorted(criteria).forEach(System.out::println);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void showProblemsSorted(){
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        List<Pair<Boolean, String>> criteria = new ArrayList<>();
+        System.out.println("Give a criteria in the form: asc/desc <fieldname>");
+        try {
+            String line = bufferedReader.readLine();
+            criteria.add(new Pair<>(line.split(" ")[0].equals("desc"), line.split(" ")[1]));
+            while(true){
+                System.out.println("Any other criteria? (enter no if none)");
+                line = bufferedReader.readLine();
+                if(line.equals("no"))
+                    break;
+                criteria.add(new Pair<>(line.split(" ")[0].equals("desc"), line.split(" ")[1]));
+            }
+            this.problemService.getSorted(criteria).forEach(System.out::println);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void showGradesSorted(){
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        List<Pair<Boolean, String>> criteria = new ArrayList<>();
+        System.out.println("Give a criteria in the form: asc/desc <fieldname>");
+        try {
+            String line = bufferedReader.readLine();
+            criteria.add(new Pair<>(line.split(" ")[0].equals("desc"), line.split(" ")[1]));
+            while(true){
+                System.out.println("Any other criteria? (enter no if none)");
+                line = bufferedReader.readLine();
+                if(line.equals("no"))
+                    break;
+                criteria.add(new Pair<>(line.split(" ")[0].equals("desc"), line.split(" ")[1]));
+            }
+            this.studentService.getGradesSorted(criteria).forEach(grade ->{
+                int studentId = Integer.parseInt(grade.toString().split(",")[0]);
+                int problemId = Integer.parseInt(grade.toString().split(",")[1]);
+                int gradeToBeShown = Integer.parseInt(grade.toString().split(",")[2]);
+                try {
+                    Student student = this.studentService.getById(studentId);
+                    Problem problem = this.problemService.getById(problemId);
+                    System.out.print("Student:");
+                    System.out.println(student);
+                    System.out.print("Problem:");
+                    System.out.println(problem);
+                    System.out.print("Grade:");
+                    System.out.println(gradeToBeShown);
+                    System.out.println();
+                    System.out.println();
+                } catch (ValidatorException e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
     }
 }

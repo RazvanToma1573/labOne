@@ -22,10 +22,10 @@ public class Main {
     public static void main(String[] args){
 
         Validator<Student> studentValidator = new StudentValidator();
-        Repository<Integer, Student> studentRepository = new StudentDBRepository();
+        SortedRepository<Integer, Student> studentRepository = new StudentDBRepository();
 
         Validator<Problem> problemValidator = new ProblemValidator();
-        Repository<Integer, Problem> problemRepository = new ProblemDBRepository();
+        SortedRepository<Integer, Problem> problemRepository = new ProblemDBRepository();
 
         Validator<Grade> gradeValidator = new GradeValidator();
         SortedRepository<Integer, Grade> gradeRepository = new GradeDBRepository();
