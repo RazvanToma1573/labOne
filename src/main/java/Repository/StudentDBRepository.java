@@ -1,12 +1,15 @@
 package Repository;
 
 import Domain.Student;
+import com.sun.tools.javac.util.Pair;
 
 
+import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class StudentDBRepository implements SortedRepository<Integer, Student> {
 
@@ -15,7 +18,7 @@ public class StudentDBRepository implements SortedRepository<Integer, Student> {
     private static final String PASSWORD = "parola";
 
     @Override
-    public Iterable<Student> findAll(Sort sort) {
+    public Iterable<Student> findAll(Sort sortObj) {
         List<Student> result = new ArrayList<>();
         String sql = "select * from students";
         try{
@@ -34,8 +37,30 @@ public class StudentDBRepository implements SortedRepository<Integer, Student> {
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println(e.getMessage());
         }
-        return result;
+        List<Pair<String, Boolean>> criteria = sortObj.getCriteria();
+
+
+        List<Student> sortedResult = result.stream().sorted((s1, s2) -> {
+            try {
+                Field field1 = s1.getClass().getDeclaredField("firstName");
+                field1.setAccessible(true);
+                Field field2 = s2.getClass().getDeclaredField("firstName");
+                field2.setAccessible(true);
+                String str1 = field1.get(s1).toString();
+                String str2 = field1.get(s2).toString();
+                field1.setAccessible(false);
+                field2.setAccessible(false);
+                return str1.compareTo(str2);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                System.out.println(e.getMessage());
+            }
+            return 0;
+        }).collect(Collectors.toList());
+
+
+        return sortedResult;
     }
+
 
     @Override
     public Optional<Student> findOne(Integer integer) {

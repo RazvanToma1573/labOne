@@ -148,6 +148,24 @@ public class Console {
                     System.out.println();
                     System.out.println("Done...");
                     System.out.println();
+                } else if (choice == 14) {
+                    System.out.println();
+                    this.showStudentsSorted();
+                    System.out.println();
+                    System.out.println("Done...");
+                    System.out.println();
+                } else if (choice == 15) {
+                    System.out.println();
+                    this.showProblemsSorted();
+                    System.out.println();
+                    System.out.println("Done...");
+                    System.out.println();
+                } else if (choice == 16) {
+                    System.out.println();
+                    this.showGradesSorted();
+                    System.out.println();
+                    System.out.println("Done...");
+                    System.out.println();
                 } else if (choice == 0) {
                     System.out.println();
                     System.out.println("Done");
