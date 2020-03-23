@@ -1,13 +1,12 @@
 package Repository;
 
 import Domain.Problem;
+import Domain.Student;
 import com.sun.tools.javac.util.Pair;
 
 import java.lang.reflect.Field;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ProblemDBRepository implements SortedRepository<Integer, Problem>{
@@ -37,31 +36,33 @@ public class ProblemDBRepository implements SortedRepository<Integer, Problem>{
             System.out.println(e.getMessage());
         }
 
-        List<Pair<String, Boolean>> criteria = sortObj.getCriteria();
-        for (Pair<String, Boolean> c : criteria) {
-            result = result.stream().sorted((s1, s2) -> {
-                try {
-                    Field field1 = s1.getClass().getDeclaredField(c.fst);
-                    field1.setAccessible(true);
-                    Field field2 = s2.getClass().getDeclaredField(c.fst);
-                    field2.setAccessible(true);
-                    if (field1.get(s1) instanceof Comparable && field2.get(s2) instanceof Comparable) {
-                        Comparable str1 = (Comparable) field1.get(s1);
-                        Comparable str2 = (Comparable) field2.get(s2);
-                        field1.setAccessible(false);
-                        field2.setAccessible(false);
-                        if (c.snd) {
-                            return str2.compareTo(str1);
-                        } else {
-                            return str1.compareTo(str2);
+        sortObj.getCriteria().stream().forEach(cr ->{
+            try {
+                Class problemClass = null;
+                Class baseClass = null;
+                final Field field;
+                problemClass = Class.forName("Domain.Problem");
+                baseClass = Class.forName("Domain.BaseEntity");
+                field = cr.fst.equals("id") ? baseClass.getDeclaredField(cr.fst) : problemClass.getDeclaredField(cr.fst);
+                field.setAccessible(true);
+                Collections.sort(result, new Comparator<Problem>() {
+                    @Override
+                    public int compare(Problem problem1, Problem problem2) {
+                        try{
+                            Comparable c1 = (Comparable)field.get(problem1);
+                            Comparable c2 = (Comparable)field.get(problem2);
+                            return cr.snd ? c2.compareTo(c1) : c1.compareTo(c2);
+                        } catch (IllegalAccessException e){
+                            System.out.println(e.getMessage());
                         }
+                        return 0;
                     }
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    System.out.println(e.getMessage());
-                }
-                return -1;
-            }).collect(Collectors.toList());
-        }
+                });
+                field.setAccessible(false);
+            } catch (ClassNotFoundException | NoSuchFieldException e) {
+                System.out.println(e.getMessage());
+            }
+        });
         return result;
     }
 

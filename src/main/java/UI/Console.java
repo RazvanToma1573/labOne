@@ -514,7 +514,7 @@ public class Console {
     public void showStudentsSorted(){
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         List<Pair<Boolean, String>> criteria = new ArrayList<>();
-        System.out.println("Give a criteria in the form: asc/desc <fieldname>");
+        System.out.println("Give a criteria in the form: asc/desc <id /  firstName / lastName>");
         try {
             String line = bufferedReader.readLine();
             criteria.add(new Pair<>(line.split(" ")[0].equals("desc"), line.split(" ")[1]));
@@ -534,7 +534,7 @@ public class Console {
     public void showProblemsSorted(){
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         List<Pair<Boolean, String>> criteria = new ArrayList<>();
-        System.out.println("Give a criteria in the form: asc/desc <fieldname>");
+        System.out.println("Give a criteria in the form: asc/desc <id / description / difficulty>");
         try {
             String line = bufferedReader.readLine();
             criteria.add(new Pair<>(line.split(" ")[0].equals("desc"), line.split(" ")[1]));
@@ -554,7 +554,7 @@ public class Console {
     public void showGradesSorted(){
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         List<Pair<Boolean, String>> criteria = new ArrayList<>();
-        System.out.println("Give a criteria in the form: asc/desc <fieldname>");
+        System.out.println("Give a criteria in the form: asc/desc <studentId / problemId / actualGrade>");
         try {
             String line = bufferedReader.readLine();
             criteria.add(new Pair<>(line.split(" ")[0].equals("desc"), line.split(" ")[1]));

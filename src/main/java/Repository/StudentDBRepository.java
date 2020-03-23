@@ -50,20 +50,20 @@ public class StudentDBRepository implements SortedRepository<Integer, Student> {
                 field.setAccessible(true);
                 Collections.sort(result, new Comparator<Student>() {
                     @Override
-                    public int compare(Student student, Student t1) {
+                    public int compare(Student student1, Student student2) {
                         try{
-                            Comparable c1 = (Comparable)field.get(student);
-                            Comparable c2 = (Comparable)field.get(t1);
+                            Comparable c1 = (Comparable)field.get(student1);
+                            Comparable c2 = (Comparable)field.get(student2);
                             return cr.snd ? c2.compareTo(c1) : c1.compareTo(c2);
                         } catch (IllegalAccessException e){
-                            e.printStackTrace();
+                            System.out.println(e.getMessage());
                         }
                     return 0;
                     }
                 });
                 field.setAccessible(false);
             } catch (ClassNotFoundException | NoSuchFieldException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         });
         return result;
