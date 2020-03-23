@@ -39,6 +39,42 @@ public class StudentDBRepository implements SortedRepository<Integer, Student> {
             System.out.println(e.getMessage());
         }
 
+        try{
+            final Class studentClass;
+            final Class baseClass;
+
+            studentClass = Class.forName("Domain.Student");
+            baseClass = Class.forName("Domain.BaseEntity");
+
+            Optional<Comparator<Student>> comparator = sortObj.getCriteria().stream()
+                    .map(cr ->{
+                        try{
+                            final Field field = cr.fst.equals("id") ?
+                                    baseClass.getDeclaredField(cr.fst) :
+                                    studentClass.getDeclaredField(cr.fst);
+                            field.setAccessible(true);
+                            return (Comparator<Student>) (student, t1) -> {
+                                try{
+                                    Comparable c1 = (Comparable)field.get(student);
+                                    Comparable c2 = (Comparable)field.get(t1);
+                                    return cr.snd ? c2.compareTo(c1) : c1.compareTo(c2);
+                                } catch (IllegalAccessException e){
+                                    System.out.println(e.getMessage());
+                                }
+                                return 0;
+                            };
+                        } catch (NoSuchFieldException e){
+                            e.printStackTrace();
+                        }
+                        return null;
+                    })
+                    .reduce((c1, c2) -> c1.thenComparing(c2));
+            Collections.sort(result, comparator.get());
+
+        } catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
+        /*
         sortObj.getCriteria().stream().forEach(cr ->{
             try {
                 Class studentClass = null;
@@ -66,6 +102,7 @@ public class StudentDBRepository implements SortedRepository<Integer, Student> {
                 System.out.println(e.getMessage());
             }
         });
+         */
         return result;
     }
 
