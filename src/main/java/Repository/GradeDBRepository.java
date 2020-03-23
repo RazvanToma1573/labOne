@@ -18,49 +18,39 @@ public class GradeDBRepository implements SortedRepository<Integer, Grade> {
     @Override
     public Iterable<Grade> findAll(Sort sortObj) {
         List<Grade> result = new ArrayList<>();
-        String sql = "select * from grades";
-        try {
-            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                int studentId = resultSet.getInt("studentid");
-                int problemId = resultSet.getInt("problemid");
-                int actualGrade = resultSet.getInt("actualgrade");
-                Grade grade = new Grade(studentId, problemId, actualGrade);
-                grade.setId(id);
-                result.add(grade);
-            }
-        } catch (SQLException exception){
-            exception.printStackTrace();
-        }
+        findAll().forEach(result::add);
 
-        sortObj.getCriteria().stream().forEach(cr ->{
-            try {
-                Class gradeClass = null;
-                final Field field;
-                gradeClass = Class.forName("Domain.Student");
-                field = gradeClass.getDeclaredField(cr.fst);
-                field.setAccessible(true);
-                Collections.sort(result, new Comparator<Grade>() {
-                    @Override
-                    public int compare(Grade grade1, Grade grade2) {
+        try{
+            final Class gradeClass;
+
+            gradeClass = Class.forName("Domain.Grade");
+
+            Optional<Comparator<Grade>> comparator = sortObj.getCriteria().stream()
+                    .map(cr ->{
                         try{
-                            Comparable c1 = (Comparable)field.get(grade1);
-                            Comparable c2 = (Comparable)field.get(grade2);
-                            return cr.snd ? c2.compareTo(c1) : c1.compareTo(c2);
-                        } catch (IllegalAccessException e){
+                            final Field field = gradeClass.getDeclaredField(cr.fst);
+                            field.setAccessible(true);
+                            return (Comparator<Grade>) (grade, t1) -> {
+                                try{
+                                    Comparable c1 = (Comparable)field.get(grade);
+                                    Comparable c2 = (Comparable)field.get(t1);
+                                    return cr.snd ? c2.compareTo(c1) : c1.compareTo(c2);
+                                } catch (IllegalAccessException e){
+                                    System.out.println(e.getMessage());
+                                }
+                                return 0;
+                            };
+                        } catch (NoSuchFieldException e){
                             System.out.println(e.getMessage());
                         }
-                        return 0;
-                    }
-                });
-                field.setAccessible(false);
-            } catch (ClassNotFoundException | NoSuchFieldException e) {
-                System.out.println(e.getMessage());
-            }
-        });
+                        return null;
+                    })
+                    .reduce((c1, c2) -> c1.thenComparing(c2));
+            Collections.sort(result, comparator.get());
+
+        } catch (ClassNotFoundException e){
+            System.out.println(e.getMessage());
+        }
         return result;
     }
 

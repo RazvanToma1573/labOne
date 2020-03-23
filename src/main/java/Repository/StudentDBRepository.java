@@ -21,24 +21,7 @@ public class StudentDBRepository implements SortedRepository<Integer, Student> {
     @Override
     public Iterable<Student> findAll(Sort sortObj) {
         List<Student> result = new ArrayList<>();
-        String sql = "select * from students";
-        try{
-            Class.forName("org.postgresql.Driver");
-            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String firstName = resultSet.getString("firstName");
-                String lastName = resultSet.getString("lastName");
-                Student student = new Student(firstName, lastName);
-                student.setId(id);
-                result.add(student);
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
+        findAll().forEach(result::add);
         try{
             final Class studentClass;
             final Class baseClass;
@@ -72,37 +55,9 @@ public class StudentDBRepository implements SortedRepository<Integer, Student> {
             Collections.sort(result, comparator.get());
 
         } catch (ClassNotFoundException e){
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
-        /*
-        sortObj.getCriteria().stream().forEach(cr ->{
-            try {
-                Class studentClass = null;
-                Class baseClass = null;
-                final Field field;
-                studentClass = Class.forName("Domain.Student");
-                baseClass = Class.forName("Domain.BaseEntity");
-                field = cr.fst.equals("id") ? baseClass.getDeclaredField(cr.fst) : studentClass.getDeclaredField(cr.fst);
-                field.setAccessible(true);
-                Collections.sort(result, new Comparator<Student>() {
-                    @Override
-                    public int compare(Student student1, Student student2) {
-                        try{
-                            Comparable c1 = (Comparable)field.get(student1);
-                            Comparable c2 = (Comparable)field.get(student2);
-                            return cr.snd ? c2.compareTo(c1) : c1.compareTo(c2);
-                        } catch (IllegalAccessException e){
-                            System.out.println(e.getMessage());
-                        }
-                    return 0;
-                    }
-                });
-                field.setAccessible(false);
-            } catch (ClassNotFoundException | NoSuchFieldException e) {
-                System.out.println(e.getMessage());
-            }
-        });
-         */
+
         return result;
     }
 
