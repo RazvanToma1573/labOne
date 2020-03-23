@@ -1,8 +1,10 @@
 package Repository;
 
 import Domain.BaseEntity;
+import Domain.Validators.RepositoryException;
 import Domain.Validators.ValidatorException;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 /**
