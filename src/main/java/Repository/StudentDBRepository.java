@@ -7,9 +7,7 @@ import com.sun.tools.javac.util.Pair;
 import javax.script.ScriptEngine;
 import java.lang.reflect.Field;
 import java.sql.*;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -40,31 +38,34 @@ public class StudentDBRepository implements SortedRepository<Integer, Student> {
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println(e.getMessage());
         }
-        List<Pair<String, Boolean>> criteria = sortObj.getCriteria();
-        for (Pair<String, Boolean> c : criteria) {
-            result = result.stream().sorted((s1, s2) -> {
-                        try {
-                            Field field1 = s1.getClass().getDeclaredField(c.fst);
-                            field1.setAccessible(true);
-                            Field field2 = s2.getClass().getDeclaredField(c.fst);
-                            field2.setAccessible(true);
-                            if (field1.get(s1) instanceof Comparable && field2.get(s2) instanceof Comparable) {
-                                Comparable str1 = (Comparable) field1.get(s1);
-                                Comparable str2 = (Comparable) field2.get(s2);
-                                field1.setAccessible(false);
-                                field2.setAccessible(false);
-                                if (c.snd) {
-                                    return str2.compareTo(str1);
-                                } else {
-                                    return str1.compareTo(str2);
-                                }
-                            }
-                        } catch (NoSuchFieldException | IllegalAccessException e) {
-                            System.out.println(e.getMessage());
+
+        sortObj.getCriteria().stream().forEach(cr ->{
+            try {
+                Class studentClass = null;
+                Class baseClass = null;
+                final Field field;
+                studentClass = Class.forName("Domain.Student");
+                baseClass = Class.forName("Domain.BaseEntity");
+                field = cr.fst.equals("id") ? baseClass.getDeclaredField(cr.fst) : studentClass.getDeclaredField(cr.fst);
+                field.setAccessible(true);
+                Collections.sort(result, new Comparator<Student>() {
+                    @Override
+                    public int compare(Student student, Student t1) {
+                        try{
+                            Comparable c1 = (Comparable)field.get(student);
+                            Comparable c2 = (Comparable)field.get(t1);
+                            return cr.snd ? c2.compareTo(c1) : c1.compareTo(c2);
+                        } catch (IllegalAccessException e){
+                            e.printStackTrace();
                         }
-                        return -1;
-                    }).collect(Collectors.toList());
-        }
+                    return 0;
+                    }
+                });
+                field.setAccessible(false);
+            } catch (ClassNotFoundException | NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+        });
         return result;
     }
 
