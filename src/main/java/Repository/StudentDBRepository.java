@@ -48,14 +48,16 @@ public class StudentDBRepository implements SortedRepository<Integer, Student> {
                             field1.setAccessible(true);
                             Field field2 = s2.getClass().getDeclaredField(c.fst);
                             field2.setAccessible(true);
-                            String str1 = field1.get(s1).toString();
-                            String str2 = field2.get(s2).toString();
-                            field1.setAccessible(false);
-                            field2.setAccessible(false);
-                            if (c.snd) {
-                                return str2.compareTo(str1);
-                            } else {
-                                return  str1.compareTo(str2);
+                            if (field1.get(s1) instanceof Comparable && field2.get(s2) instanceof Comparable) {
+                                Comparable str1 = (Comparable) field1.get(s1);
+                                Comparable str2 = (Comparable) field2.get(s2);
+                                field1.setAccessible(false);
+                                field2.setAccessible(false);
+                                if (c.snd) {
+                                    return str2.compareTo(str1);
+                                } else {
+                                    return str1.compareTo(str2);
+                                }
                             }
                         } catch (NoSuchFieldException | IllegalAccessException e) {
                             System.out.println(e.getMessage());
