@@ -13,6 +13,8 @@ import Repository.StudentXMLRepository;
 import Repository.GradeXMLRepository;
 import Repository.ProblemXMLRepository;
 import Repository.SortedRepository;
+import Repository.StudentDBRepository;
+import Repository.ProblemDBRepository;
 import Repository.GradeDBRepository;
 
 public class Main {
@@ -20,10 +22,10 @@ public class Main {
     public static void main(String[] args){
 
         Validator<Student> studentValidator = new StudentValidator();
-        Repository<Integer, Student> studentRepository = new StudentXMLRepository("src/main/java/Repository/Students.xml");
+        Repository<Integer, Student> studentRepository = new StudentDBRepository();
 
         Validator<Problem> problemValidator = new ProblemValidator();
-        Repository<Integer, Problem> problemRepository = new ProblemXMLRepository("src/main/java/Repository/Problems.xml");
+        Repository<Integer, Problem> problemRepository = new ProblemDBRepository();
 
         Validator<Grade> gradeValidator = new GradeValidator();
         SortedRepository<Integer, Grade> gradeRepository = new GradeDBRepository();
