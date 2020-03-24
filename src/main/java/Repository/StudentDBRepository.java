@@ -47,11 +47,12 @@ public class StudentDBRepository implements SortedRepository<Integer, Student> {
                                 return 0;
                             };
                         } catch (NoSuchFieldException e){
-                            e.printStackTrace();
+                            System.out.println(e.getMessage());
                         }
                         return null;
                     })
                     .reduce((c1, c2) -> c1.thenComparing(c2));
+
             Collections.sort(result, comparator.get());
 
         } catch (ClassNotFoundException e){

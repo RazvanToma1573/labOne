@@ -360,7 +360,7 @@ public class StudentsService {
     public Iterable<Student> getSorted(List<Pair<Boolean, String>> criteria) {
         Sort sort = new Sort(criteria.get(0).fst, criteria.get(0).snd);
         criteria.remove(0);
-        criteria.stream().forEach(cr -> sort.and(new Sort(cr.fst, cr.snd)));
+        criteria.forEach(cr -> sort.and(new Sort(cr.fst, cr.snd)));
         return this.studentRepository.findAll(sort);
     }
 

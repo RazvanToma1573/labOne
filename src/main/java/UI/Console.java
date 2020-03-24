@@ -526,8 +526,8 @@ public class Console {
                 criteria.add(new Pair<>(line.split(" ")[0].equals("desc"), line.split(" ")[1]));
             }
             this.studentService.getSorted(criteria).forEach(System.out::println);
-        } catch (IOException exception) {
-            exception.printStackTrace();
+        } catch (IOException | NullPointerException exception) {
+            System.out.println(exception.getMessage());
         }
     }
 
@@ -546,8 +546,8 @@ public class Console {
                 criteria.add(new Pair<>(line.split(" ")[0].equals("desc"), line.split(" ")[1]));
             }
             this.problemService.getSorted(criteria).forEach(System.out::println);
-        } catch (IOException exception) {
-            exception.printStackTrace();
+        } catch (IOException | NullPointerException exception) {
+            System.out.println(exception.getMessage());
         }
     }
 
@@ -584,8 +584,8 @@ public class Console {
                     e.printStackTrace();
                 }
             });
-        } catch (IOException exception) {
-            exception.printStackTrace();
+        } catch (IOException | NullPointerException exception) {
+            System.out.println(exception.getMessage());
         }
     }
 }
