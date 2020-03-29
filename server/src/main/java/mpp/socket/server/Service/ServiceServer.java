@@ -32,7 +32,10 @@ public class ServiceServer implements SocketService {
         try {
             Future<String> result = (Future<String>) executorService.submit(() -> {
                  int c = Integer.parseInt(command.split("|")[0]);
-                 String[] params = command.split("|")[1].split("/");
+                 String[] params;
+                 if(command.split("|").length > 1)
+                    params = command.split("|")[1].split("/");
+                 else params = new String[1];
                  Student student;
                  Problem problem;
                  int studentId, problemId, grade;

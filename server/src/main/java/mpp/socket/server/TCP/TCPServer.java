@@ -32,7 +32,7 @@ public class TCPServer {
                 Message request = new Message();
                 request.readFrom(is);
                 System.out.println("Received request: " + request);
-                Message response = methodHandlers.get(request.getHeader())
+                Message response = methodHandlers.get("ClientRequest")
                         .apply(request);
                 response.writeTo(os);
             } catch (IOException e) {
