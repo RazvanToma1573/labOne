@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><studentRepository>
+    
+    <student id="2">
+        <firstName>Cristi</firstName>
+        <lastName>Cristi</lastName>
+    </student>
+    <student id="3">
+        <firstName>Cosmin</firstName>
+        <lastName>Cosmin</lastName>
+    </student>
+    <student id="4">
+        <firstName>Iulia</firstName>
+        <lastName>Iulia</lastName>
+    </student>
+</studentRepository>

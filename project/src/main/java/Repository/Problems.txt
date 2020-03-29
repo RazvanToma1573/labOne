@@ -1,0 +1,3 @@
+2,ai,hard
+1,mpp,medium
+3,iss,medium

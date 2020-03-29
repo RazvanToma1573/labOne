@@ -2,4 +2,5 @@ rootProject.name = 'LabOne'
 include 'client'
 include 'common'
 include 'server'
+include 'project'
 
