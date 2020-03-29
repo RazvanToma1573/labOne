@@ -44,9 +44,9 @@ public class ServerApp {
 
             tcpServer.addHandler("ClientRequest", (request) -> {
                 String command = request.getHeader() + "|" + request.getBody();
-                Future<Object> future = socketService.command(command);
+                Future<String> future = socketService.command(command);
                 try{
-                    String result = (String)future.get();
+                    String result = future.get();
                     return new Message("Done", result);
                 } catch (Exception e) {
                     e.printStackTrace();
