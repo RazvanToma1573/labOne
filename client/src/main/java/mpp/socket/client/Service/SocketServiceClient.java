@@ -22,7 +22,9 @@ public class SocketServiceClient implements SocketService {
 
             String[] parts = name.split(" ");
             String command = parts[0];
-            String parameters = parts[1];
+            String parameters = "";
+            if (!(command.equals("3") || command.equals("6") || command.equals("8")))
+                 parameters = parts[1];
             Message request = new Message(command, parameters);
             System.out.println("sending request: " + request);
             Message response = tcpClient.sendAndReceive(request);
