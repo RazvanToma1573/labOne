@@ -30,7 +30,7 @@ public class ServiceServer implements SocketService {
     @Override
     public Future<String> command(String command)  {
         try {
-            Future<String> result = (Future<String>) executorService.submit(() -> {
+            Future<String> result = executorService.submit(() -> {
                  int c = Integer.parseInt(command.split("|")[0]);
                  String[] params;
                  if(command.split("|").length > 1)
@@ -89,7 +89,7 @@ public class ServiceServer implements SocketService {
                                 e.printStackTrace();
                             }
                             return "";
-                        });
+                        }).reduce("Grades:\n", (a,b) -> a+b);
                      case 9:
                          studentId = Integer.parseInt(params[0]);
                          problemId = Integer.parseInt(params[1]);
@@ -155,13 +155,13 @@ public class ServiceServer implements SocketService {
                                  e.printStackTrace();
                              }
                              return "";
-                         });
+                         }).reduce("Grades:\n", (a,b) -> a+b);
                      default:
                          return "Invalid command";
                  }
-            }).get();
+            });
             return result;
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         return null;
