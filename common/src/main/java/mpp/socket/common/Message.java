@@ -2,7 +2,6 @@ package mpp.socket.common;
 
 import java.io.*;
 
-
 public class Message {
     public static final int PORT = 1234;
     public static final String HOST = "localhost";
@@ -39,7 +38,7 @@ public class Message {
     }
 
     public void readFrom(InputStream is) throws IOException {
-        var br = new BufferedReader(new InputStreamReader(is));
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
         header = br.readLine();
         body = br.readLine();
     }
