@@ -4,5 +4,5 @@ import java.util.concurrent.Future;
 
 public interface SocketService {
 
-    Future<String> command (String name);
+    Future<Object> command (String name);
 }
