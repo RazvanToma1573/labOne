@@ -57,7 +57,7 @@ public class ServiceServer implements SocketService {
                          students.clear();
                          this.studentsService.get().forEach(students::add);
                          return students.stream().map(st -> st.toString())
-                                 .reduce("Students:\n",(a,b) -> a + "\n" + b);
+                                 .reduce("Students:",(a,b) -> a + ";" + b);
                      case 4:
                          problem = new Problem(params[1], params[2]);
                          problem.setId(Integer.parseInt(params[0]));
