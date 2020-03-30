@@ -43,7 +43,7 @@ public class ServerApp {
             TCPServer tcpServer = new TCPServer(executorService);
 
             tcpServer.addHandler("ClientRequest", (request) -> {
-                String command = request.getHeader() + "|" + request.getBody();
+                String command = request.getHeader() + " " + request.getBody();
                 Future<String> future = socketService.command(command);
                 try{
                     String result = future.get();

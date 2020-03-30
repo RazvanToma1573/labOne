@@ -31,11 +31,14 @@ public class ServiceServer implements SocketService {
     public Future<String> command(String command)  {
         try {
             Future<String> result = executorService.submit(() -> {
-                 int c = Integer.parseInt(command.split("|")[0]);
+                 int c = Integer.parseInt(command.split(" ")[0]);
                  String[] params;
-                 if(command.split("|").length > 1)
-                    params = command.split("|")[1].split("/");
-                 else params = new String[1];
+                 if(command.split(" ").length > 1) {
+                     params = command.split(" ")[1].split("/");
+                 }
+                 else {
+                     params = new String[1];
+                 }
                  Student student;
                  Problem problem;
                  int studentId, problemId, grade;
@@ -71,7 +74,7 @@ public class ServiceServer implements SocketService {
                          problems.clear();
                          this.problemsService.get().forEach(problems::add);
                          return problems.stream().map(pr -> pr.toString())
-                                 .reduce("Problems",(a,b) -> a + "\n" + b);
+                                 .reduce("Problems:",(a,b) -> a + ";" + b);
                      case 7:
                         studentId = Integer.parseInt(params[0]);
                         problemId = Integer.parseInt(params[1]);
@@ -84,12 +87,12 @@ public class ServiceServer implements SocketService {
                             try {
                                 Student stud = this.studentsService.getById(gr.getStudent());
                                 Problem prob = this.problemsService.getById(gr.getProblem());
-                                return stud + "\n" + prob + "\n" + gr.getActualGrade() + "\n";
+                                return stud + "-" + prob + "-" + gr.getActualGrade() + ";";
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                             return "";
-                        }).reduce("Grades:\n", (a,b) -> a+b);
+                        }).reduce("Grades:", (a,b) -> a+b);
                      case 9:
                          studentId = Integer.parseInt(params[0]);
                          problemId = Integer.parseInt(params[1]);
@@ -100,7 +103,7 @@ public class ServiceServer implements SocketService {
                          students.clear();
                          this.studentsService.filterService(params[0], params[1]).forEach(students::add);
                          return students.stream().map(st -> st.toString())
-                                 .reduce("Filtered Students:\n", (a,b) -> a + "\n" + b);
+                                 .reduce("Filtered Students:", (a,b) -> a + ";" + b);
                      case 11:
                          switch (Integer.parseInt(params[0])) {
                              case 1:
@@ -130,7 +133,7 @@ public class ServiceServer implements SocketService {
                                 .collect(Collectors.toList());
                         this.studentsService.getSorted(criteria).forEach(students::add);
                         return students.stream().map(st -> st.toString())
-                                .reduce("Students:\n", (a,b) -> a + "\n" + b);
+                                .reduce("Students:", (a,b) -> a + ";" + b);
                      case 15:
                         problems.clear();
                         criteria.clear();
@@ -139,7 +142,7 @@ public class ServiceServer implements SocketService {
                                  .collect(Collectors.toList());
                         this.problemsService.getSorted(criteria).forEach(problems::add);
                         return problems.stream().map(pr -> pr.toString())
-                                .reduce("Problems:\n", (a,b) -> a + "\n" + b);
+                                .reduce("Problems:", (a,b) -> a + ";" + b);
                      case 16:
                          grades.clear();
                          criteria = Arrays.stream(params).map(str -> str.split("-"))
@@ -150,12 +153,12 @@ public class ServiceServer implements SocketService {
                              try {
                                  Student stud = this.studentsService.getById(gr.getStudent());
                                  Problem prob = this.problemsService.getById(gr.getProblem());
-                                 return stud + "\n" + prob + "\n" + gr.getActualGrade() + "\n";
+                                 return stud + "-" + prob + "-" + gr.getActualGrade() + ";";
                              } catch (Exception e) {
                                  e.printStackTrace();
                              }
                              return "";
-                         }).reduce("Grades:\n", (a,b) -> a+b);
+                         }).reduce("Grades:", (a,b) -> a+b);
                      default:
                          return "Invalid command";
                  }

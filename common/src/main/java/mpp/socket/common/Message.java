@@ -34,6 +34,9 @@ public class Message {
 
     public void writeTo(OutputStream os) throws IOException {
         os.write((header + System.lineSeparator() + body + System.lineSeparator()).getBytes());
+        //BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os));
+        //bw.write(header);
+        //bw.write(body);
     }
 
     public void readFrom(InputStream is) throws IOException {
