@@ -92,7 +92,7 @@ public class ServiceServer implements SocketService {
                                 e.printStackTrace();
                             }
                             return "";
-                        }).reduce("Grades:", (a,b) -> a+b);
+                        }).reduce("Grades:;", (a,b) -> a+b);
                      case 9:
                          studentId = Integer.parseInt(params[0]);
                          problemId = Integer.parseInt(params[1]);
@@ -158,7 +158,7 @@ public class ServiceServer implements SocketService {
                                  e.printStackTrace();
                              }
                              return "";
-                         }).reduce("Grades:", (a,b) -> a+b);
+                         }).reduce("Grades:;", (a,b) -> a+b);
                      default:
                          return "Invalid command";
                  }

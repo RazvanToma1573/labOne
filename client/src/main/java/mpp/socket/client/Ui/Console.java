@@ -1,5 +1,9 @@
 package mpp.socket.client.Ui;
 
+import Domain.Problem;
+import Domain.Student;
+import Domain.Validators.ValidatorException;
+import com.sun.tools.javac.util.Pair;
 import mpp.socket.common.SocketService;
 
 import java.io.BufferedReader;
@@ -46,6 +50,7 @@ public class Console {
         System.out.println("\t\t 14 - show all students, sorted ");
         System.out.println("\t\t 15 - show all problems, sorted ");
         System.out.println("\t\t 16 - show all grades, sorted ");
+        System.out.println("\t\t 17 - show results ");
     }
 
     public void runConsole() {
@@ -92,12 +97,14 @@ public class Console {
                     this.showProblemsSorted();
                 } else if (choice == 16) {
                     this.showGradesSorted();
-                } else if (choice == 0) {
+                } else if (choice == 17) {
+                    this.checkResults();
+                }  else if (choice == 0) {
                     System.out.println("Done");
                 } else {
                     System.out.println("Please insert a valid number for your option!");
                 }
-                checkResults();
+
             } catch(InputMismatchException exception) {
                 System.out.println("Input exception:" + exception.getMessage());
                 scanner.nextLine();
@@ -435,24 +442,27 @@ public class Console {
         String message = "16 ";
 
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        try{
-            System.out.print("Student ID : ");
-            int studentId = Integer.parseInt(bufferedReader.readLine());
-            System.out.print("Problem ID : ");
-            int problemId = Integer.parseInt(bufferedReader.readLine());
-            System.out.print("Grade : ");
-            int grade = Integer.parseInt(bufferedReader.readLine());
+        List<Pair<Boolean, String>> criteria = new ArrayList<>();
+        System.out.println("Give a criteria in the form: asc/desc <studentId / problemId / actualGrade>");
+        try {
+            String line = bufferedReader.readLine();
+            StringBuilder params = new StringBuilder("");
+            params.append(line.split(" ")[0].equals("desc")).append("-").append(line.split(" ")[1]);
+            while(true){
+                System.out.println("Any other criteria? (enter no if none)");
+                line = bufferedReader.readLine();
+                if(line.equals("no"))
+                    break;
+                params.append("/").append(line.split(" ")[0].equals("desc")).append("-").append(line.split(" ")[1]);
+            }
 
-            String parameters = studentId + "/" + problemId + "/" + grade;
-            message += parameters;
+            message += params;
 
             Future<String> commandResult = socketService.command(message);
 
             this.results.put(message, commandResult);
-        } catch (IOException exception){
-            exception.printStackTrace();
-        } catch (IllegalArgumentException exception) {
-            System.out.println("IllegalArgumentException:" + exception.getMessage());
+        } catch (IOException | NullPointerException exception) {
+            System.out.println(exception.getMessage());
         }
     }
 
@@ -497,6 +507,25 @@ public class Console {
                 System.out.println("Result: ");
                 try {
                     System.out.println(value.get());
+                    String resultToBeParsed = value.get();
+
+                    String[] parsed = resultToBeParsed.split(";");
+                    System.out.println();
+
+                    String[] parsedKey = key.split(" ");
+
+                    if (parsedKey[0].equals("16") || parsedKey[0].equals("8")){
+                        for (int i = 0; i < parsed.length; i++) {
+                            String[] parsedAgain = parsed[i].split("-");
+                            for (int j = 0; j < parsedAgain.length; j++) {
+                                System.out.println(parsedAgain[j]);
+                            }
+                        }
+                    } else {
+                        for (int i = 1; i < parsed.length; i++) {
+                            System.out.println(parsed[i]);
+                        }
+                    }
                 } catch (InterruptedException | ExecutionException e) {
                     System.out.println(e.getMessage());
                 }
