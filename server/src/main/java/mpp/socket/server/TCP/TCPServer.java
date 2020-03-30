@@ -35,6 +35,7 @@ public class TCPServer {
                 Message response = methodHandlers.get("ClientRequest")
                         .apply(request);
                 response.writeTo(os);
+                System.out.println("Send response: " + response);
             } catch (IOException e) {
                 throw new SocketServiceException("Error processing client", e);
             }

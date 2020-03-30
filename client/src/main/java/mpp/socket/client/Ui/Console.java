@@ -62,7 +62,6 @@ public class Console {
             System.out.println();
             System.out.println("-------------------------------------------");
             System.out.println();
-            System.out.print("Your choice : ");
             try {
                 choice = scanner.nextInt();
                 if (choice == 1) {
@@ -119,11 +118,11 @@ public class Console {
 
         BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
         try {
-            System.out.print("ID : ");
+            System.out.println("ID : ");
             int id = Integer.parseInt(bufferRead.readLine());// ...
-            System.out.print("First Name : ");
+            System.out.println("First Name : ");
             String firstName = bufferRead.readLine();
-            System.out.print("Last Name : ");
+            System.out.println("Last Name : ");
             String lastName = bufferRead.readLine();
 
             String parameters = id + "/" + firstName + "/" + lastName;
@@ -141,7 +140,7 @@ public class Console {
         String message = "2 ";
         try {
             Scanner scanner = new Scanner(System.in);
-            System.out.print("ID: ");
+            System.out.println("ID: ");
             int id = scanner.nextInt();
 
             String parameters = Integer.toString(id);
@@ -162,13 +161,13 @@ public class Console {
         boolean cont = true;
         while(cont) {
             try {
-                System.out.print("ID:");
+                System.out.println("ID:");
                 int idStudentToBeUpdated =  Integer.parseInt(bufferedReader.readLine());
                 System.out.println("You can update the Students' first name (FIRSTNAME) or the Students' last name (LASTNAME)");
-                System.out.print("TYPE:");
+                System.out.println("TYPE:");
                 String type = bufferedReader.readLine();
                 if(type.equals("FIRSTNAME")) {
-                    System.out.print("new first name:");
+                    System.out.println("new first name:");
                     String firstname = bufferedReader.readLine();
 
                     String parameters = idStudentToBeUpdated + "/" + "FIRST" + "/" + firstname;
@@ -179,7 +178,7 @@ public class Console {
 
                     cont = false;
                 } else if(type.equals("LASTNAME")) {
-                    System.out.print("new last name:");
+                    System.out.println("new last name:");
                     String lastname = bufferedReader.readLine();
 
                     String parameters = Integer.toString(idStudentToBeUpdated) + "/" + "LAST" + "/" + lastname;
@@ -217,11 +216,11 @@ public class Console {
         try {
             //read the type
             System.out.println("Available filtering types: FIRSTNAME/LASTNAME/PROBLEM/GRADE");
-            System.out.print("type:");
+            System.out.println("type:");
             String type = bufferedReader.readLine();
             if(types.contains(type)){
                 //read the argument
-                System.out.print("filtering argument: ");
+                System.out.println("filtering argument: ");
                 String argument = bufferedReader.readLine();
 
                 String parameters = argument + "/" + type;
@@ -268,11 +267,11 @@ public class Console {
         System.out.println("Insert problem data:");
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         try{
-            System.out.print("ID : ");
+            System.out.println("ID : ");
             int id = Integer.parseInt(bufferedReader.readLine());
-            System.out.print("Description : ");
+            System.out.println("Description : ");
             String description = bufferedReader.readLine();
-            System.out.print("Difficulty(easy/medium/hard): ");
+            System.out.println("Difficulty(easy/medium/hard): ");
             String difficulty = bufferedReader.readLine();
 
             String parameters = id + "/" + description + "/" + difficulty;
@@ -291,7 +290,7 @@ public class Console {
 
         try {
             Scanner scanner = new Scanner(System.in);
-            System.out.print("ID : ");
+            System.out.println("ID : ");
             int id = scanner.nextInt();
 
             String parameters = Integer.toString(id);
@@ -312,13 +311,13 @@ public class Console {
         boolean cont = true;
         while (cont) {
             try{
-                System.out.print("ID:");
+                System.out.println("ID:");
                 int id = Integer.parseInt(bufferedReader.readLine());
                 System.out.println("You can update the Problems' description (DESCRIPTION) or the Problems' difficulty (DIFFICULTY)");
-                System.out.print("TYPE:");
+                System.out.println("TYPE:");
                 String type = bufferedReader.readLine();
                 if (type.equals("DESCRIPTION")) {
-                    System.out.print("new description:");
+                    System.out.println("new description:");
                     String description = bufferedReader.readLine();
 
                     String parameters = id + "/" + "DESCRIPTION" + "/" + description;
@@ -329,7 +328,7 @@ public class Console {
                     this.results.put(message, commandResult);
                     cont = false;
                 } else if (type.equals("DIFFICULTY")) {
-                    System.out.print("new difficulty:");
+                    System.out.println("new difficulty:");
                     String difficulty = bufferedReader.readLine();
 
                     String parameters = id + "/" + "DIFFICULTY" + "/" + difficulty;
@@ -387,9 +386,9 @@ public class Console {
 
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         try {
-            System.out.print("Student ID : ");
+            System.out.println("Student ID : ");
             int studentId = Integer.parseInt(bufferedReader.readLine());
-            System.out.print("Problem ID : ");
+            System.out.println("Problem ID : ");
             int problemId = Integer.parseInt(bufferedReader.readLine());
 
             String parameters = studentId + "/" + problemId;
@@ -410,11 +409,11 @@ public class Console {
 
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         try{
-            System.out.print("Student ID : ");
+            System.out.println("Student ID : ");
             int studentId = Integer.parseInt(bufferedReader.readLine());
-            System.out.print("Problem ID : ");
+            System.out.println("Problem ID : ");
             int problemId = Integer.parseInt(bufferedReader.readLine());
-            System.out.print("Grade : ");
+            System.out.println("Grade : ");
             int grade = Integer.parseInt(bufferedReader.readLine());
 
             String parameters = studentId + "/" + problemId + "/" + grade;
@@ -506,7 +505,6 @@ public class Console {
                 System.out.println("Command: " + key);
                 System.out.println("Result: ");
                 try {
-                    System.out.println(value.get());
                     String resultToBeParsed = value.get();
 
                     String[] parsed = resultToBeParsed.split(";");
@@ -522,13 +520,14 @@ public class Console {
                             }
                         }
                     } else {
-                        for (int i = 1; i < parsed.length; i++) {
+                        for (int i = 0; i < parsed.length; i++) {
                             System.out.println(parsed[i]);
                         }
                     }
                 } catch (InterruptedException | ExecutionException e) {
                     System.out.println(e.getMessage());
                 }
+                this.results.remove(key);
             }
         });
     }
