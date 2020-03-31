@@ -72,7 +72,7 @@ public class Console {
             System.out.println("-------------------------------------------");
             System.out.println();
             try {
-                timer.schedule(new MyTimerTask(this.results),2*60*1000);
+                timer.schedule(new MyTimerTask(this.results),0, 10*1000);
                 choice = scanner.nextInt();
                 if (choice == 1) {
                     this.addNewStudent();
