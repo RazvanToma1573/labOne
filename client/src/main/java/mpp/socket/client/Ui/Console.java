@@ -29,6 +29,14 @@ public class Console {
         results = new ConcurrentHashMap<>();
     }
 
+    private void runAsync(String m) {
+        CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
+
+            Future<String> commandResult = socketService.command(m);
+            this.results.put(m, commandResult);
+        });
+    }
+
     /**
      * Prints the menu with the available commands
      */
@@ -130,12 +138,8 @@ public class Console {
             message += parameters;
 
             final String m = message;
+            this.runAsync(m);
 
-            CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-
-                Future<String> commandResult = socketService.command(m);
-                this.results.put(m, commandResult);
-            });
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -153,12 +157,7 @@ public class Console {
 
             final String m = message;
 
-            Thread t = new Thread(() -> {
-                Future<String> commandResult = socketService.command(m);
-
-                this.results.put(m, commandResult);
-            });
-            t.start();
+            this.runAsync(m);
         } catch (IllegalArgumentException exception) {
             System.out.println("IllegalArgumentException:" + exception.getMessage());
         }
@@ -185,13 +184,7 @@ public class Console {
 
                     final String m = message;
 
-                    Thread t = new Thread(() -> {
-
-                        Future<String> commandResult = socketService.command(m);
-                        this.results.put(m, commandResult);
-
-                    });
-                    t.start();
+                    this.runAsync(m);
                     cont = false;
                 } else if(type.equals("LASTNAME")) {
                     System.out.println("new last name:");
@@ -202,13 +195,7 @@ public class Console {
 
                     final String m = message;
 
-                    Thread t = new Thread(() -> {
-
-                        Future<String> commandResult = socketService.command(m);
-                        this.results.put(m, commandResult);
-
-                    });
-                    t.start();
+                    this.runAsync(m);
                     cont = false;
                 } else {
                     System.out.println("Input exception: Input a valid type! (FIRSTNAME|LASTNAME)");
@@ -220,14 +207,9 @@ public class Console {
     }
 
     public void showAllStudents() {
-        final String message = "3 ";
+        final String m = "3 ";
 
-        Thread t = new Thread(() -> {
-            Future<String> commandResult = socketService.command(message);
-            this.results.put(message, commandResult);
-        });
-
-        t.start();
+        this.runAsync(m);
     }
 
     public void filterStudents() {
@@ -254,12 +236,7 @@ public class Console {
 
                 final String m = message;
 
-                Thread t = new Thread(() -> {
-                    Future<String> commandResult = socketService.command(m);
-                    this.results.put(m, commandResult);
-                });
-
-                t.start();
+                this.runAsync(m);
             } else {
                 System.out.println("ValidatorException: The type you introduced was not valid!");
             }
@@ -287,12 +264,7 @@ public class Console {
 
             final String m = message;
 
-            Thread t = new Thread(() -> {
-                Future<String> commandResult = socketService.command(m);
-                this.results.put(m, commandResult);
-            });
-
-            t.start();
+            this.runAsync(m);
         } catch (IOException | NullPointerException exception) {
             System.out.println(exception.getMessage());
         }
@@ -316,12 +288,7 @@ public class Console {
 
             final String m = message;
 
-            Thread t = new Thread(() -> {
-                Future<String> commandResult = socketService.command(m);
-                this.results.put(m, commandResult);
-            });
-
-            t.start();
+            this.runAsync(m);
         } catch(IOException exception){
             exception.printStackTrace();
         }
@@ -340,12 +307,7 @@ public class Console {
 
             final String m = message;
 
-            Thread t = new Thread(() -> {
-                Future<String> commandResult = socketService.command(m);
-                this.results.put(m, commandResult);
-            });
-
-            t.start();
+            this.runAsync(m);
         } catch (IllegalArgumentException exception) {
             System.out.println("IllegalArgumentException:" + exception.getMessage());
         }
@@ -372,12 +334,7 @@ public class Console {
 
                     final String m = message;
 
-                    Thread t = new Thread(() -> {
-                        Future<String> commandResult = socketService.command(m);
-                        this.results.put(m, commandResult);
-                    });
-
-                    t.start();
+                    this.runAsync(m);
                     cont = false;
                 } else if (type.equals("DIFFICULTY")) {
                     System.out.println("new difficulty:");
@@ -388,12 +345,7 @@ public class Console {
 
                     final String m = message;
 
-                    Thread t = new Thread(() -> {
-                        Future<String> commandResult = socketService.command(m);
-                        this.results.put(m, commandResult);
-                    });
-
-                    t.start();
+                    this.runAsync(m);
                     cont = false;
                 } else {
                     System.out.println("Input exception: Input a valid type! (DESCRIPTION|DIFFICULTY)");
@@ -405,14 +357,9 @@ public class Console {
     }
 
     public void showAllProblems() {
-        final String message = "6 ";
+        final String m = "6 ";
 
-        Thread t = new Thread(() -> {
-            Future<String> commandResult = socketService.command(message);
-            this.results.put(message, commandResult);
-        });
-
-        t.start();
+        this.runAsync(m);
     }
 
     public void showProblemsSorted() {
@@ -435,12 +382,7 @@ public class Console {
 
             final String m = message;
 
-            Thread t = new Thread(() -> {
-                Future<String> commandResult = socketService.command(m);
-                this.results.put(m, commandResult);
-            });
-
-            t.start();
+            this.runAsync(m);
         } catch (IOException | NullPointerException exception) {
             System.out.println(exception.getMessage());
         }
@@ -461,12 +403,7 @@ public class Console {
 
             final String m = message;
 
-            Thread t = new Thread(() -> {
-                Future<String> commandResult = socketService.command(m);
-                this.results.put(m, commandResult);
-            });
-
-            t.start();
+            this.runAsync(m);
         } catch (IOException exception){
             exception.printStackTrace();
         } catch (IllegalArgumentException exception) {
@@ -491,12 +428,7 @@ public class Console {
 
             final String m = message;
 
-            Thread t = new Thread(() -> {
-                Future<String> commandResult = socketService.command(m);
-                this.results.put(m, commandResult);
-            });
-
-            t.start();
+            this.runAsync(m);
         } catch (IOException exception){
             exception.printStackTrace();
         } catch (IllegalArgumentException exception) {
@@ -505,14 +437,9 @@ public class Console {
     }
 
     public void showAllGrades() {
-        final String message = "8 ";
+        final String m = "8 ";
 
-        Thread t = new Thread(() -> {
-            Future<String> commandResult = socketService.command(message);
-            this.results.put(message, commandResult);
-        });
-
-        t.start();
+        this.runAsync(m);
     }
 
     public void showGradesSorted() {
@@ -537,12 +464,7 @@ public class Console {
 
             final String m = message;
 
-            Thread t = new Thread(() -> {
-                Future<String> commandResult = socketService.command(m);
-                this.results.put(m, commandResult);
-            });
-
-            t.start();
+            this.runAsync(m);
         } catch (IOException | NullPointerException exception) {
             System.out.println(exception.getMessage());
         }
@@ -580,12 +502,7 @@ public class Console {
 
         final String m = message;
 
-        Thread t = new Thread(() -> {
-            Future<String> commandResult = socketService.command(m);
-            this.results.put(m, commandResult);
-        });
-
-        t.start();
+        this.runAsync(m);
     }
 
     public void checkResults() {
