@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -130,14 +131,11 @@ public class Console {
 
             final String m = message;
 
-            Thread t = new Thread(() -> {
+            CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
 
                 Future<String> commandResult = socketService.command(m);
-
                 this.results.put(m, commandResult);
-
             });
-            t.start();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
