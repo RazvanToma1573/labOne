@@ -4,15 +4,14 @@ import Domain.Problem;
 import Domain.Student;
 import Domain.Validators.ValidatorException;
 import com.sun.tools.javac.util.Pair;
+import mpp.socket.client.MyTimerTask;
 import mpp.socket.common.SocketService;
+import java.util.Timer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
@@ -59,19 +58,21 @@ public class Console {
         System.out.println("\t\t 14 - show all students, sorted ");
         System.out.println("\t\t 15 - show all problems, sorted ");
         System.out.println("\t\t 16 - show all grades, sorted ");
-        System.out.println("\t\t 17 - show results ");
     }
 
     public void runConsole() {
         System.out.println("Hello!");
         Scanner scanner = new Scanner(System.in);
         int choice = -1;
+        Timer timer = new Timer();
         while (choice != 0) {
             this.printTheMenu();
+
             System.out.println();
             System.out.println("-------------------------------------------");
             System.out.println();
             try {
+                timer.schedule(new MyTimerTask(this.results),2*60*1000);
                 choice = scanner.nextInt();
                 if (choice == 1) {
                     this.addNewStudent();
@@ -105,9 +106,7 @@ public class Console {
                     this.showProblemsSorted();
                 } else if (choice == 16) {
                     this.showGradesSorted();
-                } else if (choice == 17) {
-                    this.checkResults();
-                }  else if (choice == 0) {
+                } else if (choice == 0) {
                     System.out.println("Done");
                 } else {
                     System.out.println("Please insert a valid number for your option!");
