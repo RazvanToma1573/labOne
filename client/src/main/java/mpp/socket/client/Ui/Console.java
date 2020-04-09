@@ -1,8 +1,5 @@
 package mpp.socket.client.Ui;
 
-import Domain.Problem;
-import Domain.Student;
-import Domain.Validators.ValidatorException;
 import com.sun.tools.javac.util.Pair;
 import mpp.socket.client.MyTimerTask;
 import mpp.socket.common.SocketService;

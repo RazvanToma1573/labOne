@@ -13,6 +13,5 @@ repositories {
 
 dependencies {
     compile project(':common')
-    compile project(':project')
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
