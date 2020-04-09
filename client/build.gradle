@@ -14,4 +14,5 @@ repositories {
 dependencies {
     compile project(':common')
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'org.springframework', name: 'spring-context', version: '5.2.5.RELEASE'
 }
