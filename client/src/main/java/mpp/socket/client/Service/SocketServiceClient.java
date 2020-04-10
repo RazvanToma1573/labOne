@@ -12,11 +12,8 @@ public class SocketServiceClient implements SocketService {
     @Autowired
     private SocketService service;
 
-    @Autowired
-    private ExecutorService executorService;
-
     @Override
-    public Future<String> command(String name) {
-        return executorService.submit(() -> service.command(name).get());
+    public String command(String name) {
+        return service.command(name);
     }
 }

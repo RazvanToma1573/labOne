@@ -18,7 +18,7 @@ import java.util.concurrent.Future;
 
 public class Console {
 
-    private ConcurrentHashMap<String, Future<String>> results;
+    private ConcurrentHashMap<String, String> results;
     private AnnotationConfigApplicationContext context;
 
     public Console(AnnotationConfigApplicationContext context) {
@@ -31,6 +31,7 @@ public class Console {
         CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
             SocketService service = context.getBean(SocketService.class);
             results.put(m, service.command(m));
+            System.out.println(results.get(m));
             //Future<String> commandResult = socketService.command(m);
             //this.results.put(m, commandResult);
         });
@@ -72,7 +73,7 @@ public class Console {
             System.out.println("-------------------------------------------");
             System.out.println();
             try {
-                timer.schedule(new MyTimerTask(this.results),0, 10*1000);
+                //timer.schedule(new MyTimerTask(this.results),0, 10*1000);
                 choice = scanner.nextInt();
                 if (choice == 1) {
                     this.addNewStudent();
@@ -503,7 +504,7 @@ public class Console {
 
         this.runAsync(m);
     }
-
+    /*
     public void checkResults() {
         results.forEach((key, value) -> {
             if (value.isDone()) {
@@ -536,4 +537,6 @@ public class Console {
             }
         });
     }
+
+     */
 }
