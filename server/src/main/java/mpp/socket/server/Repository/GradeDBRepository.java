@@ -3,17 +3,20 @@ package mpp.socket.server.Repository;
 
 
 import mpp.socket.server.Domain.Grade;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.stereotype.Component;
 
+import javax.swing.text.html.Option;
 import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.*;
 
 @Component
 public class GradeDBRepository implements SortedRepository<Integer, Grade> {
-    private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "parola";
+
+    @Autowired
+    private JdbcOperations jdbcOperations;
 
     @Override
     public Iterable<Grade> findAll(Sort sortObj) {
@@ -56,94 +59,57 @@ public class GradeDBRepository implements SortedRepository<Integer, Grade> {
 
     @Override
     public Optional<Grade> findOne(Integer id) {
-        String sql = "select * from grades where id=?";
-        try {
-            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            int gradeId = resultSet.getInt("id");
-            int studentId = resultSet.getInt("studentid");
-            int problemId = resultSet.getInt("problemid");
-            int actualGrade = resultSet.getInt("actualgrade");
+        String sql = "select * from grades where id=" + id.toString();
+
+        return Optional.of(jdbcOperations.query(sql, (rs, rowNum) -> {
+            int gradeId = rs.getInt("id");
+            int studentId = rs.getInt("studentid");
+            int problemId = rs.getInt("problemid");
+            int actualGrade = rs.getInt("actualgrade");
+
             Grade grade = new Grade(studentId, problemId, actualGrade);
             grade.setId(gradeId);
-            return Optional.ofNullable(grade);
-        } catch (SQLException exception){
-            exception.printStackTrace();
-        }
-        return Optional.empty();
+            return grade;
+        }).get(0));
+
+
     }
 
     @Override
     public Iterable<Grade> findAll() {
         List<Grade> grades = new ArrayList<>();
         String sql = "select * from grades";
-        try {
-            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                int studentId = resultSet.getInt("studentid");
-                int problemId = resultSet.getInt("problemid");
-                int actualGrade = resultSet.getInt("actualgrade");
-                Grade grade = new Grade(studentId, problemId, actualGrade);
-                grade.setId(id);
-                grades.add(grade);
-            }
-            return grades;
-        } catch (SQLException exception){
-            exception.printStackTrace();
-        }
-        return null;
+        return jdbcOperations.query(sql, (rs, rowNum) -> {
+            int gradeId = rs.getInt("id");
+            int studentId = rs.getInt("studentid");
+            int problemId = rs.getInt("problemid");
+            int actualGrade = rs.getInt("actualgrade");
+
+            Grade grade = new Grade(studentId, problemId, actualGrade);
+            grade.setId(gradeId);
+            return grade;
+        });
     }
 
     @Override
     public Optional<Grade> save(Grade entity) {
         String sql = "insert into grades(id, studentid, problemid, actualgrade) values(?,?,?,?)";
-        try {
-            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, entity.getId());
-            preparedStatement.setInt(2, entity.getStudent());
-            preparedStatement.setInt(3, entity.getProblem());
-            preparedStatement.setInt(4, entity.getActualGrade());
-            preparedStatement.executeUpdate();
-        } catch (SQLException exception){
-            exception.printStackTrace();
-        }
+
+        jdbcOperations.update(sql, entity.getId(), entity.getStudent(), entity.getProblem(), entity.getActualGrade());
         return Optional.empty();
     }
 
     @Override
     public Optional<Grade> delete(Integer id) {
         String sql = "delete from grades where id=?";
-        try {
-            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-        } catch (SQLException exception){
-            exception.printStackTrace();
-        }
+        jdbcOperations.update(sql, id);
         return Optional.empty();
     }
 
     @Override
     public Optional<Grade> update(Grade entity) {
         String sql = "update grades set studentid=?, problemid=?, actualgrade=? where id=?";
-        try {
-            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, entity.getStudent());
-            preparedStatement.setInt(2, entity.getProblem());
-            preparedStatement.setInt(3, entity.getActualGrade());
-            preparedStatement.setInt(4, entity.getId());
-            preparedStatement.executeUpdate();
-        } catch (SQLException exception){
-            exception.printStackTrace();
-        }
+        jdbcOperations.update(sql, entity.getStudent(), entity.getProblem(), entity.getActualGrade(), entity.getId());
         return Optional.empty();
     }
 }

@@ -3,6 +3,8 @@ package mpp.socket.server.Repository;
 
 
 import mpp.socket.server.Domain.Problem;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcOperations;
 
 import java.lang.reflect.Field;
 import java.sql.*;
@@ -11,9 +13,8 @@ import java.util.stream.Collectors;
 
 public class ProblemDBRepository implements SortedRepository<Integer, Problem>{
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "parola";
+    @Autowired
+    private JdbcOperations jdbcOperations;
 
     @Override
     public Iterable<Problem> findAll(Sort sortObj) {
@@ -60,22 +61,18 @@ public class ProblemDBRepository implements SortedRepository<Integer, Problem>{
 
     @Override
     public Optional<Problem> findOne(Integer integer) {
-        String sql = "select * from problems where id=?";
+        String sql = "select * from problems where id=" + integer.toString();
         try{
             Class.forName("org.postgresql.Driver");
-            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, integer);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                int id = integer;
-                String description = resultSet.getString("description");
-                String difficulty = resultSet.getString("difficulty");
+            return Optional.of(jdbcOperations.query(sql, (rs, rowNum) -> {
+                String description = rs.getString("description");
+                String difficulty = rs.getString("difficulty");
                 Problem problem = new Problem(description, difficulty);
-                problem.setId(id);
-                return Optional.of(problem);
-            }
-        } catch (ClassNotFoundException | SQLException e) {
+                problem.setId(integer);
+                return problem;
+            }).get(0));
+
+        } catch (ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
         return Optional.empty();
@@ -87,18 +84,16 @@ public class ProblemDBRepository implements SortedRepository<Integer, Problem>{
         String sql = "select * from problems";
         try{
             Class.forName("org.postgresql.Driver");
-            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String description = resultSet.getString("description");
-                String difficulty = resultSet.getString("difficulty");
+            return jdbcOperations.query(sql, (rs, rowNum) -> {
+                int id = rs.getInt("id");
+                String description = rs.getString("description");
+                String difficulty = rs.getString("difficulty");
                 Problem problem = new Problem(description, difficulty);
                 problem.setId(id);
-                result.add(problem);
-            }
-        } catch (ClassNotFoundException | SQLException e) {
+
+                return problem;
+            });
+        } catch (ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
         return result;
@@ -109,13 +104,8 @@ public class ProblemDBRepository implements SortedRepository<Integer, Problem>{
         String sql = "insert into problems(id, description, difficulty) values(?, ?, ?)";
         try{
             Class.forName("org.postgresql.Driver");
-            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, entity.getId());
-            preparedStatement.setString(2, entity.getDescription());
-            preparedStatement.setString(3, entity.getDifficulty());
-            preparedStatement.executeUpdate();
-        } catch (ClassNotFoundException | SQLException e) {
+            jdbcOperations.update(sql, entity.getId(), entity.getDescription(), entity.getDifficulty());
+        } catch (ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
         return Optional.empty();
@@ -126,11 +116,8 @@ public class ProblemDBRepository implements SortedRepository<Integer, Problem>{
         String sql = "delete from problems where id=?";
         try{
             Class.forName("org.postgresql.Driver");
-            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, integer);
-            preparedStatement.executeUpdate();
-        } catch (ClassNotFoundException | SQLException e) {
+            jdbcOperations.update(sql, integer);
+        } catch (ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
         return Optional.empty();
@@ -141,13 +128,8 @@ public class ProblemDBRepository implements SortedRepository<Integer, Problem>{
         String sql = "update problems set description=?, difficulty=? where id=?";
         try{
             Class.forName("org.postgresql.Driver");
-            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, entity.getDescription());
-            preparedStatement.setString(2, entity.getDifficulty());
-            preparedStatement.setInt(3, entity.getId());
-            preparedStatement.executeUpdate();
-        } catch (ClassNotFoundException | SQLException e) {
+            jdbcOperations.update(sql, entity.getDescription(), entity.getDifficulty(), entity.getId());
+        } catch (ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
         return Optional.empty();
