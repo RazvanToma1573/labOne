@@ -11,14 +11,14 @@ import java.util.concurrent.Executors;
 public class ClientApp {
 
     public static void main(String[] args) {
-        ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        //ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-        TcpClient tcpClient = new TcpClient();
-        SocketService socketService = new SocketServiceClient(executorService, tcpClient);
-        Console console = new Console(socketService);
+        //TcpClient tcpClient = new TcpClient();
+        //SocketService socketService = new SocketServiceClient(executorService, tcpClient);
+        Console console = new Console();
         console.runConsole();
 
-        executorService.shutdown();
+        //executorService.shutdown();
 
         System.out.println("bye client");
     }

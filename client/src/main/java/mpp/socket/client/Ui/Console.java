@@ -3,6 +3,8 @@ package mpp.socket.client.Ui;
 import com.sun.tools.javac.util.Pair;
 import mpp.socket.client.MyTimerTask;
 import mpp.socket.common.SocketService;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 import java.util.Timer;
 
 import java.io.BufferedReader;
@@ -18,18 +20,20 @@ public class Console {
 
     private ConcurrentHashMap<String, Future<String>> results;
 
-    private SocketService socketService;
+    AnnotationConfigApplicationContext context =
+            new AnnotationConfigApplicationContext("mpp.socket.client.config");
 
-    public Console(SocketService socketService) {
-        this.socketService = socketService;
+    public Console() {
+        //this.socketService = socketService;
         results = new ConcurrentHashMap<>();
     }
 
     private void runAsync(String m) {
         CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-
-            Future<String> commandResult = socketService.command(m);
-            this.results.put(m, commandResult);
+            SocketService service = context.getBean(SocketService.class);
+            results.put(m, service.command(m));
+            //Future<String> commandResult = socketService.command(m);
+            //this.results.put(m, commandResult);
         });
     }
 
