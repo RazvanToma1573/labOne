@@ -3,10 +3,12 @@ import mpp.socket.client.Tcp.TcpClient;
 import mpp.socket.common.Message;
 import mpp.socket.common.SocketService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
+@Component
 public class SocketServiceClient implements SocketService {
 
     @Autowired

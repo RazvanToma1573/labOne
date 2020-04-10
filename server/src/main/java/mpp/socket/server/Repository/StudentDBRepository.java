@@ -81,7 +81,7 @@ public class StudentDBRepository implements SortedRepository<Integer, Student> {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, integer);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
+            while (resultSet.next()) {postgres
                 int id = integer;
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
