@@ -19,12 +19,11 @@ import java.util.concurrent.Future;
 public class Console {
 
     private ConcurrentHashMap<String, Future<String>> results;
+    private AnnotationConfigApplicationContext context;
 
-    AnnotationConfigApplicationContext context =
-            new AnnotationConfigApplicationContext("mpp.socket.client.config");
-
-    public Console() {
+    public Console(AnnotationConfigApplicationContext context) {
         //this.socketService = socketService;
+        this.context = context;
         results = new ConcurrentHashMap<>();
     }
 
