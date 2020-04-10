@@ -1,9 +1,10 @@
-package Domain.Validators;
+package mpp.socket.server.Domain.Validators;
 
-import Domain.Grade;
-import Domain.Problem;
-import Domain.Student;
 
+import mpp.socket.server.Domain.Grade;
+import org.springframework.stereotype.Component;
+
+@Component
 public class GradeValidator implements Validator<Grade> {
 
     @Override

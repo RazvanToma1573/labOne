@@ -1,22 +1,24 @@
 package mpp.socket.server;
 
-import Domain.Grade;
-import Domain.Problem;
-import Domain.Student;
-import Domain.Validators.GradeValidator;
-import Domain.Validators.ProblemValidator;
-import Domain.Validators.StudentValidator;
-import Domain.Validators.Validator;
-import Repository.GradeDBRepository;
-import Repository.ProblemDBRepository;
-import Repository.SortedRepository;
-import Repository.StudentDBRepository;
-import Service.ProblemsService;
-import Service.StudentsService;
+
 import mpp.socket.common.Message;
 import mpp.socket.common.SocketService;
+import mpp.socket.server.Domain.Grade;
+import mpp.socket.server.Domain.Problem;
+import mpp.socket.server.Domain.Student;
+import mpp.socket.server.Domain.Validators.GradeValidator;
+import mpp.socket.server.Domain.Validators.ProblemValidator;
+import mpp.socket.server.Domain.Validators.StudentValidator;
+import mpp.socket.server.Domain.Validators.Validator;
+import mpp.socket.server.Repository.GradeDBRepository;
+import mpp.socket.server.Repository.ProblemDBRepository;
+import mpp.socket.server.Repository.SortedRepository;
+import mpp.socket.server.Repository.StudentDBRepository;
+import mpp.socket.server.Service.ProblemsService;
 import mpp.socket.server.Service.ServiceServer;
+import mpp.socket.server.Service.StudentsService;
 import mpp.socket.server.TCP.TCPServer;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -27,21 +29,9 @@ public class ServerApp {
     public static void main(String[] args) {
         System.out.println("Server started...");
         try {
-            ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-            Validator<Student> studentValidator = new StudentValidator();
-            SortedRepository<Integer, Student> studentRepository = new StudentDBRepository();
-
-            Validator<Problem> problemValidator = new ProblemValidator();
-            SortedRepository<Integer, Problem> problemRepository = new ProblemDBRepository();
-
-            Validator<Grade> gradeValidator = new GradeValidator();
-            SortedRepository<Integer, Grade> gradeRepository = new GradeDBRepository();
-
-            ProblemsService problemService = new ProblemsService(problemRepository, problemValidator);
-            StudentsService studentService = new StudentsService(studentRepository, gradeRepository, studentValidator, gradeValidator, problemService);
-
-            SocketService socketService = new ServiceServer(executorService, studentService, problemService);
-            TCPServer tcpServer = new TCPServer(executorService);
+            AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("mpp.socket.server.config");
+            SocketService socketService = (SocketService) context.getBean("serviceServer");
+            TCPServer tcpServer = (TCPServer) context.getBean("tcpServer");
 
             tcpServer.addHandler("ClientRequest", (request) -> {
                 String command = request.getHeader() + " " + request.getBody();
@@ -55,7 +45,6 @@ public class ServerApp {
                 }
             });
             tcpServer.start();
-            executorService.shutdown();
         } catch (Exception e){
             e.printStackTrace();
         }

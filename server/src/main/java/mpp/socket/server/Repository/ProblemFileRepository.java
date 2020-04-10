@@ -1,6 +1,8 @@
-package Repository;
+package mpp.socket.server.Repository;
 
-import Domain.Problem;
+
+import mpp.socket.server.Domain.Problem;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;

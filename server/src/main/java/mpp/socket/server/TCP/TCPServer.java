@@ -2,6 +2,8 @@ package mpp.socket.server.TCP;
 
 import mpp.socket.common.Message;
 import mpp.socket.common.SocketServiceException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +15,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.function.UnaryOperator;
 
+@Component
 public class TCPServer {
     private ExecutorService executorService;
     private Map<String, UnaryOperator<Message>> methodHandlers;
@@ -42,6 +45,7 @@ public class TCPServer {
         }
     }
 
+    @Autowired
     public TCPServer(ExecutorService executorService) {
         this.executorService = executorService;
         this.methodHandlers = new HashMap<>();

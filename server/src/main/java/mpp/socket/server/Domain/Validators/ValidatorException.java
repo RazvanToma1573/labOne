@@ -1,4 +1,4 @@
-package Domain.Validators;
+package mpp.socket.server.Domain.Validators;
 
 public class ValidatorException extends Exception {
     public ValidatorException() {

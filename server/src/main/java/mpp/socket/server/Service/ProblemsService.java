@@ -1,20 +1,21 @@
-package Service;
+package mpp.socket.server.Service;
 
-import Domain.Grade;
-import Domain.Problem;
-import Domain.Student;
-import Domain.Validators.Validator;
-import Domain.Validators.ValidatorException;
-import Repository.Repository;
-import Repository.SortedRepository;
-import Repository.Sort;
+
 import com.sun.tools.javac.util.Pair;
+import mpp.socket.server.Domain.Problem;
+import mpp.socket.server.Domain.Validators.Validator;
+import mpp.socket.server.Domain.Validators.ValidatorException;
+import mpp.socket.server.Repository.Sort;
+import mpp.socket.server.Repository.SortedRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+@Component
 public class ProblemsService{
     private SortedRepository<Integer, Problem> problemRepository;
     private Validator<Problem> problemValidator;
@@ -24,6 +25,7 @@ public class ProblemsService{
      * @param problemRepository problem repository
      * @param problemValidator problem validator
      */
+    @Autowired
     public ProblemsService(SortedRepository<Integer, Problem> problemRepository, Validator<Problem> problemValidator) {
         this.problemRepository = problemRepository;
         this.problemValidator = problemValidator;

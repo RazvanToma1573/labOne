@@ -1,7 +1,10 @@
-package Domain.Validators;
+package mpp.socket.server.Domain.Validators;
 
-import Domain.Problem;
 
+import mpp.socket.server.Domain.Problem;
+import org.springframework.stereotype.Component;
+
+@Component
 public class ProblemValidator implements Validator<Problem> {
 
     /**

@@ -1,8 +1,8 @@
-package Repository;
+package mpp.socket.server.Repository;
 
-import Domain.BaseEntity;
-import Domain.Validators.Validator;
-import Domain.Validators.ValidatorException;
+
+
+import mpp.socket.server.Domain.BaseEntity;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package Domain;
+package mpp.socket.server.Domain;
 
 public class BaseEntity<ID> {
     private ID id;

@@ -1,11 +1,14 @@
-package Repository;
+package mpp.socket.server.Repository;
 
-import Domain.Grade;
+
+
+import mpp.socket.server.Domain.Grade;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Optional;
+
 
 public class GradeFileRepository extends FileRepository<Integer, Grade> {
 

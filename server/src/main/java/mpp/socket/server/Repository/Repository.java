@@ -1,8 +1,7 @@
-package Repository;
+package mpp.socket.server.Repository;
 
-import Domain.BaseEntity;
-import Domain.Validators.RepositoryException;
-import Domain.Validators.ValidatorException;
+
+import mpp.socket.server.Domain.BaseEntity;
 
 import java.sql.SQLException;
 import java.util.Optional;

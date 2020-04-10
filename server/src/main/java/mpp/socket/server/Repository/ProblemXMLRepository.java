@@ -1,6 +1,7 @@
-package Repository;
+package mpp.socket.server.Repository;
 
-import Domain.Problem;
+
+import mpp.socket.server.Domain.Problem;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

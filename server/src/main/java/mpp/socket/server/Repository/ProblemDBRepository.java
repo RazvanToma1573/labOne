@@ -1,8 +1,8 @@
-package Repository;
+package mpp.socket.server.Repository;
 
-import Domain.Problem;
-import Domain.Student;
-import com.sun.tools.javac.util.Pair;
+
+
+import mpp.socket.server.Domain.Problem;
 
 import java.lang.reflect.Field;
 import java.sql.*;

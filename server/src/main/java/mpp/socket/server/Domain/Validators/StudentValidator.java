@@ -1,9 +1,13 @@
-package Domain.Validators;
+package mpp.socket.server.Domain.Validators;
 
-import Domain.Student;
+
+
+import mpp.socket.server.Domain.Student;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
+@Component
 public class StudentValidator implements Validator<Student> {
 
     /**

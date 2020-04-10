@@ -1,8 +1,10 @@
-package Repository;
+package mpp.socket.server.Repository;
 
-import Domain.Student;
-import com.sun.tools.javac.util.Pair;
 
+
+
+import mpp.socket.server.Domain.Student;
+import org.springframework.stereotype.Component;
 
 import javax.script.ScriptEngine;
 import java.lang.reflect.Field;
@@ -12,6 +14,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+@Component
 public class StudentDBRepository implements SortedRepository<Integer, Student> {
 
     private static final String URL = "jdbc:postgresql://localhost:5432/postgres";

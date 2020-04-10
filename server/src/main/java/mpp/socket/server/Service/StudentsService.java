@@ -1,22 +1,29 @@
-package Service;
+package mpp.socket.server.Service;
 
-import Domain.Grade;
-import Domain.Problem;
-import Domain.Student;
-import Domain.Validators.Validator;
-import Domain.Validators.ValidatorException;
-import Repository.Repository;
-import Repository.Sort;
+
+
+
 import com.sun.tools.javac.util.Pair;
 
 import java.util.*;
 
 import java.util.HashSet;
-import Repository.SortedRepository;
+
+import mpp.socket.server.Domain.Grade;
+import mpp.socket.server.Domain.Problem;
+import mpp.socket.server.Domain.Student;
+import mpp.socket.server.Domain.Validators.Validator;
+import mpp.socket.server.Domain.Validators.ValidatorException;
+import mpp.socket.server.Repository.Sort;
+import mpp.socket.server.Repository.SortedRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Component
 public class StudentsService {
 
     private SortedRepository<Integer, Student> studentRepository;
@@ -33,6 +40,7 @@ public class StudentsService {
      * @param gradeValidator grade validator
      * @param problemService problem service
      */
+    @Autowired
     public StudentsService(SortedRepository<Integer, Student> studentRepository, SortedRepository<Integer, Grade> gradeRepository, Validator<Student> studentValidator, Validator<Grade> gradeValidator, ProblemsService problemService) {
         this.studentRepository = studentRepository;
         this.gradeRepository = gradeRepository;
@@ -89,7 +97,7 @@ public class StudentsService {
             Student student = checkStudent.get();
             this.studentValidator.validate(student);
 
-           Problem problem = this.problemsService.getById(problemId);
+            Problem problem = this.problemsService.getById(problemId);
 
             this.gradeRepository.save(new Grade(student.getId(), problem.getId(), 0));
         } else {

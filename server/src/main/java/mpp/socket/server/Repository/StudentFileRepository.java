@@ -1,6 +1,8 @@
-package Repository;
+package mpp.socket.server.Repository;
 
-import Domain.Student;
+
+
+import mpp.socket.server.Domain.Student;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

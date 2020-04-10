@@ -1,15 +1,15 @@
-package Repository;
+package mpp.socket.server.Repository;
 
-import Domain.Grade;
-import Domain.Student;
-import Domain.Validators.RepositoryException;
-import com.sun.tools.javac.util.Pair;
+
+
+import mpp.socket.server.Domain.Grade;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
+@Component
 public class GradeDBRepository implements SortedRepository<Integer, Grade> {
     private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
     private static final String USER = "postgres";

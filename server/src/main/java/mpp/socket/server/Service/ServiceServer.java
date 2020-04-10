@@ -1,12 +1,10 @@
 package mpp.socket.server.Service;
 
-import Domain.Grade;
-import Domain.Problem;
-import Domain.Student;
-import Service.ProblemsService;
-import Service.StudentsService;
 import com.sun.tools.javac.util.Pair;
 import mpp.socket.common.SocketService;
+import mpp.socket.server.Domain.Grade;
+import mpp.socket.server.Domain.Problem;
+import mpp.socket.server.Domain.Student;
 
 import java.util.ArrayList;
 import java.util.Arrays;

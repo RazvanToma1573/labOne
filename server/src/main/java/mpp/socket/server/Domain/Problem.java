@@ -1,4 +1,4 @@
-package Domain;
+package mpp.socket.server.Domain;
 
 import java.util.Objects;
 
