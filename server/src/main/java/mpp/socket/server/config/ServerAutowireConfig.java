@@ -88,8 +88,4 @@ public class ServerAutowireConfig {
         return Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     }
 
-    @Bean
-    TCPServer tcpServer() {
-        return new TCPServer(executorService());
-    }
 }

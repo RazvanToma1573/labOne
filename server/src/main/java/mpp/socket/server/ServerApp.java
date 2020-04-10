@@ -28,7 +28,11 @@ import java.util.concurrent.Future;
 public class ServerApp {
     public static void main(String[] args) {
         System.out.println("Server started...");
-        try {
+
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("mpp.socket.server.config");
+
+
+        /*try {
             AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("mpp.socket.server.config");
             SocketService socketService = (SocketService) context.getBean("serviceServer");
             TCPServer tcpServer = (TCPServer) context.getBean("tcpServer");
@@ -47,6 +51,6 @@ public class ServerApp {
             tcpServer.start();
         } catch (Exception e){
             e.printStackTrace();
-        }
+        }*/
     }
 }

@@ -5,6 +5,8 @@ import mpp.socket.common.SocketService;
 import mpp.socket.server.Domain.Grade;
 import mpp.socket.server.Domain.Problem;
 import mpp.socket.server.Domain.Student;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,11 +16,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
+@Component
 public class ServiceServer implements SocketService {
     private ExecutorService executorService;
     private StudentsService studentsService;
     private ProblemsService problemsService;
 
+    @Autowired
     public ServiceServer(ExecutorService executorService, StudentsService studentsService, ProblemsService problemsService) {
         this.executorService = executorService;
         this.studentsService = studentsService;
