@@ -4,6 +4,8 @@ package mpp.socket.server.Repository;
 
 
 import mpp.socket.server.Domain.Student;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.stereotype.Component;
 
 import javax.script.ScriptEngine;
@@ -16,10 +18,13 @@ import java.util.stream.Collectors;
 
 @Component
 public class StudentDBRepository implements SortedRepository<Integer, Student> {
-
+    /*
     private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
     private static final String USER = "postgres";
     private static final String PASSWORD = "parola";
+     */
+    @Autowired
+    private JdbcOperations jdbcOperations;
 
     @Override
     public Iterable<Student> findAll(Sort sortObj) {
@@ -68,6 +73,7 @@ public class StudentDBRepository implements SortedRepository<Integer, Student> {
 
     @Override
     public Optional<Student> findOne(Integer integer) {
+        /*
         String sql = "select * from students where id = ?";
         try{
             Class.forName("org.postgresql.Driver");
@@ -87,10 +93,21 @@ public class StudentDBRepository implements SortedRepository<Integer, Student> {
             System.out.println(e.getMessage());
         }
         return Optional.empty();
+         */
+    String sql  = "select * from students where id = " + integer;
+    return Optional.of(jdbcOperations.query(sql, (rs, rowNr) -> {
+        int id = rs.getInt("id");
+        String fName = rs.getString("firstName");
+        String lName = rs.getString("lastName");
+        Student student = new Student(fName, lName);
+        student.setId(id);
+        return student;
+    }).get(0));
     }
 
     @Override
     public Iterable<Student> findAll() {
+        /*
         List<Student> result = new ArrayList<>();
         String sql = "select * from students";
         try{
@@ -110,11 +127,23 @@ public class StudentDBRepository implements SortedRepository<Integer, Student> {
             System.out.println(e.getMessage());
         }
         return result;
+
+         */
+        String sql  = "select * from students";
+        return jdbcOperations.query(sql, (rs, rowNr) -> {
+            int id = rs.getInt("id");
+            String fName = rs.getString("firstName");
+            String lName = rs.getString("lastName");
+            Student student = new Student(fName, lName);
+            student.setId(id);
+            return student;
+        });
     }
 
 
     @Override
     public Optional<Student> save(Student entity) {
+        /*
         try {
             String sql = "insert into students(id, firstName, lastName) values(?, ?, ?)";
             Class.forName("org.postgresql.Driver");
@@ -128,10 +157,16 @@ public class StudentDBRepository implements SortedRepository<Integer, Student> {
             System.out.println(e.getMessage());
         }
         return Optional.empty();
+
+         */
+        String sql = "insert into students(id, firstName, lastName) values(?,?,?)";
+        jdbcOperations.update(sql, entity.getId(), entity.getFirstName(), entity.getLastName());
+        return Optional.empty();
     }
 
     @Override
     public Optional<Student> delete(Integer integer) {
+        /*
         try{
             String sql = "delete from students where id = ?";
             Class.forName("org.postgresql.Driver");
@@ -143,10 +178,16 @@ public class StudentDBRepository implements SortedRepository<Integer, Student> {
             System.out.println(e.getMessage());
         }
         return Optional.empty();
+
+         */
+        String sql = "delete from students where id=?";
+        jdbcOperations.update(sql, integer);
+        return Optional.empty();
     }
 
     @Override
     public Optional<Student> update(Student entity) {
+        /*
         String sql = "update students set firstName=?, lastName=? where id=? ";
         try{
             Class.forName("org.postgresql.Driver");
@@ -159,6 +200,11 @@ public class StudentDBRepository implements SortedRepository<Integer, Student> {
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println(e.getMessage());
         }
+        return Optional.empty();
+
+         */
+        String sql = "update students set firstName=?, lastName=? where id=?";
+        jdbcOperations.update(sql, entity.getFirstName(), entity.getLastName(), entity.getId());
         return Optional.empty();
     }
 }
