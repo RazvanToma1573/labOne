@@ -1,7 +1,6 @@
 package mpp.socket.client.Ui;
 
 import com.sun.tools.javac.util.Pair;
-import mpp.socket.client.MyTimerTask;
 import mpp.socket.common.SocketService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -13,8 +12,6 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 public class Console {
 
@@ -31,9 +28,6 @@ public class Console {
         CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
             SocketService service = context.getBean(SocketService.class);
             results.put(m, service.command(m));
-            System.out.println(results.get(m));
-            //Future<String> commandResult = socketService.command(m);
-            //this.results.put(m, commandResult);
         });
     }
 
@@ -65,7 +59,6 @@ public class Console {
         System.out.println("Hello!");
         Scanner scanner = new Scanner(System.in);
         int choice = -1;
-        Timer timer = new Timer();
         while (choice != 0) {
             this.printTheMenu();
 
@@ -73,8 +66,10 @@ public class Console {
             System.out.println("-------------------------------------------");
             System.out.println();
             try {
-                //timer.schedule(new MyTimerTask(this.results),0, 10*1000);
+                MyTimer timer = new MyTimer(5*1000, this.results);
+                timer.start();
                 choice = scanner.nextInt();
+                timer.stop();
                 if (choice == 1) {
                     this.addNewStudent();
                 } else if (choice == 2) {
