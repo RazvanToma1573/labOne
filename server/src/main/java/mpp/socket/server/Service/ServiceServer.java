@@ -137,6 +137,7 @@ public class ServiceServer implements SocketService {
                             result =  "Invalid report index";
                             break;
                     }
+                    break;
                 case 12:
                     this.studentsService.update(Integer.parseInt(params[0]), params[1], params[2]);
                     result =  "Successfully updated student";
