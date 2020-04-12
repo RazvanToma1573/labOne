@@ -26,7 +26,7 @@ public class GradeDBRepository implements SortedRepository<Integer, Grade> {
         try{
             final Class gradeClass;
 
-            gradeClass = Class.forName("Domain.Grade");
+            gradeClass = Class.forName("mpp.socket.server.Domain.Grade");
 
             Optional<Comparator<Grade>> comparator = sortObj.getCriteria().stream()
                     .map(cr ->{

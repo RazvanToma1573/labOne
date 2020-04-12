@@ -24,8 +24,8 @@ public class ProblemDBRepository implements SortedRepository<Integer, Problem>{
             final Class problemClass;
             final Class baseClass;
 
-            problemClass = Class.forName("Domain.Problem");
-            baseClass = Class.forName("Domain.BaseEntity");
+            problemClass = Class.forName("mpp.socket.server.Domain.Problem");
+            baseClass = Class.forName("mpp.socket.server.Domain.BaseEntity");
 
             Optional<Comparator<Problem>> comparator = sortObj.getCriteria().stream()
                     .map(cr ->{

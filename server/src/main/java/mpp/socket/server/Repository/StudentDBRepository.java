@@ -34,8 +34,8 @@ public class StudentDBRepository implements SortedRepository<Integer, Student> {
             final Class studentClass;
             final Class baseClass;
 
-            studentClass = Class.forName("Domain.Student");
-            baseClass = Class.forName("Domain.BaseEntity");
+            studentClass = Class.forName("mpp.socket.server.Domain.Student");
+            baseClass = Class.forName("mpp.socket.server.Domain.BaseEntity");
 
             Optional<Comparator<Student>> comparator = sortObj.getCriteria().stream()
                     .map(cr ->{
