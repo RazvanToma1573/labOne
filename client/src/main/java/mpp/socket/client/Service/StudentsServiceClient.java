@@ -16,6 +16,7 @@ import java.util.Set;
 @Component
 public class StudentsServiceClient implements IServiceStudents {
 
+    @Autowired
     private IServiceStudents service;
 
     public StudentsServiceClient(IServiceStudents service) {

@@ -9,10 +9,7 @@ import mpp.socket.common.Domain.Validators.StudentValidator;
 import mpp.socket.common.Domain.Validators.Validator;
 import mpp.socket.common.IServiceProblems;
 import mpp.socket.common.IServiceStudents;
-import mpp.socket.server.Repository.GradeDBRepository;
-import mpp.socket.server.Repository.ProblemDBRepository;
-import mpp.socket.server.Repository.SortedRepository;
-import mpp.socket.server.Repository.StudentDBRepository;
+import mpp.socket.server.Repository.*;
 import mpp.socket.server.Service.ProblemsService;
 import mpp.socket.server.Service.StudentsService;
 import org.springframework.context.annotation.Bean;
@@ -46,28 +43,40 @@ public class ServerConfig {
 
     @Bean
     IServiceStudents studentService() {
-        return new StudentsService(studentSortedRepository(), gradeSortedRepository(), studentValidator(), gradeValidator(), problemService());
+        return new StudentsService();
     }
 
     @Bean
-    SortedRepository<Integer, Student> studentSortedRepository() { return new StudentDBRepository(); }
+    SortedRepository<Integer, Student> studentSortedRepository() {
+        return new StudentDBRepository();
+    }
 
     @Bean
-    SortedRepository<Integer, Grade> gradeSortedRepository() { return new GradeDBRepository(); }
+    SortedRepository<Integer, Problem> problemSortedRepository() {
+        return new ProblemDBRepository();
+    }
 
     @Bean
-    Validator<Student> studentValidator() { return new StudentValidator(); }
+    SortedRepository<Integer, Grade> gradeSortedRepository() {
+        return new GradeDBRepository();
+    }
 
     @Bean
-    Validator<Grade> gradeValidator() { return new GradeValidator(); }
+    Validator<Student> studentValidator() {
+        return new StudentValidator();
+    }
 
     @Bean
-    IServiceProblems problemService() { return new ProblemsService(problemSortedRepository(), problemValidator()); }
+    Validator<Problem> problemValidator(){
+        return new ProblemValidator();
+    }
 
     @Bean
-    SortedRepository<Integer, Problem> problemSortedRepository() { return new ProblemDBRepository(); }
+    Validator<Grade> gradeValidator() {
+        return new GradeValidator();
+    }
 
     @Bean
-    Validator<Problem> problemValidator() { return new ProblemValidator(); }
+    IServiceProblems problemService() { return new ProblemsService(); }
 
 }

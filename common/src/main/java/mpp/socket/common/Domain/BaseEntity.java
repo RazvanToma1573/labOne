@@ -2,8 +2,10 @@ package mpp.socket.common.Domain;
 
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 
-public class BaseEntity<ID> {
+
+public class BaseEntity<ID> implements Serializable {
     private ID id;
 
 

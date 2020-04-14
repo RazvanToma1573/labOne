@@ -26,9 +26,8 @@ public class Console {
     AnnotationConfigApplicationContext context;
 
     public Console(AnnotationConfigApplicationContext context) {
-        //this.socketService = socketService;
-        this.problemsService = problemsService;
-        this.studentsService = studentsService;
+        this.studentsService = context.getBean(IServiceStudents.class);
+        this.problemsService = context.getBean(IServiceProblems.class);
         this.context = context;
     }
 
@@ -219,7 +218,6 @@ public class Console {
 
     public void showAllStudents() {
         CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-            //this.studentsService = context.getBean(IServiceStudents.class);
             Iterable<Student> students = studentsService.get();
             students.forEach(System.out::println);
         });

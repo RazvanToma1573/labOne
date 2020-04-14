@@ -9,7 +9,7 @@ import org.springframework.remoting.rmi.RmiProxyFactoryBean;
 @Configuration
 public class ClientConfig {
     @Bean
-    RmiProxyFactoryBean rmiProxyFactoryBeanStudent() {
+    RmiProxyFactoryBean rmiProxyFactoryBean1() {
         RmiProxyFactoryBean rmiProxyFactoryBean = new RmiProxyFactoryBean();
         rmiProxyFactoryBean.setServiceInterface(IServiceStudents.class);
         rmiProxyFactoryBean.setServiceUrl("rmi://localhost:1099/StudentsService");
@@ -17,7 +17,7 @@ public class ClientConfig {
     }
 
     @Bean
-    RmiProxyFactoryBean rmiProxyFactoryBeanProblem() {
+    RmiProxyFactoryBean rmiProxyFactoryBean2() {
         RmiProxyFactoryBean rmiProxyFactoryBean = new RmiProxyFactoryBean();
         rmiProxyFactoryBean.setServiceInterface(IServiceProblems.class);
         rmiProxyFactoryBean.setServiceUrl("rmi://localhost:1099/ProblemsService");

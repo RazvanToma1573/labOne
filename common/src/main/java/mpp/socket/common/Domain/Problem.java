@@ -2,11 +2,12 @@ package mpp.socket.common.Domain;
 
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 
 
-public class Problem extends BaseEntity<Integer> {
+public class Problem extends BaseEntity<Integer> implements Serializable {
 
     private String description;
     private String difficulty; //easy/medium/hard

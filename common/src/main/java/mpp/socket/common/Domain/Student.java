@@ -2,10 +2,11 @@ package mpp.socket.common.Domain;
 
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.*;
 
 
-public class Student extends BaseEntity<Integer>{
+public class Student extends BaseEntity<Integer> implements Serializable {
     private String firstName;
     private String lastName;
 

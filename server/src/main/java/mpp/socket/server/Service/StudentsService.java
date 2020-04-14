@@ -25,32 +25,21 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
+@Component
 public class StudentsService implements IServiceStudents {
 
+    @Autowired
     private SortedRepository<Integer, Student> studentRepository;
+    @Autowired
     private SortedRepository<Integer, Grade> gradeRepository;
+    @Autowired
     private Validator<Student> studentValidator;
+    @Autowired
     private Validator<Grade> gradeValidator;
+    @Autowired
     private IServiceProblems problemsService;
 
-    /**
-     * Creates a new Student service
-     * @param studentRepository student repository
-     * @param gradeRepository grade repository
-     * @param studentValidator student validator
-     * @param gradeValidator grade validator
-     * @param problemService problem service
-     */
 
-    @Autowired
-    public StudentsService(SortedRepository<Integer, Student> studentRepository, SortedRepository<Integer, Grade> gradeRepository, Validator<Student> studentValidator, Validator<Grade> gradeValidator, IServiceProblems problemService) {
-        this.studentRepository = studentRepository;
-        this.gradeRepository = gradeRepository;
-        this.studentValidator = studentValidator;
-        this.gradeValidator = gradeValidator;
-        this.problemsService = problemService;
-    }
 
     /**
      * Adds a new student to the repository
@@ -114,6 +103,11 @@ public class StudentsService implements IServiceStudents {
      * @return an iterable with all the students
      */
     public Iterable<Student> get() {
+        try{
+            Thread.sleep(10000);
+        } catch (Exception e) {
+            System.out.printf(e.getMessage());
+        }
         this.studentRepository.findAll().forEach(System.out::println);
         return this.studentRepository.findAll();
     }

@@ -24,9 +24,9 @@ public class JdbcConfig {
     DataSource dataSource() {
         BasicDataSource basicDataSource = new BasicDataSource();
 
-        basicDataSource.setUrl("jdbc:postgresql://localhost:5432/jdbctemplate");
+        basicDataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
         basicDataSource.setUsername("postgres");
-        basicDataSource.setPassword("admin");
+        basicDataSource.setPassword("parola");
         basicDataSource.setInitialSize(3);
 
         return basicDataSource;

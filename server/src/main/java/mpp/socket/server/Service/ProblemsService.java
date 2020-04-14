@@ -14,21 +14,14 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
-
+@Component
 public class ProblemsService implements IServiceProblems {
+
+    @Autowired
     private SortedRepository<Integer, Problem> problemRepository;
+    @Autowired
     private Validator<Problem> problemValidator;
 
-    /**
-     * Creates a new problem service
-     * @param problemRepository problem repository
-     * @param problemValidator problem validator
-     */
-
-    public ProblemsService(SortedRepository<Integer, Problem> problemRepository, Validator<Problem> problemValidator) {
-        this.problemRepository = problemRepository;
-        this.problemValidator = problemValidator;
-    }
 
     /**
      * Validate new problem.

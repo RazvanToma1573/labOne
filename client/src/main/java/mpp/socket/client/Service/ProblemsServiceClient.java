@@ -12,6 +12,7 @@ import java.util.List;
 @Component
 public class ProblemsServiceClient implements IServiceProblems {
 
+    @Autowired
     private IServiceProblems service;
 
     public ProblemsServiceClient(IServiceProblems service) {
