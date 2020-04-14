@@ -5,9 +5,11 @@ package mpp.socket.server.Repository;
 import mpp.socket.common.Domain.Problem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 
+@Component
 public class ProblemDBRepository implements SortedRepository<Integer, Problem>{
 
     @Autowired

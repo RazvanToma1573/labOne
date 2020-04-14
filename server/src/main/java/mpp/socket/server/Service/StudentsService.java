@@ -14,6 +14,7 @@ import mpp.socket.common.Domain.Problem;
 import mpp.socket.common.Domain.Student;
 import mpp.socket.common.Domain.Validators.Validator;
 import mpp.socket.common.Domain.Validators.ValidatorException;
+import mpp.socket.common.IServiceProblems;
 import mpp.socket.common.IServiceStudents;
 import mpp.socket.server.Repository.Sort;
 import mpp.socket.server.Repository.SortedRepository;
@@ -24,14 +25,14 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component
+
 public class StudentsService implements IServiceStudents {
 
     private SortedRepository<Integer, Student> studentRepository;
     private SortedRepository<Integer, Grade> gradeRepository;
     private Validator<Student> studentValidator;
     private Validator<Grade> gradeValidator;
-    private ProblemsService problemsService;
+    private IServiceProblems problemsService;
 
     /**
      * Creates a new Student service
@@ -41,8 +42,8 @@ public class StudentsService implements IServiceStudents {
      * @param gradeValidator grade validator
      * @param problemService problem service
      */
-    @Autowired
-    public StudentsService(SortedRepository<Integer, Student> studentRepository, SortedRepository<Integer, Grade> gradeRepository, Validator<Student> studentValidator, Validator<Grade> gradeValidator, ProblemsService problemService) {
+
+    public StudentsService(SortedRepository<Integer, Student> studentRepository, SortedRepository<Integer, Grade> gradeRepository, Validator<Student> studentValidator, Validator<Grade> gradeValidator, IServiceProblems problemService) {
         this.studentRepository = studentRepository;
         this.gradeRepository = gradeRepository;
         this.studentValidator = studentValidator;
@@ -112,6 +113,7 @@ public class StudentsService implements IServiceStudents {
      * @return an iterable with all the students
      */
     public Iterable<Student> get() {
+        this.studentRepository.findAll().forEach(System.out::println);
         return this.studentRepository.findAll();
     }
 

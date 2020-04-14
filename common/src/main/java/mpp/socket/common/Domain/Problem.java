@@ -1,6 +1,10 @@
 package mpp.socket.common.Domain;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Objects;
+
+
 
 public class Problem extends BaseEntity<Integer> {
 

@@ -9,8 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 public class ProblemsServiceClient implements IServiceProblems {
-    @Autowired
+
     private IServiceProblems service;
+
+    public ProblemsServiceClient(IServiceProblems service) {
+        this.service = service;
+    }
 
     @Override
     public void add(Problem problem) throws ValidatorException {

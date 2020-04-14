@@ -1,5 +1,8 @@
 package mpp.socket.common.Domain;
 
+import org.springframework.stereotype.Component;
+
+
 public class BaseEntity<ID> {
     private ID id;
 

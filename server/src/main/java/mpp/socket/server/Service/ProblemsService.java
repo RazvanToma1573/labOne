@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+
 public class ProblemsService implements IServiceProblems {
     private SortedRepository<Integer, Problem> problemRepository;
     private Validator<Problem> problemValidator;
@@ -24,7 +24,7 @@ public class ProblemsService implements IServiceProblems {
      * @param problemRepository problem repository
      * @param problemValidator problem validator
      */
-    @Autowired
+
     public ProblemsService(SortedRepository<Integer, Problem> problemRepository, Validator<Problem> problemValidator) {
         this.problemRepository = problemRepository;
         this.problemValidator = problemValidator;

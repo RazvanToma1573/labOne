@@ -12,10 +12,15 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Set;
 
+
 @Component
 public class StudentsServiceClient implements IServiceStudents {
-    @Autowired
+
     private IServiceStudents service;
+
+    public StudentsServiceClient(IServiceStudents service) {
+        this.service = service;
+    }
 
     @Override
     public void add(Student newStudent) throws ValidatorException, IllegalArgumentException {

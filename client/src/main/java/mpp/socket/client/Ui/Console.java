@@ -21,22 +21,25 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Console {
 
     private ConcurrentHashMap<String, String> results;
-    private AnnotationConfigApplicationContext context;
     private IServiceProblems problemsService;
     private IServiceStudents studentsService;
 
-    public Console(AnnotationConfigApplicationContext context) {
+    public Console(IServiceStudents studentsService, IServiceProblems problemsService) {
         //this.socketService = socketService;
-        this.context = context;
+        this.problemsService = problemsService;
+        this.studentsService = studentsService;
         results = new ConcurrentHashMap<>();
     }
 
+    /*
     private void runAsync(String m) {
         CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
             SocketService service = context.getBean(SocketService.class);
             results.put(m, service.command(m));
         });
     }
+    */
+
 
     /**
      * Prints the menu with the available commands
@@ -73,10 +76,10 @@ public class Console {
             System.out.println("-------------------------------------------");
             System.out.println();
             try {
-                MyTimer timer = new MyTimer(5*1000, this.results);
-                timer.start();
+                //MyTimer timer = new MyTimer(5*1000, this.results);
+                //timer.start();
                 choice = scanner.nextInt();
-                timer.stop();
+                //timer.stop();
                 if (choice == 1) {
                     this.addNewStudent();
                 } else if (choice == 2) {
@@ -139,7 +142,7 @@ public class Console {
             Student student = new Student(firstName, lastName);
             student.setId(id);
             CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-                this.studentsService = context.getBean(IServiceStudents.class);
+                //this.studentsService = context.getBean(IServiceStudents.class);
                 try {
                     studentsService.add(student);
                 } catch (ValidatorException e) {
@@ -160,7 +163,7 @@ public class Console {
             int id = scanner.nextInt();
 
             CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-               this.studentsService = context.getBean(IServiceStudents.class);
+               //this.studentsService = context.getBean(IServiceStudents.class);
                studentsService.remove(id);
             });
         } catch (IllegalArgumentException exception) {
@@ -185,7 +188,7 @@ public class Console {
                     String firstname = bufferedReader.readLine();
 
                     CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-                        this.studentsService = context.getBean(IServiceStudents.class);
+                        //this.studentsService = context.getBean(IServiceStudents.class);
                         try {
                             studentsService.update(idStudentToBeUpdated, "FIRST", firstname);
                         } catch (ValidatorException e) {
@@ -197,7 +200,7 @@ public class Console {
                     String lastname = bufferedReader.readLine();
 
                     CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-                        this.studentsService = context.getBean(IServiceStudents.class);
+                        //this.studentsService = context.getBean(IServiceStudents.class);
                         try {
                             studentsService.update(idStudentToBeUpdated, "LAST", lastname);
                         } catch (ValidatorException e) {
@@ -215,8 +218,9 @@ public class Console {
 
     public void showAllStudents() {
         CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-            this.studentsService = context.getBean(IServiceStudents.class);
-            studentsService.get().forEach(System.out::println);
+            //this.studentsService = context.getBean(IServiceStudents.class);
+            Iterable<Student> students = studentsService.get();
+            students.forEach(System.out::println);
         });
     }
 
@@ -244,7 +248,7 @@ public class Console {
 
                 final String m = message;
 
-                this.runAsync(m);
+                //this.runAsync(m);
             } else {
                 System.out.println("ValidatorException: The type you introduced was not valid!");
             }
@@ -272,7 +276,7 @@ public class Console {
 
             final String m = message;
 
-            this.runAsync(m);
+            //this.runAsync(m);
         } catch (IOException | NullPointerException exception) {
             System.out.println(exception.getMessage());
         }
@@ -295,7 +299,7 @@ public class Console {
             problem.setId(id);
 
             CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-                this.problemsService = context.getBean(IServiceProblems.class);
+                //this.problemsService = context.getBean(IServiceProblems.class);
                 try {
                     problemsService.add(problem);
                 } catch (ValidatorException e) {
@@ -316,7 +320,7 @@ public class Console {
             int id = scanner.nextInt();
 
             CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-                this.problemsService = context.getBean(IServiceProblems.class);
+                //this.problemsService = context.getBean(IServiceProblems.class);
                 problemsService.remove(id);
             });
 
@@ -346,7 +350,7 @@ public class Console {
 
                     final String m = message;
 
-                    this.runAsync(m);
+                    //this.runAsync(m);
                     cont = false;
                 } else if (type.equals("DIFFICULTY")) {
                     System.out.println("new difficulty:");
@@ -357,7 +361,7 @@ public class Console {
 
                     final String m = message;
 
-                    this.runAsync(m);
+                    //this.runAsync(m);
                     cont = false;
                 } else {
                     System.out.println("Input exception: Input a valid type! (DESCRIPTION|DIFFICULTY)");
@@ -370,7 +374,7 @@ public class Console {
 
     public void showAllProblems() {
         CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-            this.problemsService = context.getBean(IServiceProblems.class);
+            //this.problemsService = context.getBean(IServiceProblems.class);
             problemsService.get().forEach(System.out::println);
         });
     }
@@ -395,7 +399,7 @@ public class Console {
 
             final String m = message;
 
-            this.runAsync(m);
+            //this.runAsync(m);
         } catch (IOException | NullPointerException exception) {
             System.out.println(exception.getMessage());
         }
@@ -412,7 +416,7 @@ public class Console {
             int problemId = Integer.parseInt(bufferedReader.readLine());
 
             CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-                this.studentsService = context.getBean(IServiceStudents.class);
+                //this.studentsService = context.getBean(IServiceStudents.class);
                 try {
                     studentsService.assignProblem(studentId, problemId);
                 } catch (ValidatorException e) {
@@ -439,7 +443,7 @@ public class Console {
             int grade = Integer.parseInt(bufferedReader.readLine());
 
             CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-                this.studentsService = context.getBean(IServiceStudents.class);
+                //this.studentsService = context.getBean(IServiceStudents.class);
                 try {
                     studentsService.assignGrade(studentId, problemId, grade);
                 } catch (ValidatorException e) {
@@ -455,7 +459,7 @@ public class Console {
 
     public void showAllGrades() {
         CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-            this.studentsService = context.getBean(IServiceStudents.class);
+            //this.studentsService = context.getBean(IServiceStudents.class);
             studentsService.getGrades().forEach(System.out::println);
         });
     }
@@ -482,7 +486,7 @@ public class Console {
 
             final String m = message;
 
-            this.runAsync(m);
+            //this.runAsync(m);
         } catch (IOException | NullPointerException exception) {
             System.out.println(exception.getMessage());
         }
@@ -520,7 +524,7 @@ public class Console {
 
         final String m = message;
 
-        this.runAsync(m);
+        //this.runAsync(m);
     }
     /*
     public void checkResults() {
