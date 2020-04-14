@@ -23,12 +23,13 @@ public class Console {
     private ConcurrentHashMap<String, String> results;
     private IServiceProblems problemsService;
     private IServiceStudents studentsService;
+    AnnotationConfigApplicationContext context;
 
-    public Console(IServiceStudents studentsService, IServiceProblems problemsService) {
+    public Console(AnnotationConfigApplicationContext context) {
         //this.socketService = socketService;
         this.problemsService = problemsService;
         this.studentsService = studentsService;
-        results = new ConcurrentHashMap<>();
+        this.context = context;
     }
 
     /*
