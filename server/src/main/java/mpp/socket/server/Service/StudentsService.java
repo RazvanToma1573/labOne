@@ -43,6 +43,7 @@ public class StudentsService implements IServiceStudents {
      * @param problemService problem service
      */
 
+    @Autowired
     public StudentsService(SortedRepository<Integer, Student> studentRepository, SortedRepository<Integer, Grade> gradeRepository, Validator<Student> studentValidator, Validator<Grade> gradeValidator, IServiceProblems problemService) {
         this.studentRepository = studentRepository;
         this.gradeRepository = gradeRepository;
