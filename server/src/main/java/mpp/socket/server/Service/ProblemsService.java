@@ -5,6 +5,7 @@ import com.sun.tools.javac.util.Pair;
 import mpp.socket.common.Domain.Problem;
 import mpp.socket.common.Domain.Validators.Validator;
 import mpp.socket.common.Domain.Validators.ValidatorException;
+import mpp.socket.common.IServiceProblems;
 import mpp.socket.common.Repository.Sort;
 import mpp.socket.common.Repository.SortedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class ProblemsService{
+public class ProblemsService implements IServiceProblems {
     private SortedRepository<Integer, Problem> problemRepository;
     private Validator<Problem> problemValidator;
 

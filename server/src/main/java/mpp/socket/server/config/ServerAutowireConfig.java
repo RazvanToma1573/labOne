@@ -3,6 +3,8 @@ package mpp.socket.server.config;
 
 
 
+import mpp.socket.common.IServiceProblems;
+import mpp.socket.common.IServiceStudents;
 import mpp.socket.common.SocketService;
 import mpp.socket.common.Domain.Grade;
 import mpp.socket.common.Domain.Problem;
@@ -29,11 +31,20 @@ import java.util.concurrent.Executors;
 public class ServerAutowireConfig {
 
     @Bean
-    RmiServiceExporter rmiServiceExporter() {
+    RmiServiceExporter rmiServiceExporterStudent() {
         RmiServiceExporter rmiServiceExporter = new RmiServiceExporter();
         rmiServiceExporter.setServiceName("StudentsService");
-        rmiServiceExporter.setServiceInterface(SocketService.class);
-        rmiServiceExporter.setService(serviceServer());
+        rmiServiceExporter.setServiceInterface(IServiceStudents.class);
+        rmiServiceExporter.setService(studentsService());
+        return rmiServiceExporter;
+    }
+
+    @Bean
+    RmiServiceExporter rmiServiceExporterProblem() {
+        RmiServiceExporter rmiServiceExporter = new RmiServiceExporter();
+        rmiServiceExporter.setServiceName("ProblemsService");
+        rmiServiceExporter.setServiceInterface(IServiceProblems.class);
+        rmiServiceExporter.setService(problemsService());
         return rmiServiceExporter;
     }
 
@@ -77,6 +88,7 @@ public class ServerAutowireConfig {
         return new GradeValidator();
     }
 
+    /*
     @Bean
     SocketService serviceServer() {
         return new ServiceServer(executorService(), studentsService(), problemsService());
@@ -86,5 +98,7 @@ public class ServerAutowireConfig {
     ExecutorService executorService() {
         return Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     }
+    */
+
 
 }

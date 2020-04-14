@@ -14,6 +14,7 @@ import mpp.socket.common.Domain.Problem;
 import mpp.socket.common.Domain.Student;
 import mpp.socket.common.Domain.Validators.Validator;
 import mpp.socket.common.Domain.Validators.ValidatorException;
+import mpp.socket.common.IServiceStudents;
 import mpp.socket.common.Repository.Sort;
 import mpp.socket.common.Repository.SortedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class StudentsService {
+public class StudentsService implements IServiceStudents {
 
     private SortedRepository<Integer, Student> studentRepository;
     private SortedRepository<Integer, Grade> gradeRepository;
