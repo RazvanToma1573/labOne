@@ -6,8 +6,8 @@ import mpp.socket.common.Domain.Problem;
 import mpp.socket.common.Domain.Validators.Validator;
 import mpp.socket.common.Domain.Validators.ValidatorException;
 import mpp.socket.common.IServiceProblems;
-import mpp.socket.common.Repository.Sort;
-import mpp.socket.common.Repository.SortedRepository;
+import mpp.socket.server.Repository.Sort;
+import mpp.socket.server.Repository.SortedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

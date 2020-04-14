@@ -1,4 +1,4 @@
-package mpp.socket.common.Repository;
+package mpp.socket.server.Repository;
 
 
 
@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
-import java.util.*;
 
 @Component
 public class GradeDBRepository implements SortedRepository<Integer, Grade> {

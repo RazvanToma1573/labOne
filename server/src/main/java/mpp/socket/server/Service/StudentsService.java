@@ -15,8 +15,8 @@ import mpp.socket.common.Domain.Student;
 import mpp.socket.common.Domain.Validators.Validator;
 import mpp.socket.common.Domain.Validators.ValidatorException;
 import mpp.socket.common.IServiceStudents;
-import mpp.socket.common.Repository.Sort;
-import mpp.socket.common.Repository.SortedRepository;
+import mpp.socket.server.Repository.Sort;
+import mpp.socket.server.Repository.SortedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

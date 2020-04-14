@@ -1,13 +1,7 @@
 package mpp.socket.client;
 
-import mpp.socket.client.Service.SocketServiceClient;
-import mpp.socket.client.Tcp.TcpClient;
 import mpp.socket.client.Ui.Console;
-import mpp.socket.common.SocketService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ClientApp {
 

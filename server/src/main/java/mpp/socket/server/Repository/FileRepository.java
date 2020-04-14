@@ -1,8 +1,7 @@
-package mpp.socket.common.Repository;
+package mpp.socket.server.Repository;
 
 import mpp.socket.common.Domain.BaseEntity;
 
-import java.io.*;
 import java.util.Optional;
 
 public class FileRepository<ID, T extends BaseEntity<ID>> extends InMemoryRepository<ID, T> {

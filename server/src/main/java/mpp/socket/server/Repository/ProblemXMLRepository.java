@@ -1,4 +1,4 @@
-package mpp.socket.common.Repository;
+package mpp.socket.server.Repository;
 
 
 import mpp.socket.common.Domain.Problem;
