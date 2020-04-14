@@ -1,7 +1,7 @@
 package mpp.socket.common.Domain.Validators;
 
 
-import mpp.socket.server.Domain.Grade;
+import mpp.socket.common.Domain.Grade;
 import org.springframework.stereotype.Component;
 
 @Component

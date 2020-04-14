@@ -2,7 +2,7 @@ package mpp.socket.common.Domain.Validators;
 
 
 
-import mpp.socket.server.Domain.Student;
+import mpp.socket.common.Domain.Student;
 import org.springframework.stereotype.Component;
 
 @Component

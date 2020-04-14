@@ -4,17 +4,17 @@ package mpp.socket.server.config;
 
 
 import mpp.socket.common.SocketService;
-import mpp.socket.server.Domain.Grade;
-import mpp.socket.server.Domain.Problem;
-import mpp.socket.server.Domain.Student;
-import mpp.socket.server.Domain.Validators.GradeValidator;
-import mpp.socket.server.Domain.Validators.ProblemValidator;
-import mpp.socket.server.Domain.Validators.StudentValidator;
-import mpp.socket.server.Domain.Validators.Validator;
-import mpp.socket.server.Repository.GradeDBRepository;
-import mpp.socket.server.Repository.ProblemDBRepository;
-import mpp.socket.server.Repository.SortedRepository;
-import mpp.socket.server.Repository.StudentDBRepository;
+import mpp.socket.common.Domain.Grade;
+import mpp.socket.common.Domain.Problem;
+import mpp.socket.common.Domain.Student;
+import mpp.socket.common.Domain.Validators.GradeValidator;
+import mpp.socket.common.Domain.Validators.ProblemValidator;
+import mpp.socket.common.Domain.Validators.StudentValidator;
+import mpp.socket.common.Domain.Validators.Validator;
+import mpp.socket.common.Repository.GradeDBRepository;
+import mpp.socket.common.Repository.ProblemDBRepository;
+import mpp.socket.common.Repository.SortedRepository;
+import mpp.socket.common.Repository.StudentDBRepository;
 import mpp.socket.server.Service.ProblemsService;
 import mpp.socket.server.Service.ServiceServer;
 import mpp.socket.server.Service.StudentsService;

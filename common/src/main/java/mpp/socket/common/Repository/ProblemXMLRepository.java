@@ -1,7 +1,7 @@
-package mpp.socket.server.Repository;
+package mpp.socket.common.Repository;
 
 
-import mpp.socket.server.Domain.Problem;
+import mpp.socket.common.Domain.Problem;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -9,7 +9,6 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;

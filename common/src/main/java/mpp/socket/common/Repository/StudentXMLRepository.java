@@ -1,7 +1,7 @@
-package mpp.socket.server.Repository;
+package mpp.socket.common.Repository;
 
 
-import mpp.socket.server.Domain.Student;
+import mpp.socket.common.Domain.Student;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

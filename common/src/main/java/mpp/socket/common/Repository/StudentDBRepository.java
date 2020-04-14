@@ -1,20 +1,15 @@
-package mpp.socket.server.Repository;
+package mpp.socket.common.Repository;
 
 
 
 
-import mpp.socket.server.Domain.Student;
+import mpp.socket.common.Domain.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.stereotype.Component;
 
-import javax.script.ScriptEngine;
 import java.lang.reflect.Field;
-import java.sql.*;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @Component
 public class StudentDBRepository implements SortedRepository<Integer, Student> {
@@ -34,8 +29,8 @@ public class StudentDBRepository implements SortedRepository<Integer, Student> {
             final Class studentClass;
             final Class baseClass;
 
-            studentClass = Class.forName("mpp.socket.server.Domain.Student");
-            baseClass = Class.forName("mpp.socket.server.Domain.BaseEntity");
+            studentClass = Class.forName("mpp.socket.common.Domain.Student");
+            baseClass = Class.forName("mpp.socket.common.Domain.BaseEntity");
 
             Optional<Comparator<Student>> comparator = sortObj.getCriteria().stream()
                     .map(cr ->{

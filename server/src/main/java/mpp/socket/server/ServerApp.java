@@ -1,29 +1,7 @@
 package mpp.socket.server;
 
 
-import mpp.socket.common.Message;
-import mpp.socket.common.SocketService;
-import mpp.socket.server.Domain.Grade;
-import mpp.socket.server.Domain.Problem;
-import mpp.socket.server.Domain.Student;
-import mpp.socket.server.Domain.Validators.GradeValidator;
-import mpp.socket.server.Domain.Validators.ProblemValidator;
-import mpp.socket.server.Domain.Validators.StudentValidator;
-import mpp.socket.server.Domain.Validators.Validator;
-import mpp.socket.server.Repository.GradeDBRepository;
-import mpp.socket.server.Repository.ProblemDBRepository;
-import mpp.socket.server.Repository.SortedRepository;
-import mpp.socket.server.Repository.StudentDBRepository;
-import mpp.socket.server.Service.ProblemsService;
-import mpp.socket.server.Service.ServiceServer;
-import mpp.socket.server.Service.StudentsService;
-import mpp.socket.server.TCP.TCPServer;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class ServerApp {
     public static void main(String[] args) {

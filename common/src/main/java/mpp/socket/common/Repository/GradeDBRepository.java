@@ -1,15 +1,13 @@
-package mpp.socket.server.Repository;
+package mpp.socket.common.Repository;
 
 
 
-import mpp.socket.server.Domain.Grade;
+import mpp.socket.common.Domain.Grade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.stereotype.Component;
 
-import javax.swing.text.html.Option;
 import java.lang.reflect.Field;
-import java.sql.*;
 import java.util.*;
 
 @Component
@@ -26,7 +24,7 @@ public class GradeDBRepository implements SortedRepository<Integer, Grade> {
         try{
             final Class gradeClass;
 
-            gradeClass = Class.forName("mpp.socket.server.Domain.Grade");
+            gradeClass = Class.forName("mpp.socket.common.Domain.Grade");
 
             Optional<Comparator<Grade>> comparator = sortObj.getCriteria().stream()
                     .map(cr ->{

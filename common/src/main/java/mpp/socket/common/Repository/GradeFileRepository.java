@@ -1,8 +1,8 @@
-package mpp.socket.server.Repository;
+package mpp.socket.common.Repository;
 
 
 
-import mpp.socket.server.Domain.Grade;
+import mpp.socket.common.Domain.Grade;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

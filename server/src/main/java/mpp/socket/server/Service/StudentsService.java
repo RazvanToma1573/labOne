@@ -9,13 +9,13 @@ import java.util.*;
 
 import java.util.HashSet;
 
-import mpp.socket.server.Domain.Grade;
-import mpp.socket.server.Domain.Problem;
-import mpp.socket.server.Domain.Student;
-import mpp.socket.server.Domain.Validators.Validator;
-import mpp.socket.server.Domain.Validators.ValidatorException;
-import mpp.socket.server.Repository.Sort;
-import mpp.socket.server.Repository.SortedRepository;
+import mpp.socket.common.Domain.Grade;
+import mpp.socket.common.Domain.Problem;
+import mpp.socket.common.Domain.Student;
+import mpp.socket.common.Domain.Validators.Validator;
+import mpp.socket.common.Domain.Validators.ValidatorException;
+import mpp.socket.common.Repository.Sort;
+import mpp.socket.common.Repository.SortedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

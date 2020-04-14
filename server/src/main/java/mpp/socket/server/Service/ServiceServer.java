@@ -2,18 +2,16 @@ package mpp.socket.server.Service;
 
 import com.sun.tools.javac.util.Pair;
 import mpp.socket.common.SocketService;
-import mpp.socket.server.Domain.Grade;
-import mpp.socket.server.Domain.Problem;
-import mpp.socket.server.Domain.Student;
+import mpp.socket.common.Domain.Grade;
+import mpp.socket.common.Domain.Problem;
+import mpp.socket.common.Domain.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 @Component

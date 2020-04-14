@@ -1,7 +1,7 @@
 package mpp.socket.common.Domain.Validators;
 
 
-import mpp.socket.server.Domain.Problem;
+import mpp.socket.common.Domain.Problem;
 import org.springframework.stereotype.Component;
 
 @Component

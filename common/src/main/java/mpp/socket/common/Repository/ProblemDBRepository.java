@@ -1,15 +1,13 @@
-package mpp.socket.server.Repository;
+package mpp.socket.common.Repository;
 
 
 
-import mpp.socket.server.Domain.Problem;
+import mpp.socket.common.Domain.Problem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 
 import java.lang.reflect.Field;
-import java.sql.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ProblemDBRepository implements SortedRepository<Integer, Problem>{
 
@@ -24,8 +22,8 @@ public class ProblemDBRepository implements SortedRepository<Integer, Problem>{
             final Class problemClass;
             final Class baseClass;
 
-            problemClass = Class.forName("mpp.socket.server.Domain.Problem");
-            baseClass = Class.forName("mpp.socket.server.Domain.BaseEntity");
+            problemClass = Class.forName("mpp.socket.common.Domain.Problem");
+            baseClass = Class.forName("mpp.socket.common.Domain.BaseEntity");
 
             Optional<Comparator<Problem>> comparator = sortObj.getCriteria().stream()
                     .map(cr ->{

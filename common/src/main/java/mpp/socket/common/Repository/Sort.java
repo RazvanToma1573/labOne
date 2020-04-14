@@ -1,4 +1,4 @@
-package mpp.socket.server.Repository;
+package mpp.socket.common.Repository;
 
 import com.sun.tools.javac.util.Pair;
 

@@ -1,6 +1,6 @@
 package mpp.socket.common.Domain;
 
-import java.util.Objects;
+import java.util.*;
 
 public class Student extends BaseEntity<Integer>{
     private String firstName;
