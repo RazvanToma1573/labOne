@@ -5,9 +5,11 @@ import mpp.socket.common.Domain.Problem;
 import mpp.socket.common.Domain.Validators.ValidatorException;
 import mpp.socket.common.IServiceProblems;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class ProblemsServiceClient implements IServiceProblems {
 
     private IServiceProblems service;
