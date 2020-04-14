@@ -36,6 +36,7 @@ public class ProblemsService implements IServiceProblems {
      * @param newProblem new problem (Problem)
      * @throws ValidatorException custom exception (ValidatorException)
      */
+    @Override
     public void add(Problem newProblem) throws ValidatorException {
         this.problemValidator.validate(newProblem);
         this.problemRepository.save(newProblem);
@@ -45,6 +46,7 @@ public class ProblemsService implements IServiceProblems {
      * Remove problem with the given id and remove all the grades for this problem
      * @param idProblemToBeRemoved id of the problem to be removed (int)
      */
+    @Override
     public void remove(int idProblemToBeRemoved) {
         this.problemRepository.delete(idProblemToBeRemoved);
     }
@@ -53,6 +55,7 @@ public class ProblemsService implements IServiceProblems {
      * Returns all the problems from the problem repository.
      * @return list of all problems (List)
      */
+    @Override
     public Iterable<Problem> get() {
         return this.problemRepository.findAll();
     }
@@ -63,6 +66,7 @@ public class ProblemsService implements IServiceProblems {
      * @return problem if found
      * @throws ValidatorException custom exception
      */
+    @Override
     public Problem getById(int id) throws ValidatorException {
         Optional<Problem> checkProblem = this.problemRepository.findOne(id);
         if (checkProblem.isPresent()) {
@@ -80,6 +84,7 @@ public class ProblemsService implements IServiceProblems {
      * @throws ValidatorException validator exception
      * @throws IllegalArgumentException illegal argument exception
      */
+    @Override
     public void update (int idProblem, String type, String update) throws ValidatorException, IllegalArgumentException {
         Optional<Problem> checkProblem = this.problemRepository.findOne(idProblem);
         if(checkProblem.isPresent()) {
@@ -96,6 +101,7 @@ public class ProblemsService implements IServiceProblems {
         }
     }
 
+    @Override
     public Iterable<Problem> getSorted(List<Pair<Boolean, String>> criteria) {
         Sort sort = new Sort(criteria.get(0).fst, criteria.get(0).snd);
         criteria.remove(0);
