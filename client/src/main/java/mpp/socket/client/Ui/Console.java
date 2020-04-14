@@ -1,6 +1,11 @@
 package mpp.socket.client.Ui;
 
 import com.sun.tools.javac.util.Pair;
+import mpp.socket.common.Domain.Problem;
+import mpp.socket.common.Domain.Student;
+import mpp.socket.common.Domain.Validators.ValidatorException;
+import mpp.socket.common.IServiceProblems;
+import mpp.socket.common.IServiceStudents;
 import mpp.socket.common.SocketService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -17,6 +22,8 @@ public class Console {
 
     private ConcurrentHashMap<String, String> results;
     private AnnotationConfigApplicationContext context;
+    private IServiceProblems problemsService;
+    private IServiceStudents studentsService;
 
     public Console(AnnotationConfigApplicationContext context) {
         //this.socketService = socketService;
@@ -129,11 +136,16 @@ public class Console {
             System.out.println("Last Name : ");
             String lastName = bufferRead.readLine();
 
-            String parameters = id + "/" + firstName + "/" + lastName;
-            message += parameters;
-
-            final String m = message;
-            this.runAsync(m);
+            Student student = new Student(firstName, lastName);
+            student.setId(id);
+            CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
+                this.studentsService = context.getBean(IServiceStudents.class);
+                try {
+                    studentsService.add(student);
+                } catch (ValidatorException e) {
+                    e.printStackTrace();
+                }
+            });
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -147,12 +159,10 @@ public class Console {
             System.out.println("ID: ");
             int id = scanner.nextInt();
 
-            String parameters = Integer.toString(id);
-            message += parameters;
-
-            final String m = message;
-
-            this.runAsync(m);
+            CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
+               this.studentsService = context.getBean(IServiceStudents.class);
+               studentsService.remove(id);
+            });
         } catch (IllegalArgumentException exception) {
             System.out.println("IllegalArgumentException:" + exception.getMessage());
         }
@@ -174,24 +184,26 @@ public class Console {
                     System.out.println("new first name:");
                     String firstname = bufferedReader.readLine();
 
-                    String parameters = idStudentToBeUpdated + "/" + "FIRST" + "/" + firstname;
-                    message += parameters;
-
-                    final String m = message;
-
-                    this.runAsync(m);
-                    cont = false;
+                    CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
+                        this.studentsService = context.getBean(IServiceStudents.class);
+                        try {
+                            studentsService.update(idStudentToBeUpdated, "FIRST", firstname);
+                        } catch (ValidatorException e) {
+                            e.printStackTrace();
+                        }
+                    });
                 } else if(type.equals("LASTNAME")) {
                     System.out.println("new last name:");
                     String lastname = bufferedReader.readLine();
 
-                    String parameters = Integer.toString(idStudentToBeUpdated) + "/" + "LAST" + "/" + lastname;
-                    message += parameters;
-
-                    final String m = message;
-
-                    this.runAsync(m);
-                    cont = false;
+                    CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
+                        this.studentsService = context.getBean(IServiceStudents.class);
+                        try {
+                            studentsService.update(idStudentToBeUpdated, "LAST", lastname);
+                        } catch (ValidatorException e) {
+                            e.printStackTrace();
+                        }
+                    });
                 } else {
                     System.out.println("Input exception: Input a valid type! (FIRSTNAME|LASTNAME)");
                 }
@@ -202,9 +214,10 @@ public class Console {
     }
 
     public void showAllStudents() {
-        final String m = "3 ";
-
-        this.runAsync(m);
+        CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
+            this.studentsService = context.getBean(IServiceStudents.class);
+            studentsService.get().forEach(System.out::println);
+        });
     }
 
     public void filterStudents() {
@@ -278,12 +291,17 @@ public class Console {
             System.out.println("Difficulty(easy/medium/hard): ");
             String difficulty = bufferedReader.readLine();
 
-            String parameters = id + "/" + description + "/" + difficulty;
-            message += parameters;
+            Problem problem = new Problem(description, difficulty);
+            problem.setId(id);
 
-            final String m = message;
-
-            this.runAsync(m);
+            CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
+                this.problemsService = context.getBean(IServiceProblems.class);
+                try {
+                    problemsService.add(problem);
+                } catch (ValidatorException e) {
+                    e.printStackTrace();
+                }
+            });
         } catch(IOException exception){
             exception.printStackTrace();
         }
@@ -297,12 +315,11 @@ public class Console {
             System.out.println("ID : ");
             int id = scanner.nextInt();
 
-            String parameters = Integer.toString(id);
-            message += parameters;
+            CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
+                this.problemsService = context.getBean(IServiceProblems.class);
+                problemsService.remove(id);
+            });
 
-            final String m = message;
-
-            this.runAsync(m);
         } catch (IllegalArgumentException exception) {
             System.out.println("IllegalArgumentException:" + exception.getMessage());
         }
@@ -352,9 +369,10 @@ public class Console {
     }
 
     public void showAllProblems() {
-        final String m = "6 ";
-
-        this.runAsync(m);
+        CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
+            this.problemsService = context.getBean(IServiceProblems.class);
+            problemsService.get().forEach(System.out::println);
+        });
     }
 
     public void showProblemsSorted() {
@@ -393,12 +411,14 @@ public class Console {
             System.out.println("Problem ID : ");
             int problemId = Integer.parseInt(bufferedReader.readLine());
 
-            String parameters = studentId + "/" + problemId;
-            message += parameters;
-
-            final String m = message;
-
-            this.runAsync(m);
+            CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
+                this.studentsService = context.getBean(IServiceStudents.class);
+                try {
+                    studentsService.assignProblem(studentId, problemId);
+                } catch (ValidatorException e) {
+                    e.printStackTrace();
+                }
+            });
         } catch (IOException exception){
             exception.printStackTrace();
         } catch (IllegalArgumentException exception) {
@@ -418,12 +438,14 @@ public class Console {
             System.out.println("Grade : ");
             int grade = Integer.parseInt(bufferedReader.readLine());
 
-            String parameters = studentId + "/" + problemId + "/" + grade;
-            message += parameters;
-
-            final String m = message;
-
-            this.runAsync(m);
+            CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
+                this.studentsService = context.getBean(IServiceStudents.class);
+                try {
+                    studentsService.assignGrade(studentId, problemId, grade);
+                } catch (ValidatorException e) {
+                    e.printStackTrace();
+                }
+            });
         } catch (IOException exception){
             exception.printStackTrace();
         } catch (IllegalArgumentException exception) {
@@ -432,9 +454,10 @@ public class Console {
     }
 
     public void showAllGrades() {
-        final String m = "8 ";
-
-        this.runAsync(m);
+        CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
+            this.studentsService = context.getBean(IServiceStudents.class);
+            studentsService.getGrades().forEach(System.out::println);
+        });
     }
 
     public void showGradesSorted() {
