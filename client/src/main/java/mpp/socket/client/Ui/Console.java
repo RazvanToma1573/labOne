@@ -142,7 +142,6 @@ public class Console {
             Student student = new Student(firstName, lastName);
             student.setId(id);
             CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-                //this.studentsService = context.getBean(IServiceStudents.class);
                 try {
                     studentsService.add(student);
                 } catch (ValidatorException e) {
@@ -163,7 +162,6 @@ public class Console {
             int id = scanner.nextInt();
 
             CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-               //this.studentsService = context.getBean(IServiceStudents.class);
                studentsService.remove(id);
             });
         } catch (IllegalArgumentException exception) {
@@ -188,7 +186,6 @@ public class Console {
                     String firstname = bufferedReader.readLine();
 
                     CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-                        //this.studentsService = context.getBean(IServiceStudents.class);
                         try {
                             studentsService.update(idStudentToBeUpdated, "FIRST", firstname);
                         } catch (ValidatorException e) {
@@ -200,7 +197,6 @@ public class Console {
                     String lastname = bufferedReader.readLine();
 
                     CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-                        //this.studentsService = context.getBean(IServiceStudents.class);
                         try {
                             studentsService.update(idStudentToBeUpdated, "LAST", lastname);
                         } catch (ValidatorException e) {
@@ -242,12 +238,11 @@ public class Console {
                 System.out.println("filtering argument: ");
                 String argument = bufferedReader.readLine();
 
-                String parameters = argument + "/" + type;
-                message += parameters;
-
-                final String m = message;
-
-                //this.runAsync(m);
+                try {
+                    studentsService.filterService(argument, type).forEach(System.out::println);
+                } catch (ValidatorException e) {
+                    e.printStackTrace();
+                }
             } else {
                 System.out.println("ValidatorException: The type you introduced was not valid!");
             }
@@ -271,11 +266,7 @@ public class Console {
                     break;
                 parameters.append("/").append(line.split(" ")[0]).append("-").append(line.split(" ")[1]);
             }
-            message += parameters;
-
-            final String m = message;
-
-            //this.runAsync(m);
+            //todo
         } catch (IOException | NullPointerException exception) {
             System.out.println(exception.getMessage());
         }
@@ -298,7 +289,6 @@ public class Console {
             problem.setId(id);
 
             CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-                //this.problemsService = context.getBean(IServiceProblems.class);
                 try {
                     problemsService.add(problem);
                 } catch (ValidatorException e) {
@@ -319,7 +309,6 @@ public class Console {
             int id = scanner.nextInt();
 
             CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-                //this.problemsService = context.getBean(IServiceProblems.class);
                 problemsService.remove(id);
             });
 
@@ -344,23 +333,22 @@ public class Console {
                     System.out.println("new description:");
                     String description = bufferedReader.readLine();
 
-                    String parameters = id + "/" + "DESCRIPTION" + "/" + description;
-                    message += parameters;
+                    try {
+                        problemsService.update(id, "DESCRIPTION", description);
+                    } catch (ValidatorException e) {
+                        e.printStackTrace();
+                    }
 
-                    final String m = message;
-
-                    //this.runAsync(m);
                     cont = false;
                 } else if (type.equals("DIFFICULTY")) {
                     System.out.println("new difficulty:");
                     String difficulty = bufferedReader.readLine();
 
-                    String parameters = id + "/" + "DIFFICULTY" + "/" + difficulty;
-                    message += parameters;
-
-                    final String m = message;
-
-                    //this.runAsync(m);
+                    try {
+                        problemsService.update(id, "DIFFICULTY", difficulty);
+                    } catch (ValidatorException e) {
+                        e.printStackTrace();
+                    }
                     cont = false;
                 } else {
                     System.out.println("Input exception: Input a valid type! (DESCRIPTION|DIFFICULTY)");
@@ -373,7 +361,6 @@ public class Console {
 
     public void showAllProblems() {
         CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-            //this.problemsService = context.getBean(IServiceProblems.class);
             problemsService.get().forEach(System.out::println);
         });
     }
@@ -393,12 +380,8 @@ public class Console {
                     break;
                 parameters.append("/").append(line.split(" ")[0]).append("-").append(line.split(" ")[1]);
             }
+            //todo
 
-            message += parameters;
-
-            final String m = message;
-
-            //this.runAsync(m);
         } catch (IOException | NullPointerException exception) {
             System.out.println(exception.getMessage());
         }
@@ -415,7 +398,6 @@ public class Console {
             int problemId = Integer.parseInt(bufferedReader.readLine());
 
             CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-                //this.studentsService = context.getBean(IServiceStudents.class);
                 try {
                     studentsService.assignProblem(studentId, problemId);
                 } catch (ValidatorException e) {
@@ -442,7 +424,6 @@ public class Console {
             int grade = Integer.parseInt(bufferedReader.readLine());
 
             CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-                //this.studentsService = context.getBean(IServiceStudents.class);
                 try {
                     studentsService.assignGrade(studentId, problemId, grade);
                 } catch (ValidatorException e) {
@@ -458,7 +439,6 @@ public class Console {
 
     public void showAllGrades() {
         CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-            //this.studentsService = context.getBean(IServiceStudents.class);
             studentsService.getGrades().forEach(System.out::println);
         });
     }
@@ -480,10 +460,7 @@ public class Console {
                     break;
                 params.append("/").append(line.split(" ")[0].equals("desc")).append("-").append(line.split(" ")[1]);
             }
-
-            message += params;
-
-            final String m = message;
+            //todo
 
             //this.runAsync(m);
         } catch (IOException | NullPointerException exception) {
@@ -504,60 +481,29 @@ public class Console {
         int choice = scanner.nextInt();
         switch (choice) {
             case 1:
-                message += 1;
+                try {
+                    System.out.println(studentsService.getMaxAssignedProblem());
+                } catch (ValidatorException e) {
+                    e.printStackTrace();
+                }
                 break;
             case 2:
-                message += 2;
+                System.out.println(studentsService.getStudentWithMaxGrade());
                 break;
             case 3:
-                message += 3;
+                System.out.println(studentsService.getMostAssignedStudent());
             case 4:
-                message += 4;
+                try {
+                    System.out.println(studentsService.getProblemHighestAverage());
+                } catch (ValidatorException e) {
+                    e.printStackTrace();
+                }
                 break;
             case 5:
-                message += 5;
+                System.out.println(studentsService.getStudentHighestAverageHard());
                 break;
             default:
                 System.out.println("Invalid command");
         }
-
-        final String m = message;
-
-        //this.runAsync(m);
     }
-    /*
-    public void checkResults() {
-        results.forEach((key, value) -> {
-            if (value.isDone()) {
-                System.out.println("Command: " + key);
-                System.out.println("Result: ");
-                try {
-                    String resultToBeParsed = value.get();
-
-                    String[] parsed = resultToBeParsed.split(";");
-                    System.out.println();
-
-                    String[] parsedKey = key.split(" ");
-
-                    if (parsedKey[0].equals("16") || parsedKey[0].equals("8")){
-                        for (int i = 0; i < parsed.length; i++) {
-                            String[] parsedAgain = parsed[i].split("-");
-                            for (int j = 0; j < parsedAgain.length; j++) {
-                                System.out.println(parsedAgain[j]);
-                            }
-                        }
-                    } else {
-                        for (int i = 0; i < parsed.length; i++) {
-                            System.out.println(parsed[i]);
-                        }
-                    }
-                } catch (InterruptedException | ExecutionException e) {
-                    System.out.println(e.getMessage());
-                }
-                this.results.remove(key);
-            }
-        });
-    }
-
-     */
 }
