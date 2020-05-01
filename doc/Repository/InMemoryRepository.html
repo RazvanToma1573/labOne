@@ -117,15 +117,15 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <!-- ======== START OF CLASS DATA ======== -->
 <main role="main">
 <div class="header">
-<div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">Repository</a></div>
-<h2 title="Class InMemoryRepository" class="title">Class InMemoryRepository&lt;ID,&#8203;T extends <a href="../Domain/BaseEntity.html" title="class in Domain">BaseEntity</a>&lt;ID&gt;&gt;</h2>
+<div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">ro.mpp.spring.Repository</a></div>
+<h2 title="Class InMemoryRepository" class="title">Class InMemoryRepository&lt;ID,&#8203;T extends <a href="../ro.mpp.spring.Domain/BaseEntity.html" title="class in ro.mpp.spring.Domain">BaseEntity</a>&lt;ID&gt;&gt;</h2>
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li>Repository.InMemoryRepository&lt;ID,&#8203;T&gt;</li>
+<li>ro.mpp.spring.Repository.InMemoryRepository&lt;ID,&#8203;T&gt;</li>
 </ul>
 </li>
 </ul>
@@ -134,12 +134,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="Repository.html" title="interface in Repository">Repository</a>&lt;ID,&#8203;T&gt;</code></dd>
+<dd><code><a href="ro.mpp.spring.Repository.html" title="interface in ro.mpp.spring.Repository">ro.mpp.spring.Repository</a>&lt;ID,&#8203;T&gt;</code></dd>
 </dl>
 <hr>
-<pre>public class <span class="typeNameLabel">InMemoryRepository&lt;ID,&#8203;T extends <a href="../Domain/BaseEntity.html" title="class in Domain">BaseEntity</a>&lt;ID&gt;&gt;</span>
+<pre>public class <span class="typeNameLabel">InMemoryRepository&lt;ID,&#8203;T extends <a href="../ro.mpp.spring.Domain/BaseEntity.html" title="class in ro.mpp.spring.Domain">BaseEntity</a>&lt;ID&gt;&gt;</span>
 extends java.lang.Object
-implements <a href="Repository.html" title="interface in Repository">Repository</a>&lt;ID,&#8203;T&gt;</pre>
+implements <a href="ro.mpp.spring.Repository.html" title="interface in ro.mpp.spring.Repository">ro.mpp.spring.Repository</a>&lt;ID,&#8203;T&gt;</pre>
 </li>
 </ul>
 </div>
@@ -267,7 +267,7 @@ implements <a href="Repository.html" title="interface in Repository">Repository<
 <ul class="blockListLast">
 <li class="blockList">
 <h4>entities</h4>
-<pre>private&nbsp;java.util.Map&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>,&#8203;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">T</a> extends <a href="../Domain/BaseEntity.html" title="class in Domain">BaseEntity</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>&gt;&gt; entities</pre>
+<pre>private&nbsp;java.util.Map&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>,&#8203;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">T</a> extends <a href="../ro.mpp.spring.Domain/BaseEntity.html" title="class in ro.mpp.spring.Domain">BaseEntity</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>&gt;&gt; entities</pre>
 </li>
 </ul>
 </li>
@@ -308,11 +308,11 @@ implements <a href="Repository.html" title="interface in Repository">Repository<
 <li class="blockList">
 <h4>findOne</h4>
 <pre class="methodSignature">public&nbsp;java.util.Optional&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">T</a>&gt;&nbsp;findOne&#8203;(<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>&nbsp;id)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Repository.html#findOne(ID)">Repository</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="ro.mpp.spring.Repository.html#findOne(ID)">ro.mpp.spring.Repository</a></code></span></div>
 <div class="block">Find the entity with the given <code>id</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Repository.html#findOne(ID)">findOne</a></code>&nbsp;in interface&nbsp;<code><a href="Repository.html" title="interface in Repository">Repository</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>,&#8203;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">T</a> extends <a href="../Domain/BaseEntity.html" title="class in Domain">BaseEntity</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>&gt;&gt;</code></dd>
+<dd><code><a href="ro.mpp.spring.Repository.html#findOne(ID)">findOne</a></code>&nbsp;in interface&nbsp;<code><a href="ro.mpp.spring.Repository.html" title="interface in ro.mpp.spring.Repository">ro.mpp.spring.Repository</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>,&#8203;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">T</a> extends <a href="../ro.mpp.spring.Domain/BaseEntity.html" title="class in ro.mpp.spring.Domain">BaseEntity</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>&gt;&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>id</code> - must be not null.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -329,13 +329,13 @@ implements <a href="Repository.html" title="interface in Repository">Repository<
 <pre class="methodSignature">public&nbsp;java.lang.Iterable&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">T</a>&gt;&nbsp;findAll()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Repository.html#findAll()">findAll</a></code>&nbsp;in interface&nbsp;<code><a href="Repository.html" title="interface in Repository">Repository</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>,&#8203;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">T</a> extends <a href="../Domain/BaseEntity.html" title="class in Domain">BaseEntity</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>&gt;&gt;</code></dd>
+<dd><code><a href="ro.mpp.spring.Repository.html#findAll()">findAll</a></code>&nbsp;in interface&nbsp;<code><a href="ro.mpp.spring.Repository.html" title="interface in ro.mpp.spring.Repository">ro.mpp.spring.Repository</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>,&#8203;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">T</a> extends <a href="../ro.mpp.spring.Domain/BaseEntity.html" title="class in ro.mpp.spring.Domain">BaseEntity</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>&gt;&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>all entities.</dd>
 </dl>
 </li>
 </ul>
-<a id="save(Domain.BaseEntity)">
+<a id="save(ro.mpp.spring.Domain.BaseEntity)">
 <!--   -->
 </a><a id="save(T)">
 <!--   -->
@@ -344,11 +344,11 @@ implements <a href="Repository.html" title="interface in Repository">Repository<
 <li class="blockList">
 <h4>save</h4>
 <pre class="methodSignature">public&nbsp;java.util.Optional&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">T</a>&gt;&nbsp;save&#8203;(<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">T</a>&nbsp;entity)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Repository.html#save(T)">Repository</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="ro.mpp.spring.Repository.html#save(T)">ro.mpp.spring.Repository</a></code></span></div>
 <div class="block">Saves the given entity.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Repository.html#save(T)">save</a></code>&nbsp;in interface&nbsp;<code><a href="Repository.html" title="interface in Repository">Repository</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>,&#8203;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">T</a> extends <a href="../Domain/BaseEntity.html" title="class in Domain">BaseEntity</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>&gt;&gt;</code></dd>
+<dd><code><a href="ro.mpp.spring.Repository.html#save(T)">save</a></code>&nbsp;in interface&nbsp;<code><a href="ro.mpp.spring.Repository.html" title="interface in ro.mpp.spring.Repository">ro.mpp.spring.Repository</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>,&#8203;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">T</a> extends <a href="../ro.mpp.spring.Domain/BaseEntity.html" title="class in ro.mpp.spring.Domain">BaseEntity</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>&gt;&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>entity</code> - must not be null.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -365,11 +365,11 @@ implements <a href="Repository.html" title="interface in Repository">Repository<
 <li class="blockList">
 <h4>delete</h4>
 <pre class="methodSignature">public&nbsp;java.util.Optional&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">T</a>&gt;&nbsp;delete&#8203;(<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>&nbsp;id)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Repository.html#delete(ID)">Repository</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="ro.mpp.spring.Repository.html#delete(ID)">ro.mpp.spring.Repository</a></code></span></div>
 <div class="block">Removes the entity with the given id.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Repository.html#delete(ID)">delete</a></code>&nbsp;in interface&nbsp;<code><a href="Repository.html" title="interface in Repository">Repository</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>,&#8203;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">T</a> extends <a href="../Domain/BaseEntity.html" title="class in Domain">BaseEntity</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>&gt;&gt;</code></dd>
+<dd><code><a href="ro.mpp.spring.Repository.html#delete(ID)">delete</a></code>&nbsp;in interface&nbsp;<code><a href="ro.mpp.spring.Repository.html" title="interface in ro.mpp.spring.Repository">ro.mpp.spring.Repository</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>,&#8203;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">T</a> extends <a href="../ro.mpp.spring.Domain/BaseEntity.html" title="class in ro.mpp.spring.Domain">BaseEntity</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>&gt;&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>id</code> - must not be null.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -377,7 +377,7 @@ implements <a href="Repository.html" title="interface in Repository">Repository<
 </dl>
 </li>
 </ul>
-<a id="update(Domain.BaseEntity)">
+<a id="update(ro.mpp.spring.Domain.BaseEntity)">
 <!--   -->
 </a><a id="update(T)">
 <!--   -->
@@ -386,11 +386,11 @@ implements <a href="Repository.html" title="interface in Repository">Repository<
 <li class="blockList">
 <h4>update</h4>
 <pre class="methodSignature">public&nbsp;java.util.Optional&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">T</a>&gt;&nbsp;update&#8203;(<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">T</a>&nbsp;entity)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Repository.html#update(T)">Repository</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="ro.mpp.spring.Repository.html#update(T)">ro.mpp.spring.Repository</a></code></span></div>
 <div class="block">Updates the given entity.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Repository.html#update(T)">update</a></code>&nbsp;in interface&nbsp;<code><a href="Repository.html" title="interface in Repository">Repository</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>,&#8203;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">T</a> extends <a href="../Domain/BaseEntity.html" title="class in Domain">BaseEntity</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>&gt;&gt;</code></dd>
+<dd><code><a href="ro.mpp.spring.Repository.html#update(T)">update</a></code>&nbsp;in interface&nbsp;<code><a href="ro.mpp.spring.Repository.html" title="interface in ro.mpp.spring.Repository">ro.mpp.spring.Repository</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>,&#8203;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">T</a> extends <a href="../ro.mpp.spring.Domain/BaseEntity.html" title="class in ro.mpp.spring.Domain">BaseEntity</a>&lt;<a href="InMemoryRepository.html" title="type parameter in InMemoryRepository">ID</a>&gt;&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>entity</code> - must not be null.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>

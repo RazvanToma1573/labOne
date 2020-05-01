@@ -1,6 +1,6 @@
 unnamed package
-Domain
-Domain.Validators
-Repository
-Service
-UI
+ro.mpp.spring.Domain
+ro.mpp.spring.Domain.Validators
+ro.mpp.spring.Repository
+ro.mpp.spring.Service
+ro.mpp.spring.UI

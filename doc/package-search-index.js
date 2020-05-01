@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"Domain"},{"l":"Domain.Validators"},{"l":"Repository"},{"l":"Service"},{"l":"UI"}]
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"ro.mpp.spring.Domain"},{"l":"ro.mpp.spring.Domain.Validators"},{"l":"ro.mpp.spring.Repository"},{"l":"ro.mpp.spring.Service"},{"l":"ro.mpp.spring.UI"}]

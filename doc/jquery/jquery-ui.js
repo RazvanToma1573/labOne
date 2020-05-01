@@ -1,4 +1,4 @@
-/*! jQuery UI - v1.11.4 - 2015-05-20
+/*! jQuery ro.mpp.spring.UI - v1.11.4 - 2015-05-20
 * http://jqueryui.com
 * Includes: core.js, widget.js, position.js, autocomplete.js, menu.js
 * Copyright 2015 jQuery Foundation and other contributors; Licensed MIT */
@@ -15,7 +15,7 @@
 	}
 }(function( $ ) {
 /*!
- * jQuery UI Core 1.11.4
+ * jQuery ro.mpp.spring.UI Core 1.11.4
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -309,7 +309,7 @@ $.ui.plugin = {
 
 
 /*!
- * jQuery UI Widget 1.11.4
+ * jQuery ro.mpp.spring.UI Widget 1.11.4
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -857,7 +857,7 @@ var widget = $.widget;
 
 
 /*!
- * jQuery UI Position 1.11.4
+ * jQuery ro.mpp.spring.UI Position 1.11.4
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -1364,7 +1364,7 @@ var position = $.ui.position;
 
 
 /*!
- * jQuery UI Menu 1.11.4
+ * jQuery ro.mpp.spring.UI Menu 1.11.4
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -1995,7 +1995,7 @@ var menu = $.widget( "ui.menu", {
 
 
 /*!
- * jQuery UI Autocomplete 1.11.4
+ * jQuery ro.mpp.spring.UI Autocomplete 1.11.4
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
