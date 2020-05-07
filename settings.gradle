@@ -1,2 +1,5 @@
 rootProject.name = 'LabOne'
+include 'core'
+include 'client'
+include 'web'
 
