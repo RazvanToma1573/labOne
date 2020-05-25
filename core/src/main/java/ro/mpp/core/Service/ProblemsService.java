@@ -3,13 +3,16 @@ package ro.mpp.core.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.mpp.core.Domain.Problem;
 import ro.mpp.core.Domain.Validators.Validator;
 import ro.mpp.core.Domain.Validators.ValidatorException;
 import ro.mpp.core.Repository.ProblemRepository;
-import ro.mpp.core.Repository.Sort;
+
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -31,7 +34,6 @@ public class ProblemsService implements IProblemService{
     @Override
     public Problem add(Problem newProblem) throws ValidatorException {
         log.trace("add Problem - method entered: problem = {}", newProblem);
-        this.problemValidator.validate(newProblem);
         Problem problem = this.problemRepository.save(newProblem);
         log.trace("add Problem - method finished");
         return problem;
@@ -55,6 +57,12 @@ public class ProblemsService implements IProblemService{
     @Override
     public List<Problem> get() {
         return this.problemRepository.findAll();
+    }
+
+    @Override
+    public Page<Problem> get(int page) {
+        log.trace("Get all problems - method entered");
+        return this.problemRepository.findAll(PageRequest.of(page, 5));
     }
 
     /**
@@ -95,48 +103,29 @@ public class ProblemsService implements IProblemService{
     }
 
     @Override
-    public List<Problem> getSorted(Map<String, Boolean> criteria) {
-        log.trace("Get the problems, sorted - method entered");
-        Sort sort = new Sort();
-        criteria.entrySet().stream().forEach(cr -> sort.and(new Sort(cr.getValue(), cr.getKey())));
-        List<Problem> result = new ArrayList<>();
-        problemRepository.findAll().forEach(result::add);
-        try{
-            final Class problemClass;
-            final Class baseClass;
-
-            problemClass = Class.forName("ro.mpp.core.Domain.Problem");
-            baseClass = Class.forName("ro.mpp.core.Domain.BaseEntity");
-
-            Optional<Comparator<Problem>> comparator = sort.getCriteria().entrySet().stream()
-                    .map(cr ->{
-                        try{
-                            final Field field = cr.getKey().equals("id") ?
-                                    baseClass.getDeclaredField(cr.getKey()) :
-                                    problemClass.getDeclaredField(cr.getKey());
-                            field.setAccessible(true);
-                            return (Comparator<Problem>) (problem, t1) -> {
-                                try{
-                                    Comparable c1 = (Comparable)field.get(problem);
-                                    Comparable c2 = (Comparable)field.get(t1);
-                                    return cr.getValue() ? c2.compareTo(c1) : c1.compareTo(c2);
-                                } catch (IllegalAccessException e){
-                                    System.out.println(e.getMessage());
-                                }
-                                return 0;
-                            };
-                        } catch (NoSuchFieldException e){
-                            System.out.println(e.getMessage());
-                        }
-                        return null;
-                    })
-                    .reduce((c1, c2) -> c1.thenComparing(c2));
-            Collections.sort(result, comparator.get());
-
-        } catch (ClassNotFoundException e){
-            System.out.println(e.getMessage());
+    public Page<Problem> getSorted(int page, Map<String, Boolean> criteria) {
+        log.trace("Get problems, sorted - method entered");
+        boolean first = true;
+        org.springframework.data.domain.Sort sort = null;
+        for(Map.Entry<String, Boolean> entry : criteria.entrySet()) {
+            if(first) {
+                if(entry.getValue()) {
+                    sort = new org.springframework.data.domain.Sort(org.springframework.data.domain.Sort.Direction.DESC, entry.getKey());
+                }
+                else {
+                    sort = new org.springframework.data.domain.Sort(org.springframework.data.domain.Sort.Direction.ASC, entry.getKey());
+                }
+                first = false;
+            }
+            else {
+                if(entry.getValue()) {
+                    sort = sort.and(new org.springframework.data.domain.Sort(org.springframework.data.domain.Sort.Direction.DESC, entry.getKey()));
+                }
+                else{
+                    sort = sort.and(new org.springframework.data.domain.Sort(Sort.Direction.ASC, entry.getKey()));
+                }
+            }
         }
-        log.trace("Get the problems, sorted - method finished");
-        return result;
+        return this.problemRepository.findAll(PageRequest.of(page, 5, sort));
     }
 }

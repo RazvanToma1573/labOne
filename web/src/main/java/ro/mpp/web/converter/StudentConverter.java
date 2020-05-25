@@ -8,20 +8,14 @@ import ro.mpp.web.dto.StudentDTO;
 public class StudentConverter extends BaseConverter<Student, StudentDTO> {
     @Override
     public Student convertDTOtoModel(StudentDTO dto) {
-        Student student = Student.builder()
-                .firstName(dto.getFirstName())
-                .lastName(dto.getLastName())
-                .build();
+        Student student = new Student(dto.getFirstName(), dto.getLastName());
         student.setId(dto.getId());
         return student;
     }
 
     @Override
     public StudentDTO convertModelToDTO(Student student) {
-        StudentDTO dto = StudentDTO.builder()
-                .firstName(student.getFirstName())
-                .lastName(student.getLastName())
-                .build();
+        StudentDTO dto = new StudentDTO(student.getFirstName(), student.getLastName());
         dto.setId(student.getId());
         return dto;
     }

@@ -44,6 +44,7 @@ public class JPAConfig {
         hikariConfig.addDataSourceProperty("cachePrepStmts", "true");
         hikariConfig.addDataSourceProperty("prepStmtCacheSize", "250");
         hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        hikariConfig.setDriverClassName("org.postgresql.Driver");
         return new HikariDataSource(hikariConfig);
     }
 

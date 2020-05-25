@@ -1,0 +1,14 @@
+<h3>Assign a problem to student</h3>
+
+<div class="input-line">
+  <label for="studentID"> Student ID: </label>
+  <input (keyup)="changeStudentId($event)"
+         type="number" id="studentID" #studentId>
+</div>
+<div class="input-line">
+  <label for="problemID"> Problem ID: </label>
+  <input (keyup)="changeProblemId($event)"
+         type="number" id="problemID" #problemId>
+</div>
+
+<button (click)="onAdd()" [disabled]="checkCanAdd()">Add</button>

@@ -1,6 +1,7 @@
 package ro.mpp.core.Service;
 
 
+import org.springframework.data.domain.Page;
 import ro.mpp.core.Domain.Grade;
 import ro.mpp.core.Domain.Problem;
 import ro.mpp.core.Domain.Student;
@@ -11,22 +12,25 @@ import java.util.Map;
 import java.util.Set;
 
 public interface IStudentService {
-    Student add(Student student) throws ValidatorException, IllegalArgumentException;
+    Student add(Student student) throws IllegalArgumentException;
     void remove(int id) throws IllegalArgumentException;
     void removeProblem(int id) throws  IllegalArgumentException;
     void assignProblem(int studentId, int problemId) throws ValidatorException, IllegalArgumentException;
+    void removeGrade(int id);
+    Page<Student> get(int page);
     List<Student> get();
+    Page<Grade> getGrades(int page);
     List<Grade> getGrades();
     Student getById(int id) throws ValidatorException, IllegalArgumentException;
     Grade assignGrade(int studentId, int problemId, int grade) throws ValidatorException, IllegalArgumentException;
-    Set<Student> filterService(String argument, String type) throws ValidatorException;
+    Page<Student> filterService(int page, String argument, String type) throws ValidatorException;
     Student update (int idStudent, String firstName, String lastName) throws ValidatorException, IllegalArgumentException;
     Student getStudentWithMaxGrade();
     Problem getMaxAssignedProblem() throws ValidatorException;
     Student getMostAssignedStudent();
     Problem getProblemHighestAverage() throws ValidatorException;
     Student getStudentHighestAverageHard();
-    List<Student> getSorted(Map<String, Boolean> criteria);
-    List<Grade> getGradesSorted(Map<String, Boolean> criteria);
+    Page<Student> getSorted(int page, Map<String, Boolean> criteria);
+    Page<Grade> getGradesSorted(int page, Map<String, Boolean> criteria);
 
 }

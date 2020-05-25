@@ -1,0 +1,21 @@
+<h1>Grade details</h1>
+<div>
+  <div>
+    <label class="id">Student ID: <span>{{grade.studentId}}</span></label>
+    <label class="first-name">First Name: <span>{{student.firstName}}</span></label>
+    <label class="last-name">Last Name: <span>{{student.lastName}}</span></label>
+  </div>
+
+  <div>
+    <label class="id">Problem ID: <span>{{grade.problemId}}</span></label>
+    <label class="first-name">Description: <span>{{problem.description}}</span></label>
+    <label class="last-name">Difficulty: <span>{{problem.difficulty}}</span></label>
+  </div>
+
+  <div>
+    <label class="id">Grade : <span>{{grade.actualGrade}}</span></label>
+    <input type="number" [(ngModel)]="grade.actualGrade" placeholder="Grade">
+  </div>
+
+  <button class="btn" (click)="onUpdate()">Update</button>
+</div>

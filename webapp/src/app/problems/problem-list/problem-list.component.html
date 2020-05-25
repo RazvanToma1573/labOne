@@ -1,0 +1,52 @@
+<h1>Problems</h1>
+<button (click)="goBack()">Back</button>
+<div class="sort-div">
+  <div class="sort-item">
+    <label for="sortId">ID: </label>
+    <select id="sortId" #sortId>
+      <option value="none">None</option>
+      <option value="asc">Asc</option>
+      <option value="desc">Desc</option>
+    </select>
+  </div>
+  <div class="sort-item">
+    <label for="sortDescription">Description: </label>
+    <select id="sortDescription" #sortDescription>
+      <option value="none">None</option>
+      <option value="asc">Asc</option>
+      <option value="desc">Desc</option>
+    </select>
+  </div>
+  <div class="sort-item">
+    <label for="sortDifficulty">Difficulty: </label>
+    <select id="sortDifficulty" #sortDifficulty>
+      <option value="none">None</option>
+      <option value="asc">Asc</option>
+      <option value="desc">Desc</option>
+    </select>
+  </div>
+  <button (click)="onSort()">
+    Sort
+  </button>
+</div>
+
+
+<ul>
+  <li *ngFor="let problem of problems"
+      class="item">
+    <a (click)="onSelect(problem)">
+      ({{problem.id}}) {{problem.description}} {{problem.difficulty}}
+    </a>
+    <button class="btn-remove" (click)="onRemove(problem)">Remove</button>
+  </li>
+</ul>
+<div class="pages">
+  <button [disabled]="currentPage === 0" (click)="onLeft()"><</button>
+  <label>{{currentPage + 1}}</label>
+  <button [disabled]="(currentPage + 1)*5 >= nrOfPages" (click)="onRight()">></button>
+</div>
+<hr>
+<div>
+  <app-problem-add [currentPage]="currentPage"></app-problem-add>
+</div>
+

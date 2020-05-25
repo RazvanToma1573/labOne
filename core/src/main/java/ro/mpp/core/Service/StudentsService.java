@@ -9,6 +9,9 @@ import java.util.HashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.mpp.core.Domain.Grade;
@@ -17,7 +20,6 @@ import ro.mpp.core.Domain.Student;
 import ro.mpp.core.Domain.Validators.Validator;
 import ro.mpp.core.Domain.Validators.ValidatorException;
 import ro.mpp.core.Repository.GradeRepository;
-import ro.mpp.core.Repository.Sort;
 import ro.mpp.core.Repository.StudentRepository;
 import java.util.Optional;
 import java.util.Set;
@@ -45,9 +47,8 @@ public class StudentsService implements IStudentService{
      * @throws IllegalArgumentException if newStudent is null
      */
     @Override
-    public Student add (Student newStudent) throws ValidatorException, IllegalArgumentException {
+    public Student add (Student newStudent) throws IllegalArgumentException {
         log.trace("add student - method entered: student={}", newStudent);
-        this.studentValidator.validate(newStudent);
         Student student = this.studentRepository.save(newStudent);
         log.trace("add Student - method finished");
         return student;
@@ -72,6 +73,13 @@ public class StudentsService implements IStudentService{
                 .forEach(grade -> this.gradeRepository.deleteById(grade.getId()));
         studentRepository.deleteById(id);
         log.trace("remove Student - method finished");
+    }
+
+    @Override
+    public void removeGrade(int id) {
+        log.trace("Remove grade {} - entered", id);
+        this.gradeRepository.deleteById(id);
+        log.trace("Remove grade - finished");
     }
 
     @Override
@@ -118,8 +126,13 @@ public class StudentsService implements IStudentService{
      * @return an iterable with all the students
      */
     @Override
-    public List<Student> get() {
+    public Page<Student> get(int page) {
         log.trace("Get all students - method entered");
+        return this.studentRepository.findAll(PageRequest.of(page, 5));
+    }
+
+    @Override
+    public List<Student> get() {
         return this.studentRepository.findAll();
     }
 
@@ -128,6 +141,12 @@ public class StudentsService implements IStudentService{
      *
      * @return an iterable with all the grades
      */
+    @Override
+    public Page<Grade> getGrades(int page) {
+        log.trace("Get all grades - method entered");
+        return this.gradeRepository.findAll(PageRequest.of(page, 5));
+    }
+
     @Override
     public List<Grade> getGrades() {
         log.trace("Get all grades - method entered");
@@ -159,7 +178,6 @@ public class StudentsService implements IStudentService{
      * @param studentId is the ID of the stundet
      * @param problemId   is the problem to be graded
      * @param grade     is the grade (0..10)
-     * @throws ValidatorException       custom exception
      * @throws IllegalArgumentException if new grade is null
      */
     @Override
@@ -168,8 +186,6 @@ public class StudentsService implements IStudentService{
         log.trace("assign grade to a student - method entered: studentId={}, problemID={}, grade={}", studentId, problemId, grade);
         Student student = this.getById(studentId);
         Problem problem = this.problemsService.getById(problemId);
-        if(this.gradeRepository.findAll().stream().noneMatch(gr -> gr.getStudentId() == studentId && gr.getProblemId() == problemId))
-            throw new ValidatorException("The problem is not assigned to this student");
         int id = this.gradeRepository.findAll().stream().filter(gr ->
                 gr.getStudentId() == studentId && gr.getProblemId() == problemId)
                 .collect(Collectors.toList()).get(0).getId();
@@ -189,17 +205,18 @@ public class StudentsService implements IStudentService{
      * @throws ValidatorException if the argument is invalid
      */
     @Override
-    public Set<Student> filterService(String argument, String type) throws ValidatorException {
+    public Page<Student> filterService(int page, String argument, String type) throws ValidatorException {
         log.trace("Filter students - method entered");
         Iterable<Student> students = studentRepository.findAll();
         Iterable<Grade> grades = gradeRepository.findAll();
         switch (type) {
             case "FIRSTNAME": {
 
-                Set<Student> filteredStudents = new HashSet<>();
-                students.forEach(filteredStudents::add);
-                filteredStudents.removeIf(student -> !student.getFirstName().contains(argument));
-                return filteredStudents;
+                //Set<Student> filteredStudents = new HashSet<>();
+                //students.forEach(filteredStudents::add);
+                //filteredStudents.removeIf(student -> !student.getFirstName().contains(argument));
+                //return filteredStudents;
+                return this.studentRepository.findByFirstName(argument, PageRequest.of(page, 5));
 
             }
             case "LASTNAME": {
@@ -207,7 +224,7 @@ public class StudentsService implements IStudentService{
                 Set<Student> filteredStudents = new HashSet<>();
                 students.forEach(filteredStudents::add);
                 filteredStudents.removeIf(student -> !student.getLastName().contains(argument));
-                return filteredStudents;
+                return this.studentRepository.findByLastName(argument, PageRequest.of(page, 5));
 
             }
             case "PROBLEM":
@@ -217,10 +234,12 @@ public class StudentsService implements IStudentService{
                     Set<Grade> filteredGrades = new HashSet<>();
                     grades.forEach(filteredGrades::add);
                     filteredGrades.removeIf(grade -> !(grade.getProblemId()==problemID));
+                    List<Student> stds = filteredGrades.stream().map(grade -> this.studentRepository.findById(grade.getStudentId()).get())
+                            .collect(Collectors.toList());
 
-                    return filteredGrades.stream().map(Grade::getStudentId)
-                            .map(studentId -> this.studentRepository.findById(studentId).get()).collect(Collectors.toSet());
-
+                    //return filteredGrades.stream().map(Grade::getStudentId)
+                       //     .map(studentId -> this.studentRepository.findById(studentId).get()).collect(Collectors.toSet());
+                    return null;
                 } catch (NumberFormatException exception) {
                     throw new ValidatorException("ID not valid");
                 }
@@ -231,10 +250,10 @@ public class StudentsService implements IStudentService{
                     Set<Grade> filteredGrades = new HashSet<>();
                     grades.forEach(filteredGrades::add);
                     filteredGrades.removeIf(grade -> grade.getActualGrade() != (wantedGrade));
-
-                    return filteredGrades.stream().map(Grade::getStudentId)
-                            .map(studentId -> this.studentRepository.findById(studentId).get())
-                            .collect(Collectors.toSet());
+                    return null;
+                    //return filteredGrades.stream().map(Grade::getStudentId)
+                      //      .map(studentId -> this.studentRepository.findById(studentId).get())
+                        //    .collect(Collectors.toSet());
 
                 } catch (NumberFormatException exception) {
                     throw new ValidatorException("Grade not valid");
@@ -377,91 +396,56 @@ public class StudentsService implements IStudentService{
 
     }
     @Override
-    public List<Student> getSorted(Map<String, Boolean> criteria) {
+    public Page<Student> getSorted(int page, Map<String, Boolean> criteria) {
         log.trace("Get students, sorted - method entered");
-        Sort sort = new Sort();
-        criteria.entrySet().stream().forEach(cr -> sort.and(new Sort(cr.getValue(), cr.getKey())));
-        List<Student> result = new ArrayList<>();
-        studentRepository.findAll().forEach(result::add);
-        try{
-            final Class studentClass;
-            final Class baseClass;
-
-            studentClass = Class.forName("ro.mpp.core.Domain.Student");
-            baseClass = Class.forName("ro.mpp.core.Domain.BaseEntity");
-
-            Optional<Comparator<Student>> comparator = sort.getCriteria().entrySet().stream()
-                    .map(cr ->{
-                        try{
-                            final Field field = cr.getKey().equals("id") ?
-                                    baseClass.getDeclaredField(cr.getKey()) :
-                                    studentClass.getDeclaredField(cr.getKey());
-                            field.setAccessible(true);
-                            return (Comparator<Student>) (student, t1) -> {
-                                try{
-                                    Comparable c1 = (Comparable)field.get(student);
-                                    Comparable c2 = (Comparable)field.get(t1);
-                                    return cr.getValue() ? c2.compareTo(c1) : c1.compareTo(c2);
-                                } catch (IllegalAccessException e){
-                                    System.out.println(e.getMessage());
-                                }
-                                return 0;
-                            };
-                        } catch (NoSuchFieldException e){
-                            System.out.println(e.getMessage());
-                        }
-                        return null;
-                    })
-                    .reduce((c1, c2) -> c1.thenComparing(c2));
-
-            Collections.sort(result, comparator.get());
-
-        } catch (ClassNotFoundException e){
-            System.out.println(e.getMessage());
+        boolean first = true;
+        Sort sort = null;
+        for(Map.Entry<String, Boolean> entry : criteria.entrySet()) {
+            if(first) {
+                if(entry.getValue()) {
+                    sort = new Sort(Sort.Direction.DESC, entry.getKey());
+                }
+                else {
+                    sort = new Sort(Sort.Direction.ASC, entry.getKey());
+                }
+                first = false;
+            }
+            else {
+                if(entry.getValue()) {
+                    sort = sort.and(new Sort(Sort.Direction.DESC, entry.getKey()));
+                }
+                else{
+                    sort = sort.and(new Sort(Sort.Direction.ASC, entry.getKey()));
+                }
+            }
         }
-        log.trace("Get grades, sorted - method finished");
-        return result;
+        return this.studentRepository.findAll(PageRequest.of(page, 5, sort));
+
     }
     @Override
-    public List<Grade> getGradesSorted(Map<String, Boolean> criteria) {
+    public Page<Grade> getGradesSorted(int page, Map<String, Boolean> criteria) {
         log.trace("Get grades, sorted - method entered");
-        Sort sort = new Sort();
-        criteria.entrySet().stream().forEach(cr -> sort.and(new Sort(cr.getValue(), cr.getKey())));
-        List<Grade> result = new ArrayList<>();
-        gradeRepository.findAll().forEach(result::add);
-
-        try{
-            final Class gradeClass;
-
-            gradeClass = Class.forName("ro.mpp.core.Domain.Grade");
-
-            Optional<Comparator<Grade>> comparator = sort.getCriteria().entrySet().stream()
-                    .map(cr ->{
-                        try{
-                            final Field field = gradeClass.getDeclaredField(cr.getKey());
-                            field.setAccessible(true);
-                            return (Comparator<Grade>) (grade, t1) -> {
-                                try{
-                                    Comparable c1 = (Comparable)field.get(grade);
-                                    Comparable c2 = (Comparable)field.get(t1);
-                                    return cr.getValue() ? c2.compareTo(c1) : c1.compareTo(c2);
-                                } catch (IllegalAccessException e){
-                                    System.out.println(e.getMessage());
-                                }
-                                return 0;
-                            };
-                        } catch (NoSuchFieldException e){
-                            System.out.println(e.getMessage());
-                        }
-                        return null;
-                    })
-                    .reduce((c1, c2) -> c1.thenComparing(c2));
-            Collections.sort(result, comparator.get());
-
-        } catch (ClassNotFoundException e){
-            System.out.println(e.getMessage());
+        boolean first = true;
+        Sort sort = null;
+        for(Map.Entry<String, Boolean> entry : criteria.entrySet()) {
+            if(first) {
+                if(entry.getValue()) {
+                    sort = new Sort(Sort.Direction.DESC, entry.getKey());
+                }
+                else {
+                    sort = new Sort(Sort.Direction.ASC, entry.getKey());
+                }
+                first = false;
+            }
+            else {
+                if(entry.getValue()) {
+                    sort = sort.and(new Sort(Sort.Direction.DESC, entry.getKey()));
+                }
+                else{
+                    sort = sort.and(new Sort(Sort.Direction.ASC, entry.getKey()));
+                }
+            }
         }
-        log.trace("Get grades, sorted - method finished");
-        return result;
+        return this.gradeRepository.findAll(PageRequest.of(page, 5, sort));
     }
 }

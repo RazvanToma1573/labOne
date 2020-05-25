@@ -5,11 +5,17 @@ import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-@Builder
+@Getter
+@Setter
 public class StudentDTO extends BaseDTO {
     private String firstName;
     private String lastName;
+
+    @Override
+    public String toString() {
+        return "StudentDTO{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}' + super.toString();
+    }
 }
