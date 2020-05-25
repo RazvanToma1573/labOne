@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 public interface IStudentService {
+    /*
     Student add(Student student) throws IllegalArgumentException;
     void remove(int id) throws IllegalArgumentException;
     void removeProblem(int id) throws  IllegalArgumentException;
@@ -33,4 +34,7 @@ public interface IStudentService {
     Page<Student> getSorted(int page, Map<String, Boolean> criteria);
     Page<Grade> getGradesSorted(int page, Map<String, Boolean> criteria);
 
+     */
+    void save(Student student);
+    List<Student> findAll();
 }

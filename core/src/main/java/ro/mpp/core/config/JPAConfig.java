@@ -1,9 +1,15 @@
 package ro.mpp.core.config;
 
+import com.google.common.cache.CacheBuilder;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.postgresql.ds.PGPoolingDataSource;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.guava.GuavaCacheManager;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate5.HibernateExceptionTranslator;
@@ -17,50 +23,40 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableJpaRepositories({"ro.mpp.core.Repository"})
 @EnableTransactionManagement
+@EnableCaching
+@ComponentScan("ro.mpp.core.Service")
 public class JPAConfig {
-    @Value("${db.jdbcUrl}")
-    private String jdbcUrl;
-
-    @Value("${db.username}")
-    private String username;
-
-    @Value("${db.password}")
-    private String password;
-
-    @Value("${db.generateDDL}")
-    private boolean generateDDL;
-
     @Bean
     public DataSource dataSource() {
-        HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setJdbcUrl(jdbcUrl);
-        hikariConfig.setUsername(username);
-        hikariConfig.setPassword(password);
-        hikariConfig.setDriverClassName(org.postgresql.Driver.class.getName());
-        hikariConfig.addDataSourceProperty("cachePrepStmts", "true");
-        hikariConfig.addDataSourceProperty("prepStmtCacheSize", "250");
-        hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-        hikariConfig.setDriverClassName("org.postgresql.Driver");
-        return new HikariDataSource(hikariConfig);
+        PGPoolingDataSource dataSource = new PGPoolingDataSource();
+        //            dataSource.setUrl(jdbcURL);
+        dataSource.setServerName("localhost");
+        dataSource.setDatabaseName("postgres");
+        dataSource.setUser("postgres");
+        dataSource.setPassword("parola");
+        dataSource.setMaxConnections(4);
+
+        return dataSource;
     }
 
     @Bean
     public EntityManagerFactory entityManagerFactory(){
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setDatabase(Database.POSTGRESQL);
-        vendorAdapter.setGenerateDdl(generateDDL);
+        vendorAdapter.setGenerateDdl(true);
         vendorAdapter.setShowSql(true);
 
-        LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-        factoryBean.setJpaVendorAdapter(vendorAdapter);
-        factoryBean.setPackagesToScan("ro.mpp.core.Domain");
-        factoryBean.setDataSource(dataSource());
-        factoryBean.afterPropertiesSet();
-        return factoryBean.getObject();
+        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+        factory.setJpaVendorAdapter(vendorAdapter);
+        factory.setPackagesToScan("ro.mpp.core.Domain");
+        factory.setDataSource(dataSource());
+        factory.afterPropertiesSet();
+        return factory.getObject();
     }
 
     @Bean
@@ -78,5 +74,12 @@ public class JPAConfig {
     @Bean
     public HibernateExceptionTranslator hibernateExceptionTranslator(){
         return new HibernateExceptionTranslator();
+    }
+
+    @Bean
+    public CacheManager cacheManager() {
+        GuavaCacheManager guavaCacheManager = new GuavaCacheManager();
+        guavaCacheManager.setCacheBuilder(CacheBuilder.newBuilder().expireAfterAccess(2, TimeUnit.HOURS));
+        return guavaCacheManager;
     }
 }

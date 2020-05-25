@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class StudentsService implements IStudentService{
+    /*
     public static final Logger log = LoggerFactory.getLogger(StudentsService.class);
     @Autowired
     private StudentRepository studentRepository;
@@ -39,13 +40,7 @@ public class StudentsService implements IStudentService{
     @Autowired
     private IProblemService problemsService;
 
-    /**
-     * Adds a new student to the repository
-     *
-     * @param newStudent is the new student to be added
-     * @throws ValidatorException       if the data of the new student is invalid
-     * @throws IllegalArgumentException if newStudent is null
-     */
+
     @Override
     public Student add (Student newStudent) throws IllegalArgumentException {
         log.trace("add student - method entered: student={}", newStudent);
@@ -54,12 +49,7 @@ public class StudentsService implements IStudentService{
         return student;
     }
 
-    /**
-     * Removes a student from the repository and remove all the grades of this stuedent
-     *
-     * @param id is the ID of the student to be removed
-     * @throws IllegalArgumentException if id is null
-     */
+
     @Override
     public void remove(int id) throws IllegalArgumentException {
         log.trace("remove Student - method entered: studentID = {}", id);
@@ -93,14 +83,7 @@ public class StudentsService implements IStudentService{
         log.trace("remove Problem with the given id - method finished");
     }
 
-    /**
-     * Assigns a problem to a student from repository
-     *
-     * @param studentId is the ID of the student
-     * @param problemId   is the id of the new problem to be assigned
-     * @throws ValidatorException       Custom exception
-     * @throws IllegalArgumentException if the new grade is null
-     */
+
     @Override
     public void assignProblem(int studentId, int problemId) throws ValidatorException, IllegalArgumentException{
         log.trace("assign a problem to a student - method entered: studentID={}, problemId={}",studentId, problemId);
@@ -120,11 +103,7 @@ public class StudentsService implements IStudentService{
         log.trace("assign problem to a student - method finished");
     }
 
-    /**
-     * Returns all the students from the repository
-     *
-     * @return an iterable with all the students
-     */
+
     @Override
     public Page<Student> get(int page) {
         log.trace("Get all students - method entered");
@@ -136,11 +115,7 @@ public class StudentsService implements IStudentService{
         return this.studentRepository.findAll();
     }
 
-    /**
-     * Returns all the grades from the repository
-     *
-     * @return an iterable with all the grades
-     */
+
     @Override
     public Page<Grade> getGrades(int page) {
         log.trace("Get all grades - method entered");
@@ -153,14 +128,7 @@ public class StudentsService implements IStudentService{
         return this.gradeRepository.findAll();
     }
 
-    /**
-     * Returns a student with the given ID from the repository
-     *
-     * @param id is the ID of the student
-     * @return student with the given ID
-     * @throws ValidatorException custom exception
-     * @throws IllegalArgumentException if id is null
-     */
+
     @Override
     public Student getById(int id) throws ValidatorException, IllegalArgumentException {
         log.trace("Get a student by his ID - method entered");
@@ -172,14 +140,7 @@ public class StudentsService implements IStudentService{
         }
     }
 
-    /**
-     * Assigns a grade to a student from repository for a given problem
-     *
-     * @param studentId is the ID of the stundet
-     * @param problemId   is the problem to be graded
-     * @param grade     is the grade (0..10)
-     * @throws IllegalArgumentException if new grade is null
-     */
+
     @Override
     @Transactional
     public Grade assignGrade(int studentId, int problemId, int grade) throws ValidatorException, IllegalArgumentException {
@@ -195,15 +156,7 @@ public class StudentsService implements IStudentService{
         return gr;
     }
 
-    /**
-     * Filters all students from repository by a given type and parameter
-     * Type is in {FIRSTNAME, LASTNAME, PROBLEM, GRADE}
-     *
-     * @param argument is the filter argument for the students
-     * @param type     is the type of filtering
-     * @return a list of filtere students
-     * @throws ValidatorException if the argument is invalid
-     */
+
     @Override
     public Page<Student> filterService(int page, String argument, String type) throws ValidatorException {
         log.trace("Filter students - method entered");
@@ -262,14 +215,7 @@ public class StudentsService implements IStudentService{
         return null;
     }
 
-    /**
-     * Updates a student on the field present in the type
-     * @param idStudent int
-     * @param firstName String
-     * @param lastName  string
-     * @throws ValidatorException validator exception
-     * @throws IllegalArgumentException illegal argument exception
-     */
+
     @Override
     @Transactional
     public Student update (int idStudent, String firstName, String lastName) throws ValidatorException, IllegalArgumentException {
@@ -281,10 +227,7 @@ public class StudentsService implements IStudentService{
         return student;
     }
 
-    /**
-     * Finds the student with the maximum average grade for report
-     * @return the student with the maximum average grade
-     */
+
     @Override
     public Student getStudentWithMaxGrade() {
         log.trace("Get the student with highest average grade - method entered");
@@ -299,10 +242,7 @@ public class StudentsService implements IStudentService{
 
     }
 
-    /**
-     * Finds the problem which was assigned most times for report
-     * @return the problem which was assigned most times
-     */
+
     @Override
     public Problem getMaxAssignedProblem() throws ValidatorException {
         log.trace("Get the problem that was assigned most - method entered");
@@ -330,10 +270,7 @@ public class StudentsService implements IStudentService{
         return gradesFrequency.entrySet().stream().max(Comparator.comparing(entry -> entry.getValue())).get().getKey();
     }
 
-    /**
-     * Finds the student who has most assigned problem for report
-     * @return the student with the most number of assigned problems
-     */
+
     @Override
     public Student getMostAssignedStudent(){
         Iterable<Grade> allGrades = this.gradeRepository.findAll();
@@ -349,10 +286,7 @@ public class StudentsService implements IStudentService{
         return this.studentRepository.findById(problemsFrequency.entrySet().stream().max(Comparator.comparing(entry -> entry.getValue())).get().getKey()).get();
     }
 
-    /**
-     * Returns the problem with the highest average grade for all students
-     * @return Problem with highest average grade
-     */
+
     @Override
     public Problem getProblemHighestAverage() throws ValidatorException {
         Iterable<Grade> allGrades = this.gradeRepository.findAll();
@@ -371,10 +305,7 @@ public class StudentsService implements IStudentService{
         return this.problemsService.getById(problemId);
     }
 
-    /**
-     * Return the student with highest average grade at hard problems
-     * @return the student with max Grade
-     */
+
     @Override
     public Student getStudentHighestAverageHard(){
         log.trace("Get the student with the highest avg grade at hard problems - method entered");
@@ -447,5 +378,19 @@ public class StudentsService implements IStudentService{
             }
         }
         return this.gradeRepository.findAll(PageRequest.of(page, 5, sort));
+    }
+     */
+
+    @Autowired
+    StudentRepository studentRepository;
+
+    @Override
+    public void save(Student student) {
+        this.studentRepository.save(student);
+    }
+
+    @Override
+    public List<Student> findAll() {
+        return studentRepository.findAllWithGradesAndProblemJPQL();
     }
 }
