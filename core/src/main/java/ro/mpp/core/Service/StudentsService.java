@@ -1,34 +1,29 @@
 package ro.mpp.core.Service;
 
 
-import java.lang.reflect.Field;
 import java.util.*;
-
-import java.util.HashSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.mpp.core.Domain.Grade;
 import ro.mpp.core.Domain.Problem;
 import ro.mpp.core.Domain.Student;
-import ro.mpp.core.Domain.Validators.Validator;
-import ro.mpp.core.Domain.Validators.ValidatorException;
-import ro.mpp.core.Repository.GradeRepository;
 import ro.mpp.core.Repository.StudentRepository;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class StudentsService implements IStudentService{
-    /*
+
     public static final Logger log = LoggerFactory.getLogger(StudentsService.class);
+    private String method = "SQL";
+    /*
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
@@ -384,13 +379,142 @@ public class StudentsService implements IStudentService{
     @Autowired
     StudentRepository studentRepository;
 
+    @Autowired
+    IProblemService problemService;
+
     @Override
-    public void save(Student student) {
-        this.studentRepository.save(student);
+    public Student add(int id, String firstName, String lastName) {
+        log.trace("save student - entered");
+        Student student = Student.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .build();
+        student.setId(id);
+        studentRepository.save(student);
+        log.trace("save student - finished");
+        return student;
     }
 
     @Override
     public List<Student> findAll() {
-        return studentRepository.findAllWithGradesAndProblemJPQL();
+        log.trace("Find all students - entered");
+        if(method.equals("JPQL")) {
+            log.trace("JPQL");
+            return studentRepository.findAllWithGradesAndProblemJPQL();
+        }
+        else if(method.equals("CriteriaAPI")) {
+            log.trace("CriteriaAPI");
+            return studentRepository.findAllWithGradesAndProblemCriteriaAPI();
+        }
+        else if(method.equals("SQL")) {
+            log.trace("SQL");
+            return studentRepository.findAllWithGradesAndProblemSQL();
+        }
+        else return null;
+    }
+
+    @Override
+    public Student remove(int id) {
+        log.trace("Remove a student - entered");
+        Student student = this.getById(id);
+        studentRepository.delete(id);
+        log.trace("Remove a student - finished");
+        return student;
+    }
+
+
+
+    @Override
+    public Student getById(int id) {
+        if(method.equals("JPQL")) {
+            return studentRepository.findWithGradesAndProblemJPQL(id);
+        }
+        else if(method.equals("CriteriaAPI")) {
+            return studentRepository.findWithGradesAndProblemCriteriaAPI(id);
+        }
+        else if(method.equals("SQL")) {
+            return studentRepository.findWithGradesAndProblemSQL(id);
+        }
+        else return null;
+
+    }
+
+    @Override
+    @Transactional
+    public Student update(int id, String firstName, String lastName) {
+        log.trace("Update student - entered");
+        Student student = this.getById(id);
+        student.setFirstName(firstName);
+        student.setLastName(lastName);
+        log.trace("Update student - finished");
+        return student;
+    }
+
+    @Override
+    @Transactional
+    public void assignProblem(int studentId, int problemId) {
+        log.trace("Assign problem to student - entered");
+        Student student = this.getById(studentId);
+        Problem problem = problemService.getById(problemId);
+        Grade grade = Grade.builder()
+                .student(student)
+                .problem(problem)
+                .actualGrade(0)
+                .build();
+        student.getGrades().add(grade);
+        problem.getGrades().add(grade);
+        log.trace("Assign problem to student - finished");
+    }
+
+    @Override
+    @Transactional
+    public void assignGrade(int studentId, int problemId, int grade) {
+        log.trace("Assign grade to student - entered");
+        Student student = this.getById(studentId);
+        student.getGrades().stream().filter(gr -> gr.getStudent().getId() == studentId && gr.getProblem().getId() == problemId)
+                .collect(Collectors.toList())
+                .get(0)
+                .setActualGrade(grade);
+        log.trace("Assign grade to student - finished");
+    }
+
+    @Override
+    public Set<Grade> findAllGrades() {
+        log.trace("Find all grades - entered");
+        return this.findAll()
+                .stream()
+                .map(student -> student.getGrades())
+                .reduce((a, b) -> Stream.concat(a.stream(), b.stream()).collect(Collectors.toSet()))
+                .get();
+    }
+
+    @Override
+    public void removeGrade(int studentId, int problemId) {
+        log.trace("Remove a grade - entered");
+        Grade grade = this.getById(studentId)
+                .getGrades().stream().filter(gr -> gr.getStudent().getId() == studentId && gr.getProblem().getId() == problemId)
+                .collect(Collectors.toList())
+                .get(0);
+        this.getById(studentId)
+                .getGrades().remove(grade);
+        problemService.getById(problemId)
+                .getGrades().remove(grade);
+        log.trace("Remove a grade - finished");
+    }
+
+    @Override
+    public List<Student> findAllByFirstName(String firstName) {
+        log.trace("Find all by first name - entered");
+        if(method.equals("JPQL")) {
+            return studentRepository.findAllByFirstNameJPQL(firstName);
+        }
+        else if(method.equals("CriteriaAPI")) {
+            return studentRepository.findAllByFirstNameCriteriaAPI(firstName);
+        }
+        else if(method.equals("SQL")) {
+            return studentRepository.findAllByFirstNameSQL(firstName);
+        }
+        else return null;
+
     }
 }

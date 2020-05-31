@@ -39,4 +39,8 @@ public class Student extends BaseEntity<Integer>{
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "student", fetch = FetchType.LAZY)
     private Set<Grade> grades = new HashSet<>();
 
+    @Override
+    public String toString() {
+        return "Student(" + getId() + "," + firstName + "," + lastName + ")";
+    }
 }

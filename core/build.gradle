@@ -23,8 +23,6 @@ ext{
 
 dependencies {
 
-    testCompile group: 'junit', name: 'junit', version: '4.11'
-
     compile group: 'org.springframework', name: 'spring-context', version: "$springVersion"
 
     compile group: 'org.slf4j', name: 'slf4j-api', version: "$slf4jVersion"
@@ -74,4 +72,11 @@ dependencies {
     compile group: 'com.zaxxer', name: 'HikariCP', version: "$hikariVersion"
 
     compile group: 'javax.xml.bind', name: 'jaxb-api', version: "$jaxbapiVersion"
+    compile group: 'com.google.guava', name: 'guava', version: "$guavaVersion"
+
+    //dbunit-test-config
+    compile group: 'com.zaxxer', name: 'HikariCP', version: "$hikariVersion"
+    compile group: 'org.dbunit', name: 'dbunit', version: "$dbUnitVersion"
+    compile group: 'com.h2database', name: 'h2', version: "$h2DbVersion"
+    compile group: 'com.github.springtestdbunit', name: 'spring-test-dbunit', version: "$springtestdbunitVersion"
 }

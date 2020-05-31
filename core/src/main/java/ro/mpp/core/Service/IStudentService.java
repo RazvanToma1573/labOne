@@ -35,6 +35,15 @@ public interface IStudentService {
     Page<Grade> getGradesSorted(int page, Map<String, Boolean> criteria);
 
      */
-    void save(Student student);
+    Student add(int id, String firstName, String lastName);
+    Student remove(int id);
     List<Student> findAll();
+    Student getById(int id);
+    Student update(int id, String firstName, String lastName);
+    List<Student> findAllByFirstName(String firstName);
+
+    void assignProblem(int studentId, int problemId);
+    void assignGrade(int studentId, int problemId, int grade);
+    Set<Grade> findAllGrades();
+    void removeGrade(int studentId, int problemId);
 }

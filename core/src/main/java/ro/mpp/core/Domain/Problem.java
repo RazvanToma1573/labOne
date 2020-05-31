@@ -25,7 +25,6 @@ import java.util.Set;
 @Setter
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
 @Builder
 public class Problem extends BaseEntity<Integer> {
 
@@ -41,4 +40,9 @@ public class Problem extends BaseEntity<Integer> {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "problem", fetch = FetchType.LAZY)
     private Set<Grade> grades = new HashSet<>();
+
+    @Override
+    public String toString() {
+        return "Problem(" + getId() + "," + description + "," + difficulty + ")";
+    }
 }

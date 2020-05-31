@@ -35,16 +35,11 @@
   <li *ngFor="let grade of grades"
       class="item">
     <a (click)="onSelect(grade)">
-      {{grade.studentId}} {{grade.problemId}} {{grade.actualGrade}}
+      {{grade.student.id}} {{grade.problem.id}} {{grade.actualGrade}}
     </a>
     <button (click)="remove(grade.id)">Remove</button>
   </li>
 </ul>
-<div class="pages">
-  <button [disabled]="currentPage === 0" (click)="onLeft()"><</button>
-  <label>{{currentPage + 1}}</label>
-  <button [disabled]="(currentPage + 1)*5 >= nrOfPages" (click)="onRight()">></button>
-</div>
 <hr>
 <div>
   <app-grade-add [currentPage]="currentPage"></app-grade-add>

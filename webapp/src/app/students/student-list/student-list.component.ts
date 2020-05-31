@@ -29,22 +29,15 @@ export class StudentListComponent implements OnInit {
               private location: Location) { }
 
   ngOnInit(): void {
-    this.getStudents(0);
-    this.currentPage = 0;
-    this.studentService.getAllStudents().subscribe(
-      students => this.nrOfPages = students.length
-    );
+    this.getStudents();
     this.studentService.listUpdated
       .subscribe((students: Student[]) => {
         this.students = students;
       });
-    this.studentService.pagesUpdated
-      .subscribe(nr => this.nrOfPages = nr);
-
   }
 
-  getStudents(page: number) {
-    this.studentService.getStudents(page)
+  getStudents() {
+    this.studentService.getStudents()
       .subscribe(
         students => {
           this.students = students;
@@ -61,58 +54,11 @@ export class StudentListComponent implements OnInit {
 
   onRemove(student: Student) {
     if(confirm("Do you really want to remove the student?")) {
-      this.studentService.delete(this.currentPage, student.id);
-      if((this.currentPage)*5 === this.nrOfPages) {
-        this.currentPage -= 1;
-        this.getStudents(this.currentPage);
-      }
+      this.studentService.delete(student.id);
       if(this.selectedStudent.id === student.id) {
         this.router.navigate(['/students']);
       }
     }
-  }
-
-  onSort() {
-    var id = this.sortIdRef.nativeElement.value;
-    var firstName = this.sortFirstNameRef.nativeElement.value;
-    var lastName = this.sortLastNameRef.nativeElement.value;
-    this.studentService.getStudentsSorted(0, id, firstName, lastName);
-    this.currentPage = 0;
-    this.studentService.currentPage = 0;
-  }
-
-  onLeft() {
-    this.currentPage -= 1;
-    if(this.sorted) {
-      this.getSorted(this.currentPage);
-    }
-    else if(this.filtered) {
-      this.getFiltered(this.currentPage);
-    }
-    else {
-      this.getStudents(this.currentPage);
-    }
-  }
-
-  onRight() {
-    this.currentPage += 1;
-    if(this.sorted) {
-      this.getSorted(this.currentPage);
-    }
-    else if(this.filtered) {
-      this.getFiltered(this.currentPage);
-    }
-    else {
-      this.getStudents(this.currentPage);
-    }
-
-  }
-
-  onFilter() {
-    var type = this.filterTypeRef.nativeElement.value;
-    var argument = this.filterArgumentRef.nativeElement.value;
-    this.studentService.filter(this.currentPage, this.filterTypeRef.nativeElement.value,
-      this.filterArgumentRef.nativeElement.value);
   }
 
   goBack() {
@@ -156,19 +102,10 @@ export class StudentListComponent implements OnInit {
       });
   }
 
-  getFiltered(page: number) {
-    this.filtered = true;
-    this.sorted = false;
+  getFiltered() {
     var argument = this.filterArgumentRef.nativeElement.value;
     var column = this.filterTypeRef.nativeElement.value;
-    this.studentService.getAllStudents().subscribe(
-      students => {
-        console.log(students);
-        students = students.filter(student => student[column] === argument);
-        console.log(students);
-        this.students = students.slice(page*5, Math.min(page*5 + 5, students.length));
-      }
-    )
+    this.studentService.filter(column, argument);
   }
 
 }

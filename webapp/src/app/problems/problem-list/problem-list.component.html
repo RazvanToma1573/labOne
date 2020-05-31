@@ -30,6 +30,16 @@
   </button>
 </div>
 
+<div class="filter-div">
+  <label for="filters">Filter By:</label>
+  <select name="filters" id="filters" #filterType>
+    <option value="none">None</option>
+    <option value="description">Description</option>
+    <option value="difficulty">Difficulty</option>
+  </select>
+  <input type="text" #filterArgument>
+  <button (click)="getFiltered()">Filter</button>
+</div>
 
 <ul>
   <li *ngFor="let problem of problems"
@@ -40,11 +50,6 @@
     <button class="btn-remove" (click)="onRemove(problem)">Remove</button>
   </li>
 </ul>
-<div class="pages">
-  <button [disabled]="currentPage === 0" (click)="onLeft()"><</button>
-  <label>{{currentPage + 1}}</label>
-  <button [disabled]="(currentPage + 1)*5 >= nrOfPages" (click)="onRight()">></button>
-</div>
 <hr>
 <div>
   <app-problem-add [currentPage]="currentPage"></app-problem-add>

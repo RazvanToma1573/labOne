@@ -17,6 +17,8 @@ export class ProblemListComponent implements OnInit {
   @ViewChild('sortId') sortIdRef: ElementRef;
   @ViewChild('sortDescription') sortDescriptionRef: ElementRef;
   @ViewChild('sortDifficulty') sortDifficultyRef: ElementRef;
+  @ViewChild('filterType') filterTypeRef: ElementRef;
+  @ViewChild('filterArgument') filterArgumentRef: ElementRef;
   currentPage = 0;
   nrOfPages = 0;
 
@@ -25,21 +27,16 @@ export class ProblemListComponent implements OnInit {
               private location: Location) { }
 
   ngOnInit(): void {
-    this.getProblems(0);
+    this.getProblems();
     this.currentPage = 0;
-    this.problemService.getAllProblems().subscribe(
-      problems => this.nrOfPages = problems.length
-    );
     this.problemService.listUpdated
       .subscribe((problems: Problem[]) => {
         this.problems = problems;
       });
-    this.problemService.pagesUpdated
-      .subscribe(nr => this.nrOfPages = nr);
   }
 
-  getProblems(page: number) {
-    this.problemService.getProblems(page)
+  getProblems() {
+    this.problemService.getProblems()
       .subscribe(problems => {
         this.problems = problems;
           console.log(this.problems);
@@ -54,7 +51,7 @@ export class ProblemListComponent implements OnInit {
 
   onRemove(problem: Problem) {
     if(confirm("Do you really want to remove the problem?")) {
-      this.problemService.delete(this.currentPage, problem.id);
+      this.problemService.delete(problem.id);
       if(this.selectedProblem.id === problem.id) {
       this.router.navigate(['/problems']);
       }
@@ -65,18 +62,13 @@ export class ProblemListComponent implements OnInit {
     var id = this.sortIdRef.nativeElement.value;
     var description = this.sortDescriptionRef.nativeElement.value;
     var difficulty = this.sortDifficultyRef.nativeElement.value;
-    this.problemService.getProblemsSorted(this.currentPage, id, description, difficulty);
+    //this.problemService.getProblemsSorted(id, description, difficulty);
   }
 
-  onLeft() {
-    this.currentPage -= 1;
-    this.getProblems(this.currentPage);
+  getFiltered() {
+    this.problemService.filter(this.filterTypeRef.nativeElement.value, this.filterArgumentRef.nativeElement.value);
   }
 
-  onRight() {
-    this.currentPage += 1;
-    this.getProblems(this.currentPage);
-  }
 
   goBack() {
     this.location.back();

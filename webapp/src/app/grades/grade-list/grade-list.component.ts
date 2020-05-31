@@ -25,21 +25,16 @@ export class GradeListComponent implements OnInit {
               private location: Location) { }
 
   ngOnInit(): void {
-    this.getGrades(0);
+    this.getGrades();
     this.currentPage = 0;
-    this.gradeService.getAllGrades().subscribe(
-      grades => this.nrOfPages = grades.length
-    );
     this.gradeService.listUpdated
       .subscribe((grades: Grade[]) => {
         this.grades = grades;
       });
-    this.gradeService.pagesUpdated
-      .subscribe(nr => this.nrOfPages = nr);
   }
 
-  getGrades(page: number) {
-    this.gradeService.getGrades(page)
+  getGrades() {
+    this.gradeService.getGrades()
       .subscribe(grades => this.grades = grades,
         error => this.error = error);
   }
@@ -56,18 +51,8 @@ export class GradeListComponent implements OnInit {
     this.gradeService.getGradesSorted(this.currentPage, studentId, problemId, actualGrade);
   }
 
-  onLeft() {
-    this.currentPage -= 1;
-    this.getGrades(this.currentPage);
-  }
-
-  onRight() {
-    this.currentPage += 1;
-    this.getGrades(this.currentPage);
-  }
-
   remove(id: number) {
-    this.gradeService.delete(this.currentPage, id);
+    this.gradeService.delete(id);
   }
 
   goBack() {

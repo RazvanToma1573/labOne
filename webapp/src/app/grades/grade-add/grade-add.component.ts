@@ -21,12 +21,7 @@ export class GradeAddComponent implements OnInit {
   }
 
   onAdd() {
-    const grade = new Grade(this.studentIdRef.nativeElement.value, this.problemIdRef.nativeElement.value, 0);
-    this.gradeService.save(this.currentPage, grade);
-    this.studentIdRef.nativeElement.value = 0;
-    this.problemIdRef.nativeElement.value = 0;
-    this.studentIdAdd = 0;
-    this.problemIdAdd = 0;
+    this.gradeService.save(this.studentIdRef.nativeElement.value, this.problemIdRef.nativeElement.value);
   }
 
   checkCanAdd() {

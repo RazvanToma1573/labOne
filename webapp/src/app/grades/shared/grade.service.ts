@@ -20,9 +20,8 @@ export class GradeService {
               private problemService: ProblemService) {
   }
 
-  getGrades(page: number): Observable<Grade[]> {
-    this.currentPage = page;
-    return this.httpClient.get<Array<Grade>>(this.url + "/" + page);
+  getGrades(): Observable<Grade[]> {
+    return this.httpClient.get<Array<Grade>>(this.url);
   }
 
   getAllGrades(): Observable<Grade[]> {
@@ -57,24 +56,22 @@ export class GradeService {
       .pipe(map(grades => grades.find(grade => grade.id === id)));
   }
 
-  save(page: number, grade: Grade) {
-    this.httpClient.post<Grade>(this.url, grade)
+  save(studentId: number, problemId: number) {
+    this.httpClient.post<Grade>(this.url + "/" + studentId + "/" + problemId, null)
       .subscribe(_ => {
-        this.getGrades(page)
+        this.getGrades()
           .subscribe(grades => {
             this.listUpdated.emit(grades);
-            this.getAllGrades().subscribe(
-              grades => this.pagesUpdated.emit(grades.length))
           });
       },
         error => alert(error));
   }
 
   update(grade: Grade): void {
-    const link = `${this.url}/${grade.id}`;
-    this.httpClient.put<Grade>(link, grade)
+    const link = `${this.url}/${grade.student.id}/${grade.problem.id}/${grade.actualGrade}`;
+    this.httpClient.put<Grade>(link, null)
       .subscribe(_ => {
-        this.getGrades(this.currentPage)
+        this.getGrades()
           .subscribe(grades => this.listUpdated.emit(grades));
       },
         error => {
@@ -91,15 +88,12 @@ export class GradeService {
     return this.problemService.getProblem(id);
   }
 
-  delete(page:number, id: number) {
+  delete(id: number) {
     this.httpClient.delete(this.url + "/remove/" + id)
       .subscribe(_ => {
-        this.getGrades(page)
+        this.getGrades()
           .subscribe(grades => {
             this.listUpdated.emit(grades);
-            this.getAllGrades().subscribe(grades => {
-              this.pagesUpdated.emit(grades.length);
-            })
           })
       })
   }

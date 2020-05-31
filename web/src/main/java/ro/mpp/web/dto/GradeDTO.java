@@ -13,10 +13,9 @@ import javax.validation.constraints.Min;
 @Builder
 public class GradeDTO extends BaseDTO {
 
-    @Min(1)
-    private Integer studentId;
-    @Min(1)
-    private Integer problemId;
+    private StudentDTO student;
+    private ProblemDTO problem;
+
     @Min(0)
     @Max(10)
     private Integer actualGrade;

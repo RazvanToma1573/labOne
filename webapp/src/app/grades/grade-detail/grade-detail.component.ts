@@ -14,7 +14,7 @@ import {Problem} from "../../problems/shared/problem.model";
   styleUrls: ['./grade-detail.component.css']
 })
 export class GradeDetailComponent implements OnInit {
-  @Input() grade: Grade = new Grade(1, 1, 1);
+  @Input() grade: Grade = new Grade(new Student(), new Problem(), 1);
   student: Student = new Student();
   problem: Problem = new Problem();
   constructor(private gradeService: GradeService,
@@ -25,12 +25,8 @@ export class GradeDetailComponent implements OnInit {
       .pipe(switchMap((params: Params) => this.gradeService.getGrade(+params['id'])))
       .subscribe(grade => {
         this.grade = grade;
-        this.gradeService.getStudent(grade.studentId)
-          .subscribe(student => this.student = student);
-        this.gradeService.getProblem(grade.problemId)
-          .subscribe(problem => this.problem = problem);
+        console.log(grade);
       });
-
   }
 
   onUpdate() {

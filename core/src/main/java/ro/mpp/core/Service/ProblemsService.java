@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.mpp.core.Domain.Problem;
+import ro.mpp.core.Domain.Student;
 import ro.mpp.core.Domain.Validators.Validator;
 import ro.mpp.core.Domain.Validators.ValidatorException;
 import ro.mpp.core.Repository.ProblemRepository;
@@ -19,18 +20,16 @@ import java.util.*;
 @Service
 public class ProblemsService implements IProblemService{
     public static final Logger log = LoggerFactory.getLogger(ProblemsService.class);
+
+    private String method = "JPQL";
+    /*
     @Autowired
     private ProblemRepository problemRepository;
     @Autowired
     private Validator<Problem> problemValidator;
 
 
-    /**
-     * Validate new problem.
-     * Add a new problem to the problem repository if the validation was carried out with no problems.
-     * @param newProblem new problem (Problem)
-     * @throws ValidatorException custom exception (ValidatorException)
-     */
+
     @Override
     public Problem add(Problem newProblem) throws ValidatorException {
         log.trace("add Problem - method entered: problem = {}", newProblem);
@@ -39,10 +38,7 @@ public class ProblemsService implements IProblemService{
         return problem;
     }
 
-    /**
-     * Remove problem with the given id and remove all the grades for this problem
-     * @param idProblemToBeRemoved id of the problem to be removed (int)
-     */
+
     @Override
     public void remove(int idProblemToBeRemoved) {
         log.trace("remove Problem - method entered: problemID = {}", idProblemToBeRemoved);
@@ -50,10 +46,7 @@ public class ProblemsService implements IProblemService{
         log.trace("remove Problem - method finished");
     }
 
-    /**
-     * Returns all the problems from the problem repository.
-     * @return list of all problems (List)
-     */
+
     @Override
     public List<Problem> get() {
         return this.problemRepository.findAll();
@@ -65,12 +58,7 @@ public class ProblemsService implements IProblemService{
         return this.problemRepository.findAll(PageRequest.of(page, 5));
     }
 
-    /**
-     * Returns the problem that has the given id.
-     * @param id int
-     * @return problem if found
-     * @throws ValidatorException custom exception
-     */
+
     @Override
     public Problem getById(int id) throws ValidatorException {
         log.trace("Get the problems by its ID - method entered");
@@ -83,14 +71,7 @@ public class ProblemsService implements IProblemService{
         }
     }
 
-    /**
-     * Updates a problem on the field present in the type string
-     * @param idProblem int
-     * @param desc  String
-     * @param diff String
-     * @throws ValidatorException validator exception
-     * @throws IllegalArgumentException illegal argument exception
-     */
+
     @Override
     @Transactional
     public Problem update (int idProblem, String desc, String diff) throws ValidatorException, IllegalArgumentException {
@@ -127,5 +108,81 @@ public class ProblemsService implements IProblemService{
             }
         }
         return this.problemRepository.findAll(PageRequest.of(page, 5, sort));
+    }
+
+     */
+    @Autowired
+    ProblemRepository problemRepository;
+
+    @Override
+    public Problem add(int id, String description, String difficulty) {
+        Problem problem = Problem.builder()
+                .description(description)
+                .difficulty(difficulty)
+                .build();
+        problem.setId(id);
+        problemRepository.save(problem);
+        return problem;
+    }
+
+    @Override
+    public Problem remove(int id) {
+        Problem problem = this.getById(id);
+        this.problemRepository.delete(id);
+        return problem;
+    }
+
+    @Override
+    public List<Problem> findAll() {
+        if(method.equals("JPQL")) {
+            return problemRepository.findAllWithGradesAndStudentJPQL();
+        }
+        else if(method.equals("CriteriaAPI")) {
+            return problemRepository.findAllWithGradesAndStudentCriteriaAPI();
+        }
+        else if(method.equals("SQL")) {
+            return problemRepository.findAllWithGradesAndStudentSQL();
+        }
+        else return null;
+
+    }
+
+    @Override
+    public Problem getById(int id) {
+        if(method.equals("JPQL")) {
+            return problemRepository.findWithGradesAndStudentJPQL(id);
+        }
+        else if(method.equals("CriteriaAPI")) {
+            return problemRepository.findWithGradesAndStudentCriteriaAPI(id);
+        }
+        else if(method.equals("SQL")) {
+            return problemRepository.findWithGradesAndStudentSQL(id);
+        }
+        else return null;
+
+    }
+
+    @Override
+    @Transactional
+    public Problem update(int id, String description, String difficulty) {
+        Problem problem = this.getById(id);
+        problem.setDescription(description);
+        problem.setDifficulty(difficulty);
+        return problem;
+    }
+
+    @Override
+    public List<Problem> findAllByDescription(String description) {
+        if(method.equals("JPQL")) {
+            return problemRepository.findAllByDescriptionJPQL(description);
+        }
+        else if(method.equals("CriteriaAPI")) {
+            return problemRepository.findAllByDescriptionCriteriaAPI(description);
+        }
+        else if(method.equals("SQL")) {
+            return problemRepository.findAllByDescriptionSQL(description);
+        }
+        else return null;
+
     }
 }

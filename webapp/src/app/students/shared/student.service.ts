@@ -14,39 +14,12 @@ export class StudentService {
   constructor(private httpClient: HttpClient) {
   }
 
-  getStudents(page: number): Observable<Student[]> {
-    this.currentPage = page;
-    return this.httpClient.get<Array<Student>>(this.url + "/" + page);
+  getStudents(): Observable<Student[]> {
+    return this.httpClient.get<Array<Student>>(this.url);
   }
 
   getAllStudents(): Observable<Student[]> {
     return this.httpClient.get<Array<Student>>(this.url);
-  }
-
-  getStudentsSorted(page: number, id: string, firstName: string, lastName: string): void {
-    var param = "";
-    if (id !== "none") {
-      param += "id-" + (id.toLowerCase() === "desc");
-    }
-    if (firstName !== "none") {
-      if (param.length > 0) {
-        param += "&";
-      }
-      param += "firstName-" + (firstName.toLowerCase() === "desc");
-    }
-    if (lastName !== "none") {
-      if (param.length > 0) {
-        param += "&";
-      }
-      param += "lastName-" + (lastName.toLowerCase() === "desc");
-    }
-    this.httpClient.get<Array<Student>>(this.url + "/sorted/" + page + "/" + param)
-      .subscribe(students => {
-        this.listUpdated.emit(students);
-        this.getAllStudents().subscribe(
-          students => this.pagesUpdated.emit(students.length)
-        )
-      });
   }
 
   getStudent(id: number): Observable<Student> {
@@ -56,15 +29,12 @@ export class StudentService {
       ));
   }
 
-  save(page: number, student: Student): void {
+  save(student: Student): void {
     this.httpClient.post(this.url, student)
       .subscribe(_ => {
-          this.getStudents(page)
+          this.getStudents()
             .subscribe(students => {
               this.listUpdated.emit(students);
-              this.getAllStudents().subscribe(
-                students => this.pagesUpdated.emit(students.length)
-              )
             })
         },
         error => {
@@ -77,36 +47,41 @@ export class StudentService {
     const link = `${this.url}/${student.id}`;
     this.httpClient.put<Student>(link, student)
       .subscribe(_ => {
-        this.getStudents(this.currentPage)
+        this.getStudents()
           .subscribe(students => this.listUpdated.emit(students));
       });
   }
 
-  delete(page: number, id: number): void {
+  delete(id: number): void {
     const link = `${this.url}/${id}`;
     this.httpClient.delete(link)
       .subscribe(_ => {
-        this.getStudents(page)
+        this.getStudents()
           .subscribe(students => {
             this.listUpdated.emit(students);
-            this.getAllStudents().subscribe(
-              students => this.pagesUpdated.emit(students.length))
           });
 
       });
   }
 
-  filter(page: number, type: string, argument: string) {
+  filter(type: string, argument: string) {
     if (type !== "none") {
-      this.httpClient.get<Array<Student>>(this.url + "/filter/" + page + "/" + type + "/" + argument)
-        .subscribe(
-          students => {
+      if(type === "firstName") {
+        this.httpClient.get<Array<Student>>(this.url+"/filter/" + argument)
+          .subscribe(students => {
             this.listUpdated.emit(students);
-            this.getAllStudents().subscribe(
-              students =>
-                this.pagesUpdated.emit(students.length)
-            );
-          });
+          })
+      }
+      else {
+        this.getStudents()
+          .subscribe(students => {
+            this.listUpdated.emit(students.filter(student => student.lastName === argument));
+          })
+      }
+    }
+    else {
+      this.getStudents()
+        .subscribe(students => this.listUpdated.emit(students));
     }
   }
 }

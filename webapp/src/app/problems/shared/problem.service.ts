@@ -15,36 +15,12 @@ export class ProblemService {
   constructor(private httpClient: HttpClient) {
   }
 
-  getProblems(page: number): Observable<Problem[]> {
-    this.currentPage = page;
-    return this.httpClient.get<Array<Problem>>(this.url + "/" + page);
+  getProblems(): Observable<Problem[]> {
+    return this.httpClient.get<Array<Problem>>(this.url);
   }
 
   getAllProblems(): Observable<Problem[]> {
     return this.httpClient.get<Array<Problem>>(this.url);
-  }
-
-  getProblemsSorted(page: number, id: string, description: string, difficulty: string): void {
-    var param = "";
-    if(id !== "none") {
-      param += "id-" + (id.toLowerCase() === "desc");
-    }
-    if(description !== "none") {
-      if (param.length > 0) {
-        param += "&";
-      }
-      param += "description-" + (description.toLowerCase() === "desc");
-    }
-    if(difficulty !== "none") {
-      if (param.length > 0) {
-        param += "&";
-      }
-      param += "difficulty-" + (difficulty.toLowerCase() === "desc");
-    }
-    this.httpClient.get<Array<Problem>>(this.url + "/sorted/" + page + "/" + param)
-      .subscribe(problems => {
-        this.listUpdated.emit(problems)
-      });
   }
 
   getProblem(id: number): Observable<Problem> {
@@ -54,15 +30,12 @@ export class ProblemService {
       ))
   }
 
-  save(page: number, problem: Problem) {
+  save(problem: Problem) {
     this.httpClient.post<Problem>(this.url, problem)
       .subscribe(_ => {
-        this.getProblems(page).subscribe(
+        this.getProblems().subscribe(
           problems => {
             this.listUpdated.emit(problems);
-            this.getAllProblems().subscribe(
-              problems => this.pagesUpdated.emit(problems.length)
-            )
           }
         )
       })
@@ -72,23 +45,37 @@ export class ProblemService {
     const link = `${this.url}/${problem.id}`;
     this.httpClient.put<Problem>(link, problem)
       .subscribe(_ => {
-        this.getProblems(this.currentPage)
+        this.getProblems()
           .subscribe(problems => this.listUpdated.emit(problems));
       });
   }
 
-  delete(page: number, id: number): void {
+  delete(id: number): void {
     this.httpClient.delete(`http://localhost:8080/api/grades/${id}`);
     const link = `${this.url}/${id}`;
     this.httpClient.delete(link)
       .subscribe(_ => {
-        this.getProblems(page)
+        this.getProblems()
           .subscribe(problems => {
             this.listUpdated.emit(problems);
-            this.getAllProblems().subscribe(
-              problems => this.pagesUpdated.emit(problems.length)
-            )
           });
       });
+  }
+
+  filter(type: string, argument: string) {
+    if(type !== 'none') {
+      if(type === 'description') {
+        this.httpClient.get<Array<Problem>>(this.url + "/filter/" + argument)
+          .subscribe(problems => this.listUpdated.emit(problems))
+      }
+      else {
+        this.getProblems()
+          .subscribe(problems => this.listUpdated.emit(problems.filter(problem => problem.difficulty === argument)))
+      }
+    }
+    else {
+      this.getProblems()
+        .subscribe(problems => this.listUpdated.emit(problems));
+    }
   }
 }

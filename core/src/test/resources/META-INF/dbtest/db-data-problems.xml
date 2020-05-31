@@ -1,0 +1,5 @@
+<dataset>
+    <problem id="2000" description="MPP" difficulty="medium"/>
+    <problem id="2001" description="AI" difficulty="hard"/>
+    <problem id="2002" description="MPP" difficulty="hard"/>
+</dataset>

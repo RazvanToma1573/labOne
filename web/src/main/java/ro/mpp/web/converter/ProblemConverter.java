@@ -1,8 +1,12 @@
 package ro.mpp.web.converter;
 
 import org.springframework.stereotype.Component;
+import ro.mpp.core.Domain.Grade;
 import ro.mpp.core.Domain.Problem;
 import ro.mpp.web.dto.ProblemDTO;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class ProblemConverter extends BaseConverter<Problem, ProblemDTO> {

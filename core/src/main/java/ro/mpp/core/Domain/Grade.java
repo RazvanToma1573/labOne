@@ -2,9 +2,7 @@ package ro.mpp.core.Domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
@@ -15,7 +13,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(exclude = {"student", "problem"}, callSuper = true)
-@ToString(callSuper = true)
 @Builder
 public class Grade extends BaseEntity<Integer>{
 
@@ -24,8 +21,15 @@ public class Grade extends BaseEntity<Integer>{
     private int actualGrade;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id")
     private Student student;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "problem_id")
     private Problem problem;
+
+    @Override
+    public String toString() {
+        return "Grade(" + student.getId() + "," + problem.getId() + "," + actualGrade + ")";
+    }
 }
