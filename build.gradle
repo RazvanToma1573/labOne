@@ -53,6 +53,7 @@ allprojects {
 //        compile group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
         annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        compile group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
 
         testCompile (group: 'junit', name: 'junit', version: '4.12'){
             exclude group:'org.hamcrest', module:'hamcrest-core'

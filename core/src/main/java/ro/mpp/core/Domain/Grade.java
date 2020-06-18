@@ -13,6 +13,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(exclude = {"student", "problem"}, callSuper = true)
+@ToString(exclude = {"student", "problem"})
 @Builder
 public class Grade extends BaseEntity<Integer>{
 
@@ -28,8 +29,4 @@ public class Grade extends BaseEntity<Integer>{
     @JoinColumn(name = "problem_id")
     private Problem problem;
 
-    @Override
-    public String toString() {
-        return "Grade(" + student.getId() + "," + problem.getId() + "," + actualGrade + ")";
     }
-}

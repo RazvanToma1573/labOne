@@ -10,6 +10,7 @@ import ro.mpp.core.Service.IStudentService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -34,8 +35,7 @@ public class Main {
                 .student(student)
                 .problem(problem)
                 .build();
-
-        problemService.findAll().stream().forEach(System.out::println);
+        List<Student> students = studentService.getEntityGraph();
 
         ;
 

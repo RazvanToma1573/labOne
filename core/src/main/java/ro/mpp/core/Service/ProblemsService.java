@@ -3,6 +3,7 @@ package ro.mpp.core.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -21,7 +22,8 @@ import java.util.*;
 public class ProblemsService implements IProblemService{
     public static final Logger log = LoggerFactory.getLogger(ProblemsService.class);
 
-    private String method = "JPQL";
+    @Value("JPQL")
+    private String method;
     /*
     @Autowired
     private ProblemRepository problemRepository;
@@ -134,6 +136,8 @@ public class ProblemsService implements IProblemService{
 
     @Override
     public List<Problem> findAll() {
+        log.trace("Get all problems");
+        log.trace(method);
         if(method.equals("JPQL")) {
             return problemRepository.findAllWithGradesAndStudentJPQL();
         }

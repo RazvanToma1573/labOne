@@ -42,6 +42,8 @@ public interface IStudentService {
     Student update(int id, String firstName, String lastName);
     List<Student> findAllByFirstName(String firstName);
 
+    List<Student> getEntityGraph();
+
     void assignProblem(int studentId, int problemId);
     void assignGrade(int studentId, int problemId, int grade);
     Set<Grade> findAllGrades();

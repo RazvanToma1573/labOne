@@ -22,6 +22,7 @@ export class ProblemAddComponent implements OnInit {
 
   onAdd() {
     const problem = new Problem(this.descriptionRef.nativeElement.value, this.difficultyRef.nativeElement.value);
+    problem.id = 1;
     this.problemService.save(problem);
     this.descriptionRef.nativeElement.value = "";
     this.difficultyRef.nativeElement.value = "";

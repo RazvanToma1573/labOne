@@ -22,7 +22,9 @@ import ro.mpp.core.Repository.StudentRepository;
 public class StudentsService implements IStudentService{
 
     public static final Logger log = LoggerFactory.getLogger(StudentsService.class);
-    private String method = "SQL";
+
+    @Value("SQL")
+    private String method;
     /*
     @Autowired
     private StudentRepository studentRepository;
@@ -398,6 +400,7 @@ public class StudentsService implements IStudentService{
     @Override
     public List<Student> findAll() {
         log.trace("Find all students - entered");
+        System.out.println(method);
         if(method.equals("JPQL")) {
             log.trace("JPQL");
             return studentRepository.findAllWithGradesAndProblemJPQL();
@@ -516,5 +519,10 @@ public class StudentsService implements IStudentService{
         }
         else return null;
 
+    }
+
+    @Override
+    public List<Student> getEntityGraph() {
+        return studentRepository.findAllWithGrades();
     }
 }

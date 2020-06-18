@@ -34,6 +34,8 @@ export class StudentListComponent implements OnInit {
       .subscribe((students: Student[]) => {
         this.students = students;
       });
+    this.studentService.getGraph()
+      .subscribe(students => console.log(students))
   }
 
   getStudents() {

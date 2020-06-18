@@ -58,6 +58,18 @@ public class StudentController {
         return new ArrayList<>(studentConverter.convertModelsToDTOs(students));
     }
 
+    @RequestMapping(value="/students/graph", method = RequestMethod.GET)
+    List<StudentDTO> getAllStudentsGraph() {
+        List<Student> students = studentsService.getEntityGraph();
+        return students.stream()
+                .map(student -> StudentDTO.builder()
+                .firstName(student.getFirstName()).lastName(student.getLastName())
+                .grades(student.getGrades().stream().map(grade -> gradeConverter.convertModelToDTO(grade))
+                .collect(Collectors.toSet()))
+                .build())
+                .collect(Collectors.toList());
+    }
+
     @RequestMapping(value = "/student/{id}", method = RequestMethod.GET)
     StudentDTO getStudentById(@PathVariable Integer id) throws ValidatorException {
         log.trace("Get a student by ID - method entered");

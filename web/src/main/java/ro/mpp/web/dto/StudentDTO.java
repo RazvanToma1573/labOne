@@ -2,6 +2,7 @@ package ro.mpp.web.dto;
 
 
 import lombok.*;
+import ro.mpp.core.Domain.Grade;
 import ro.mpp.core.Domain.Student;
 
 import java.util.Set;

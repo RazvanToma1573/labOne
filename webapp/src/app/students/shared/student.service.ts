@@ -52,6 +52,10 @@ export class StudentService {
       });
   }
 
+  getGraph(): Observable<any> {
+    return this.httpClient.get(this.url + "/graph")
+  }
+
   delete(id: number): void {
     const link = `${this.url}/${id}`;
     this.httpClient.delete(link)

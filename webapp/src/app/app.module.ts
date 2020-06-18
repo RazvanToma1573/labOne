@@ -22,6 +22,7 @@ import { GradeListComponent } from './grades/grade-list/grade-list.component';
 import { GradeDetailComponent } from './grades/grade-detail/grade-detail.component';
 import { GradeAddComponent } from './grades/grade-add/grade-add.component';
 import {GradeService} from "./grades/shared/grade.service";
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import {GradeService} from "./grades/shared/grade.service";
     ProblemAddComponent,
     GradeListComponent,
     GradeDetailComponent,
-    GradeAddComponent
+    GradeAddComponent,
+    LoginComponent
   ],
     imports: [
         BrowserModule,

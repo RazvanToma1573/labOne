@@ -30,6 +30,7 @@ export class StudentAddComponent implements OnInit {
     }
     else {
       const student = new Student(this.firstNameRef.nativeElement.value, this.lastNameRef.nativeElement.value);
+      student.id = 1;
       this.studentService.save(student);
       this.firstNameRef.nativeElement.value = "";
       this.lastNameRef.nativeElement.value = "";
