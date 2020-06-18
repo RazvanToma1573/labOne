@@ -1,0 +1,24 @@
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Total Capacity</th>
+    <th>edit</th>
+  </tr>
+
+  <tr *ngFor="let node of nodes">
+    <td>{{node.name}}</td>
+    <td>{{node.totalCapacity}}</td>
+    <td><button>Edit</button></td>
+  </tr>
+</table>
+
+<button (click)="Add()">Add</button>
+
+<div *ngIf="showAdd">
+  <label for="name">Name</label>
+  <input type="text" id="name" #nameref>
+  <br>
+  <label for="cap">Capacity</label>
+  <input type="text" id="cap" #capref>
+  <button (click)="addNode()">Save</button>
+</div>

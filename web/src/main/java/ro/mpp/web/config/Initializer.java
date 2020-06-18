@@ -18,7 +18,7 @@ public class Initializer implements WebApplicationInitializer {
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/api/*");
 
-        container.addFilter("springSecurityFilterChain", new DelegatingFilterProxy("springSecurityFilterChain"))
-                .addMappingForUrlPatterns(null, false, "/*");
+        //container.addFilter("springSecurityFilterChain", new DelegatingFilterProxy("springSecurityFilterChain"))
+         //       .addMappingForUrlPatterns(null, false, "/*");
     }
 }
